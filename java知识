@@ -1,0 +1,8253 @@
+一、       JavaWeb基础
+
+第一天：
+
+1．Eclipse详解：
+
+(1).Bad versionnumber in .class file：编译器版本和运行(JRE)版本不符合。高的JRE版本兼容低版本的编译器版本。
+
+ 
+
+(2).当程序有错误的时候，使用Debug as 运行程序。双击语句设置断点。程序运行到此处停止。点击跳入方法的内部代码。点击跳过，执行下一条代码，点击跳出，跳出方法。观察变量的值，选中变量右击选择watch. 跳入下一个断点。查看断点，调试完后一定要清除断点。结束运行断点的jvm.
+
+ 
+
+2．HashSet和hashCode和equals方法
+
+java系统首先调用对象的hashCode()方法获得该对象的哈希吗，然后根据哈希吗找到相应的存储区域，最后取出该存储区域内的每个元素与该元素进行比较.两个equals相等，hashCode()相等。需要重写equals,hashCode()方法.更改数据的值，hashCode()的值也更改了，并未删除.内存泄露.有个东西不在被用，但是未被删除，导致内存泄露.
+
+ 
+
+3．Junit测试框架
+
+(1).在测试类，方法前加注解：@Test，不然出现初始化异常。
+
+ 
+
+(2).方法before,after前加@Before,@After注解。在测试方法之前和之后运行方法。
+
+ 
+
+(3).静态方法beforeClass,afterClass方法前加上注解@BeforeClass,@AfterClass，类加载的时候运行
+
+ 
+
+(4).Assert断言。判断两个对象是否相等。期望值和实际值相等。
+
+ 
+
+4．得到配置文件的路径
+
+通过类加载器 reflect.class.getClassLoader.getResourceAsStream();在class指定目录下查找指定的类文件进行加载.编译器把src中的.java文件编译成class文件，所有非.java文件，原封不动的搬过去.但是这种方法是只读的.
+
+通过类的信息reflect.class.getResourceAsStream();相对路径
+
+一般用绝对路径,使用配置文件告诉用户路径.
+
+一定要记住要用完整的路径，但是完整的路径不是硬编码的，是计算出来的.
+
+ 
+
+5．反射
+
+(1).反射主要用于框架开发
+
+ 
+
+(2).一个类有多个组成部分，例如：成员变量，方法，构造方法等，反射就是加载类，并解析类的各个组成部分。
+
+ 
+
+(3).加载类使用Class.forName()静态方法，给类的完整名称，包名和类名。
+
+ 
+
+(4).Class提供了解析public的构造方法，方法，字段等方法以及private。字段封装数据，方法执行功能
+
+ 
+
+(5).静态方法无需传递对象，method.invoke()
+
+ 
+
+(6).升级时保持兼容性，main函数的解析有点麻烦,反射解析数组参变量的时候的问题。启动Java程序的main方法的参数是一个字符串数组，即public static void main(String[] args),通过反射方式来调用这个main方法时，如何为invoke方法传递参数呢?按照jdk1.5的语法，整个数组是一个参数，而按照jdk1.4的语法，数组中的每个元素对应一个参数，当把一个字符串数组作为参数传递给invoke方法时，javac会到底按照哪种语法进行处理呢？jdk1.5肯定要兼容jdk1.4的语法，会按jdk1.4的语法进行处理，即把数组打散成若干个单独的参数。所以，在给main方法传递参数时，不能使用代码mainMethod.invoke(null,newString[]{“xxx”}),javac只把它当做jdk1.4的语法进行理解，而不把它当做jdk1.5的语法解释，因此会出现参数类型不对的问题。解决的方法：
+
+mainMethod.invoke(null,newObject[]{new String[]{“xxx”}});
+
+mainMethod.invoke(null,(Object)newString[]{“xxx”});编译器会做特殊处理，编译时不把参数当做数组看待，也就不会把数组打散成若干个参数了.
+
+ 
+
+(7).对数组进行反射:相同的维数(不是数组元素的个数,例如都是一维数组，不关心数组的大小)，相同的8种基本数据类型时数组有相同的字节码.
+
+ 
+
+6． 泛型
+
+(1).泛型是对象类型，不能是基本类型，泛型存在源代码级别上，给编译器看的，生成class文件就不存在泛型了
+
+ 
+
+(2).参数类型变量，实际类型变量，泛型类型，参数化的类型
+
+ 
+
+(3).自定义泛型方法：public <T> void method(T args){};public<T,K,V> void method(T a,K b,V c){};
+
+ 
+
+(4).静态方法public static <T> void method(T t){};泛型类不作用静态方法
+
+ 
+
+7．可变参数
+
+(1).可变参数就看成数组，可以使用增强for循环
+
+ 
+
+(2).可变参数列表为最后一个参数
+
+ 
+
+(3).可以给可变参数传递一个数组
+
+ 
+
+(4).可变参数的类型是基本类型还是对象类型
+
+ 
+
+8．课程介绍
+
+(1).在谷歌心目中，“云”必须具备以下条件：数据都存在网上，而非终端里，软件最终消失，只要你的“云”设备拥有浏览器就可以运行现在的一切，“云”时代的互联网终端设备将不仅仅是PC，手机，汽车，甚至手表，只要有简单的操作系统加个浏览器就完全可以实现，由于数据都在“云”端，企业的IT管理越来越简单，企业和个人用户也不同在担心病毒，数据丢失等问题。
+
+ 
+
+(2).李开复描述了这样一个场景，只要你的PC或手机等终端里安装了一个简单的操作系统和完整功能的浏览器，开机后输入自己的用户名和密码，你存在“云”中的应用软件和数据就会同步到终端里。
+
+ 
+
+9．快捷键
+
+(1).配置快捷键：window->preferences->key
+
+(2).Alt+/ :内容提示
+
+Ctrl+1 :快速修复
+
+Ctrl+Shift+O :快速导入包
+
+Ctrl+Shift+F :格式化代码
+
+Alt+方向键 :跟踪代码
+
+Ctrl+Shift+/ :添加注释
+
+Ctrl+Shift+\ :取消注释
+
+Ctrl+Shift+X :更改为大写
+
+Ctrl+Shift+Y :更改为小写
+
+Ctrl+Shift+向下键 :复制代码
+
+Ctrl+Shift+向上，向下  :改变代码行的顺序
+
+Ctrl+T  :查看继承关系
+
+Ctrl+Shift+T :查看源代码
+
+Ctrl+Shift+L :查看所有的快捷键
+
+ 
+
+10．类加载器及其委托机制的深入分析
+
+(1).Java虚拟机中可以安装多个类加载器，系统默认三个主要类加载器，每个类负责加载特定位置的类：BootStrap,ExtClassLoader,AppClassLoader
+
+ 
+
+(2).类加载器也是Java类，因为其他java类的加载器本身也要被类加载器加载，显然必须有第一个类加载器不是java类，这正是BootStrap(内嵌到JVM的内核中，使用C++语言编写的)
+
+ 
+
+(3).Java虚拟机中的所有类装载器采用具有父子关系的属性结构进行组织，在实例化每个类转载器对象时，需要为其指定一个父级类装载器对象或者默认采用系统类装载器为其父级类加载器
+
+(4).
+
+public class ClassLoaderTest{
+
+public static void main(String[] args){
+
+System.out.println(ClassLoaderTest.class.getClassLoader().getClass().getName());
+
+//输出为sun.misc.Lanuncher$AppClassLoader;
+
+System.out.println(System.class.getClassLoader());
+
+//输出为null,因为类System是由BootStrap加载的;
+
+}
+
+}
+
+ 
+
+(5).BootStrap->ExtClassLoader->AppClassLoader
+
+ClassLoader loader= ClassLoaderTest.class.getClassLoader();
+
+while(loader!=null){
+
+System.out.println(loader.getClass().getName());
+
+loader = loader.getParent();//往上顺序打印
+
+}
+
+System.out.println(loader);//最后打印老祖宗
+
+ 
+
+(6).
+
+BootStrap——>JRE/lib/rt.jar
+
+ExtClassLoader—–>JRE/lib/ext/*.jar
+
+AppClassLoader——>ClassPath指定的所有jar或目录
+
+用Eclipse的打包工具将ClassLoaderTest打包成itcast.jar,然后放在jre/lib/ext目录下，在eclipse中运行这个类，运行结果显示为ExtClassLoader,此时的环境状态是classpath目录有ClassLoaderTest.class,ext/itcast.jar包中也有ClassLoaderTest.class，这时我们在打印ClassLoaderTest类的类加载名称，发现是ExtClassLoader,而不是AppClassLoader.
+
+ 
+
+(7).类加载的委托机制：
+
+当Java虚拟机要加载一个类时，到底派出哪个类加载器去加载呢：
+
+首先当前线程的类加载器去加载线程中的第一个类
+
+如果类A中引用了类B，Java虚拟机将使用加载类A的类加载器来加载类B
+
+还可以直接调用ClassLoader.loadClass()方法来指定某个类加载器去加载某个类
+
+每个类加载器加载类时，又先委托给其上级类加载器
+
+当所有祖宗类加载器没有加载到类，回到发起者类加载器，还加载不了，则抛ClassNotFoundException，不是再去找发起者类加载器的儿子，因为没有getChild方法，即使有，那么多个儿子，找哪一个呢？
+
+对着类加载器的层次结构图和委托加载原理
+
+ 
+
+(8).Thread类有一个方法setContextClassLoader(ClassLoader classLoader)//加载当前的类.
+
+ 
+
+(9).每个类加载都首先会委托送到BootStrap，那么BootStrap很累，这样，那为什么不多搞几个BootStrap呢，之所以不这样做，是因为，便于统一管理，因为所有的类都会找BootStrap，可能这时有几个相同的类进行加载，那么BootStrap，不会多次将他们的class文件加载内存中，只会加载一份即可.这样效率就高了.
+
+ 
+
+(10).
+
+public class MyClassLoader{
+
+public static void main(String[]args){
+
+String srcPath=args[0];
+
+String destDir=args[1];//得到目录
+
+String destFileName =srcPath.substring(srcPath.lastIndexOf(‘/’)+1);//得到文件名
+
+String destFilePath=destDir+”\\”+destFileName;
+
+FileInputStream fis = newFileInputStream(srcPath);
+
+FileOutputStream fos=new FileOutputStream(destPath);
+
+cypher(fis,fos);
+
+fis.close();
+
+fos.close();
+
+}
+
+private static void cyp(InputStreamips,OutputStream ops){
+
+int b =-1;
+
+while((b=ips.read())!=-1){
+
+ops.write(b^0xff);//对内容进行异或处理
+
+}
+
+}
+
+}
+
+class ClassLoader extends Date{
+
+public String toString(){
+
+return “hello,itcast”;
+
+}
+
+}
+
+args[0]:ClassLoader.class的绝对路径
+
+args[1]:itcastlib
+
+有包名的类不能调用无包名的类.
+
+ 
+
+(11).编写自己的类加载器：
+
+知识讲解：
+
+自定义的类加载器必须继承ClassLoader(抽象类)
+
+覆盖findClass方法
+
+defineClass方法:得到class文件转换成字节码
+
+编程步棸：
+
+编写一个文件内容进行简单加密的程序
+
+编写了一个自己的类加载器，可实现对加密过的类进行装载和解密
+
+编写一个程序调用类加载器加载类，在源程序中不能用该类名定义引用变量，因为编译器无法识别这个类，程序中可以出了使用ClassLoader.load方法之外，还可以使用设置线程的上下文类加载器或者系统类加载器，然后再使用Class.forName
+
+ 
+
+(12).
+
+模板设计模式：
+
+父类—>loadClass(相同的)
+
+子类1(自己干的)
+
+子类2(自己干的)
+
+覆盖findClass方法(自己干)
+
+ 
+
+(13).
+
+public class MyClassLoader extendsClassLoader{
+
+public MyClassLoader(){
+
+}
+
+public MyClassLoader(String classDir){
+
+this.classDir = classDir;
+
+}
+
+@Override
+
+protected Class<?> findClass(Stringname){
+
+String classFileName = classDir +”\\” + name + “.class”;
+
+FileInputStream fis = new FileInputStream(classFileName);
+
+ByteArrayOutputStream bos = newByteArrayOutputStream();
+
+cypher(fis,bos);
+
+fis.close();
+
+byte[] bytes = bos.toByteArray();
+
+defineClass(bytes,0,bytes.length);
+
+return super.findClass(name);
+
+}
+
+public static void main(String[] args){
+
+Class clazz = newMyClassLoader(“itcastlib”).loadClass(“ClassLoaderAttachment”);
+
+ClassLoaderAttachment d1 =clazz.newInstance();
+
+}
+
+}
+
+ 
+
+(14).windows->showview->problem查看错误.
+
+ 
+
+(15).可以查看Servlet的类加载委托继承树
+
+ 
+
+11． 枚举
+
+(1).枚举的作用限定指定的值，没有枚举前设计一个类，将构造函数设置成私有的，变量设置成静态常量
+
+ 
+
+(2).枚举可以有构造函数(私有的)，字段，方法
+
+ 
+
+(3).可以定义set,get方法，获取变量的值。
+
+(4).带有抽象方法的枚举，不能new出新的对象了。在new对象的时候就重写抽象方法，使用匿名内部类
+
+ 
+
+(5).枚举中的每个枚举值代表枚举类的一个对象。
+
+ 
+
+(6).枚举也可以实现接口，或继承抽象类
+
+ 
+
+(7).JDK5中的switch拓展为除了接受int,short,char,byte外，也可以接受枚举类型。
+
+ 
+
+(8).枚举的方法，name,ordial,valueOf,将字符串转换成枚举值。表单提交数据的时候。values返回枚举的所有的枚举值
+
+ 
+
+12．内省
+
+(1).内省:Introspector，专门操作Bean的属性。
+
+ 
+
+(2).Bean的属性：只有字段提供了set/get方法，就是属性。只要有get/set的方法，就有一个属性，所以属性是有get/set方法决定的
+
+ 
+
+(3).任何类都继承了Object类，又因为Object中有一个class属性
+
+ 
+
+(4).内省的入口类：Introspector，方法getPropertyDescriptors()获取Bean的属性
+
+ 
+
+(5).操作Bean的指定属性
+
+ 
+
+(6).BeanUtils框架操作Bean
+
+ 
+
+(7).在工程中新建一个文件夹，将架包复制到文件夹中，还需另外的架包loging,选中架包，右击build path加入到工程的环境中
+
+ 
+
+(8).BeanUtils使用方便，类型自动转化，只支持8中基本数据类型
+
+ 
+
+(9).给BeanUtils注册类型转换器，ConvertUtils.register()
+
+ 
+
+(10).将Map中的数据整合到对象中，BeanUtils.populate()方法
+
+ 
+
+13．配置Java模板代码
+
+window->preferences->java->Editor->Template:编辑模板代码：line_selection,光标cursor，右击选择source with
+
+ 
+
+14．享元模式
+
+相同的对象只实例化一个，实例：桌面上的图标，word中字符，有很多小的对象，有很多相同的属性，不同的属性叫做外部行为，相同的属性叫做内部行为integer的缓冲池
+
+ 
+
+15．注解
+
+(1).@SuppressWarning(“deprecation”)过时注解
+
+ 
+
+(2).@Deprecated注解，表示该方法是否过时，架包升级时添加的注解
+
+ 
+
+(3).注解相当于一种标记，通过反射了解你的类及各种元素上有无何种标记
+
+ 
+
+(4).注解相当于一个类：@interface Annotation{};注解类，应用注解类的类，对应用了注解类的类进行反射操作的类
+
+ 
+
+(5).AnnotationTest.class.getAnnotation(ItcastAnnotation.class)得到类AnnotationTest上的注解ItcastAnnotation，注解上使用注解叫做元注解，元数据，元信息
+
+ 
+
+(6).@Retention(RetentionPolicy.RUNTIME)(保持到运行阶段),@Retention(RetentionPolicy.SOURCE)(保持在源文件阶 段),@Retention(RetentionPolicy.CLASS)(保持在class文件中)：源代码->class文件->(类加载)内存中的文件(字节码)
+
+ 
+
+(7).@Override注解保持到SOURCE,@SuppressWarning注解保持到SOURCE，@Deprecated注解保持到RUNTIME(只有将该类调到内存中才知道该类中的方法是否过时了)
+
+ 
+
+(8).@Target({ElementType.METHOD,ElementType.TYPE})注解只能标记到方法上或类,接口等类型上 (9).注解的属性：String color();类有个color属性,还有一个特殊的属性value,属性的默认值default,数组的属性值,枚举的属性值,注解的属性值
+
+第二天：
+
+1．dom4j解析XML文档
+
+(1).Dom4j是一个简单、灵活的开放源代码的库，Dom4j是由早期开发JDOM的人分离出来而后独立开发的，与JDOM不同的是，dom4j使用接口和抽象基类，虽然Dom4j的api相对要复杂一些，但是他提供了比JDOM更好的灵活性
+
+ 
+
+(2).Dom4j是一个非常优秀的Java XML API,具有性能优异、功能强大和极易使用的特点，现在很多软件采用的Dom4j,例如hibernate,包括sun公司自己的JAXM也使用了Dom4j
+
+ 
+
+(3).使用Dom4j开发，需要下载dom4j相应的jar文件
+
+ 
+
+2.  XML语法
+
+(1).编写XML文档时，需要先使用文档声明，声明XML文档的类型，使用IE校验XML文档的正确性.
+
+ 
+
+(2).XML文档中的”中国”保存为本地的码表的”中国”
+
+ 
+
+(3).在XML文档中，空格和换行都作为原始内容被处理
+
+ 
+
+(4).XML区分大小写，一个标签可以有多个属性，每个属性都有它自己的名称和取值，在XML技术中，
+
+标签属性所代表的信息也可以被表示子标签表示
+
+ 
+
+(5).XML文件中的注释采用:”<!–  >”格式
+
+ 
+
+(6).CDATA区域内的内容，XML解析程序不会处理，而是直接原封不动的输出
+
+ 
+
+(7).转义字符: “<“:&lt; “>”:&gt;
+
+ 
+
+3.  Xml语言
+
+在xml语言中，它允许用户自定义标签，一个标签用于描述一段数据，一个标签可分为开始标签和结束标签之间，又可以使用其他标签描述其他数据，以此来实现数据关系的描述.用于配置文件，以描述程序模块之间的关系
+
+4.  XML约束
+
+(1).在XML技术里，可以编写一个文档来约束一个XML文档的书写规范
+
+ 
+
+ 
+
+(2).常用的约束技术:XML DTD 和 XML Schema
+
+ 
+
+(3).如果dtd文件中含有中文，一定要存为utf-8格式.
+
+ 
+
+(4).IE5以上的浏览器内置了XML解析工具：Microsort.XMLDOM,开发人员可以编写javascript代码，利用这个解析工具装载xml文件，并对xml文件进行dtd验证.创建xml文档解析器对象：
+
+var xmldoc = newActiveXObject(“Microsoft.XMLDOM”);
+
+开启xml校验
+
+xmldoc.validateOnParse= “true”;
+
+装载xml文档
+
+xmldoc.load(“book.xml”);
+
+获取错误信息
+
+xmldoc.parseError.reason;xmldoc.parseError.line
+
+ 
+
+(5).将DTD文件导入到eclipse中，可进行校验xml是否遵循dtd文件
+
+在xml文件中编写DTD
+
+ 
+
+第三天：
+
+1．HTTP请求头各个头字段详解
+
+请求头详解:
+
+Accept:text/html,image/*用于告诉服务器，客户机支持的数据类型,
+
+Accept-Charset：客户机采用的编码
+
+Accept-Encoding:客户机支持的压缩格式
+
+Accept-Language:客户机的语言环境,不同国家访问的内容也是不同的，就是通过这个头实现的，用于实现国际化
+
+Host:www.it315.org:8080：告诉服务器，想访问的主机名
+
+If-Modified-Since:客户机通过这个头告诉服务器，资源的缓存时间，提高访问效率
+
+Referer:客户机告诉服务器，他是从哪个资源来访问服务器的(防盗链),通过检查该头是否是从本网站点击过来的，如不是的，就让他跳到本网站的首页来
+
+User-Agent:客户机告诉服务器，客户机的软件环境
+
+Cookie:客户机通过这个头向服务器带点数据
+
+ 
+
+2．Http请求行和请求方式
+
+一个完整的HTTP请求包含：一个请求行，若干个请求头，以及实体内容，请求行，请求头，之后空一行，带有请求信息(如表单提交数据为post方式)如下所示
+
+Get/books/java.html HTTP/1.1   :请求行，用于描述客户端的请求方式，请求的资源名称，以及使用的HTTP的协议版本号
+
+Accept:*
+
+Accept-Language:en-us
+
+Connection:Keep-Alive
+
+Host:localhost
+
+Referer:http://localhost/links.asp
+
+User-Agent:Mozilla/4.0
+
+Accept-Encoding:gzip,deflate
+
+以上的内容为多个消息头，用于描述客户端请求哪台主机，以及客户端的一些环境信息等
+
+请求行中的GET称之为请求方式，请求方式：post,get,head,options,delete,trace,put,常用的有:get,post，用户没有设置，默认情况下浏览器向服务器发送的都是get请求,例如在浏览器直接输地址访问，点连接访问都是get,用户如想把请求方式改为post，可通过更改表单的提交方式实现.不管post或get，都用于向服务器请求某个web资源，这两种方式的区别主要表现在数据传递上：请求方式为get方式，则可以再请求的URL地址后以?的形式带上交给服务器的数据，多个数据之间以&进行分割，同时在URL地址后附带的参数是有限制的，其数据容量通常不能超过1k,若请求方式为post方式，则可以再请求的实体内容中向服务器发送数据，post方式的特点：传送的数据无限制
+
+<ahref=”1.html?name=aaaaaaa”>连接</a>get方式
+
+ 
+
+3．Http响应头字段详解
+
+响应头:
+
+Location:
+
+这个头配合302状态码使用，用于告诉用户找谁
+
+,response.setStatus(302),response.setHeader(“Location”,”/day04/1.html”);请求重定向，判断浏览器的地址栏的地址是否发生变化，实例是用户登录
+
+Server:服务器通过这个头，告诉浏览器的类型
+
+Content-Encoding:服务器通过这个头，数据的压缩格式,收费是靠数据出口量算的， 所以为了省钱和效率高，要进行数据压缩，jdk中的GZIPOutputStream类，压缩类流,包装流和底层流，最好将包装流关了或者刷新，数据写入到底层流中去,
+
+response.setHeader(“Content-Encoding”,”gzip”);response.setHeader(“Content-length”,gzip.length+””);
+
+Content-Length:服务器会送的数据的长度
+
+Content-Type:服务器会送数据的类型，response.getOutputStream().write();服务器会送数据都是二进制，通过这个头，可以告诉浏览器这个二进制是什么类型，this.getServletContext().getResourceAsStream(“/1.bmp”);intlen = 0;byte buffer[] =new byte[1024];OutputStream out =response.getOutputStream();while((len=in.read(buffer))>0){out.write(buffer,0,len)},在服务器的目录下的web.xml中查看各个数据类型的respose.setHeader(“content-type”,””)的写法.
+
+Refresh:告诉浏览器隔多长时间刷新一次，response.setHeader(“refresh”,”3;url=”””)控制浏览器隔三秒跳到指定的网页上
+
+Content-Disposition:告诉浏览器以下载的方式打开文件,response.setHeader(“content-disposition”,”attachment;filename=3.jpg);
+
+Transfer-Encoding:告诉浏览器数据的传送格式
+
+ETag:缓存相关的头，服务器根据数据的内容生产一个字符串，客户机第二次访问服 务器时带来的ETag的值和服务器的值一样，就拿缓存给客户，实时更新，
+
+Expires:高速浏览器，把会送的资源缓存多少时间，-1或0，则是不缓存的
+
+Pragma：no-cache
+
+Cache-Control:no-cache
+
+控制浏览器不要缓存数据,当数据不发生改变时，就要缓存，当实时性要求很高的数据不能缓存.
+
+ 
+
+4．Http响应状态行
+
+HTTP /1.1 200OK  :状态行，用于描述服务器对请求的处理结果
+
+Server:Microsoft-IIS/5.0
+
+Date:….
+
+Content-Length:2291
+
+Content-Type:text/html
+
+Cache-control:private
+
+多个消息头:用于描述服务器的基本信息，以及数据的描述，服务器通过这些数据的描述信息，可以通知客户端如何处理等一会它会送的数据
+
+<HTML>
+
+<BODY>
+
+实体内容：代表服务器向客户端会送的数据
+
+具体:
+
+状态行：
+
+格式：HTTP版本号  状态码  原因叙述<CRLF>
+
+举例：HTTP1.1  200     OK
+
+状态码用于表示服务器对请求的处理结果，他是一个三位的十进制数，响应状态码分为5类，
+
+100-199:表示接收请求，要求客户端继续提交下一次请求才能完成整个处理过程
+
+200-299：表示成功接收请求并已完成整个处理过程，常用200
+
+300-399：为完成请求，客户需进一步细化请求，例如，请求的资源已经移动一个新地址，常用302(你请求我，我叫你去找别人),307和304(拿缓存)
+
+400-499：客户端的请求有错误，常用404,403(没有权限访问)
+
+500-599：服务器端出现错误，常用500
+
+ 
+
+5．http协议概述
+
+(1).浏览所有的服务器:
+
+在命令行中敲入
+
+telnet localhost 8080
+
+GET /aa/1.html HTTP/1.1
+
+Host:
+
+(2).在HTTP1.0协议中，客户端和Web服务器建立连接后，只能获得一个web资源。在HTTP1.1协议，允许客户端与web服务器建立连接后，在一个连接上获取多个web资源。
+
+(3).在命令行中敲入以上的命令，HTTP/1.0获取一次资源，就断开连接，而HTTP/1.1不会断开连接
+
+(4).一个web页面中，使用img标签引用了三幅图片，当客户端访问服务器中的这个web页面时，客户端总共会访问几次服务器，即向服务器发送了几次HTTP请求：
+
+<img src=”1.jpg”>
+
+<img src=”2.jpg”>
+
+<img src=”3.jpg”>
+
+共四次请求，浏览器认识img标签，浏览器解析img，则img一次请求，最好将这三张图片整合到一张图片上，这样就只有两次请求了
+
+(5).<scriptsrc=”1.js”>
+
+<scriptsrc=”1.js”>
+
+共三次请求，可以将多个js文件整合到一个js文件,避免多次向服务器发出请求
+
+6． tomcat服务器目录结构
+
+bin：存放启动和关闭Tomcat的脚本文件(命令)
+
+conf：存放Tomcat服务器的各种配置文件(核心文件:server.xml)
+
+lib：存放Tomcat服务器的支撑jar包
+
+logs：存放Tomcat的日志文件(catalina文件)
+
+temp：存放Tomcat运行时产生的临时文件
+
+webapps：web应用所在目录，即供外界访问的web资源的存放目录
+
+work：Tomcat的工作目录,jsp翻译成servelet文件
+
+ 
+
+7．web服务器启动问题
+
+(1).tomcat是使用Java编写的，启动的时候需要JVM,java环境设置不正确的话可能导致服务器不能启动，还有就是8080端口被占用了.
+
+ 
+
+(2).在conf->中server.xml中对tomcat服务器进行配置
+
+ 
+
+(3).我的电脑->计算机管理->服务->停止windows服务
+
+ 
+
+(4).http://www.sina.com/是url;www.sina.com是主机名;sina.com是域名，在域名下可以搭建多个网站
+
+ 
+
+(5).tomcat文件下的webapps下新建一个web资源
+
+ 
+
+(6).Cataline_home环境变量的设置问题,服务器的目录，启动的服务器的目录要和服务器存放的目录一致
+
+ 
+
+8． web开发相关概念和常见web服务器
+
+(1).自己开发服务器:
+
+public class Server
+
+{
+
+public static void main(String[] args)throws Exception{
+
+ServerSocket server = newServerSocket(9999);//服务器建立端口
+
+Socket sock server.accept();//客户端访问
+
+FileInputStream in = newFileInputStream(“c:\\a\\1.html”);
+
+OutputStream out = sock.getOutputStream();
+
+int len = 0;
+
+byte buffer[] new byte[1024];
+
+while((len = in.read(buffer))>0){
+
+out.write(buffer,0,len);
+
+}in.close();
+
+out.close();
+
+sock.close();
+
+server.close();
+
+}
+
+}
+
+(2).WebLogic是BEA公司的产品，是目前应用最广泛的Web服务器，支持J2EE规范，是商业产品，需要收费
+
+(3).常用的Web服务器IBM公司的WebShpere，也遵循J2EE规范，也要收费
+
+(4).Tomcat服务器只支持JSP以及Servlet规范，不支持EJB，如果要支持可以使用JBOSS
+
+(5).http:80,smtp:25,pop3:110,ftp:23,https:443
+
+ 
+
+9.  web应用和虚拟目录
+
+(1).web应用虚拟目录映射：自己开发好的web应用项目到部署到服务器上的web应用项目的关系目录，在服务器的配置文件中配置，虚拟目录，<Context path=”/itcast”docBase=”c:\news”/>,”/itcast”就是虚拟目录，”c:\news”是磁盘上web应用的目录，修改配置文件后一定要重启服务器.http://localhost:8080/itcast/1.html，浏览c:\news\1.html文件.当path=””时，就是缺省设置
+
+ 
+
+(2).tomcatdocument中reference中观察tomcat的配置文件设置方法.在Catanena\localhost\新建一个context.xml文件.这种方法无需重启服务器.
+
+<ContextdocBase=”c:\news”/>,http://localhost:8080/1.html;多级虚拟目录:文件名:a#b#c.xml,http://localhost:8080/a/b/c/1.html;缺省的虚拟目录，把文件名改成ROOT.xml重启服务器，覆盖原先的缺省设置.
+
+ 
+
+(3).webapps文件夹中的web应用可以让外界访问，又服务器自动映射目录,把news文件放到webapps中去，http://localhost:8080/news/1.html,当服务器和webapps不在一个目录时，此方法不可以.
+
+ 
+
+10.  web应用组织结构
+
+(1).mail:Web应用所在目录
+
+html,jsp,css,js文件等,这些文件一般存在web应用根目录下，根目录下的文件外界可以直接访问，java类，jar包,web应用的配置文件存在这个目录下WEB-INF，这个文件夹的文件名一个单词都不能写错，这个文件要新建，在这个文件夹下载新建一个classes文件夹，放置java程序，新建一个lib文件夹，放置架包，该目录下的文件外界无法非法直接访问，由web服务器负责调用.每个web应用应该有个web配置文件，是最重要的一个配置文件，一切配置可以通过这个文件进行配置web.xml
+
+ 
+
+(2).对于web.xml文件，可以从server.xml中拷贝，拷贝头和尾部分.
+
+ 
+
+11.  web资源访问流程
+
+(1).服务器认识war包，自动解压，放到webapps中，自动生成应用.
+
+ 
+
+(2).配置context元素的reloadable=”true”,应用程序修改，不需要重新发布应用，建议不要配置，因为只要一修改，就要重新加载，出现问题.
+
+ 
+
+(3).context.xml中<Context>中配置，被所有的web应用使用.
+
+ 
+
+12.  配置虚拟主机
+
+(1).在一个tomcat服务器中可以放置多个网站，所谓配置虚拟主机，就是在tomcat服务器中配置一个网站
+
+ 
+
+(2).如需在Web服务器中配置一个网站，需使用Host元素进行配置，例:<Hostname=”site1″appBase=”c:\app”></Host>,配置的主机(网站)要想被外部访问，必须在DNS服务器或windows系统中注册.
+
+ 
+
+(3).在server.xml新建一个主机,新建一个Host标签，<Host name=www.sina.com appBase=”c:\sina”><Contextpath=”/.mail” docBase=”c:\sina\main”/></Host>
+
+ 
+
+(4).互联网访问流程:ie中输入错误！超链接引用无效。 返回给ie，接着使用ip地址访问sina.com
+
+ 
+
+(5).ie开始会访问windows的host文件，如果这个文件知道这个地址，就不会去问DNS，没有则会去访问DNS服务器：/windows/system32/drivers/etc/hosts文件进行配置.
+
+ 
+
+13. 软件密码学和配置tomcat的https连接器
+
+(1).对称加密:加密和解密的密码是相同的.
+
+ 
+
+(2).非对称加密:接受者生成一对公钥和私钥，公钥加密的数据只能私钥解，私钥加密的数据只能公钥解，然后接受者将公钥传给发送者,用接受者的公钥进行加密,然后接受者用私钥解密.然而，在传送公钥的途中可能被黑客拦截，然后黑客自己生成自己的公钥和私钥，然后将公钥送给发送者，发送者如何知道公钥是不是接受者的公钥?这是在互联网上有个叫CA的机构，接受者产生一对公钥和私钥，然后让CA认证，CA给接受者一份数字证书，这时发送者受到的是数字证书，发送者验证数字证书是不是接受者的数字证书.信任点就是CA.网上银行出示一份数字证书(公钥),浏览器可以验证数字证书正确，注册，当你填写信息时，浏览器就是用这份数字证书验证.但是数字证书可能被黑客拦截，怎么确定数字证书是接受者发的还是黑客发的，数字签名(私钥加密)，发送者自己生成一对公钥和私钥，发送者想让接受者相信是自己加密的，发送者就需要签名(使用自己的私钥),然后只有接受者使用公钥解密，就相信是发送者将内容加密的.MD5算法得到数据指纹.然后对数据指纹加密.将密文和指纹加密信息传给接受者，可以判断在传送过程没有被篡改，用密文生成数据指纹，和传过来的数据指纹对比.
+
+ 
+
+第四天：
+
+1．Eclipse开发servlet
+
+(1).web工程的名称，该工程部署时，在webapps目录下就会有一个example的web应用
+
+ 
+
+(2).src文件夹，Java程序的开发目录，该目录下编写的所有程序在部署时，会自动部署到example/web-inf/classes目录下
+
+ 
+
+(3).WebRoot文件夹，webroot对应于web应用的根目录，该目录下的所有子目录和子文件夹在部署时，会原封不动的发布到web应用目录下
+
+ 
+
+(4).Web rootfolder:WebRoot应用的根目录，Context root URL:映射到服务器的目录，在WebRoot目录下新建Web资源，应用发布时，将src文件夹中的源文件编译成class到webRoot\web-inf下的classes文件夹
+
+ 
+
+(5).servlet导入源码，到tomcat服务器的目录下查找文件夹
+
+ 
+
+(6).为servlet配置对外访问路径，
+
+<servlet><servlet-name>
+
+别名
+
+</servlet-name><servlet-class>
+
+类名(全称)
+
+</servlet-class></servlet>
+
+<servlet-mapping><servlet-name>
+
+别名
+
+</servlet-name><url-pattern>/aa<url-pattern></servlet-mapping>
+
+ 
+
+(7).还可以更改tomcat的运行java环境
+
+ 
+
+2． HttpServlet和一些开发细节
+
+Servlet接口sun公司定义了两个默认实现：
+
+GenericServlet,HttpServlet
+
+httpservlet指能够处理HTTP请求的servlet,它在原有的servlet接口上添加了一些与http协议处理方法，它比servlet接口的功能更为强大，因此开发人员在编写Servlet时，通常应继承这个类，而避免直接去实现Servlet接口
+
+httpservlet在实现servlet接口时，复写了service方法,该方法体内的代码会自动判断用户的请求方式，如为get请求，则调用httpservlet的doGet方法，如为post请求，则调用doPost方法，因此，开发人员在编写Servlet时，通常只需要复写doGet或doPost方法，而不要去复写service方法.可以查看httpservlet的源码,
+
+修改servlet的模板代码.进入myeclipse,搜索Servlet.java文件，打开修改文件.
+
+ 
+
+3．ServletConfig对象以及它的开发场景
+
+(1).在servlet的配置文件中，可以使用一个或多个<init-param>标签为servlet配置一些初始化参数，当servlet配置了初始化参数后，web容器在创建servlet实例对象时，会自动将这些初始化参数封装到servletconfig对象中，并在调用servlet的init方法时，将servletConfig对象传递给servlet，进而，程序员通过servletconfig对象就可以得到当前servlet的初始化参数信息.
+
+ 
+
+(2).web服务器创建的容器对象
+
+request,response,servletconfig,servletcontext,session,cookie
+
+ 
+
+(3).servletconfig
+
+配置参数信息.
+
+<init-param><param-name>data</param-name><param-value>xxxx</param-value></init-param>
+
+ 
+
+(4).覆写init()方法带有servletconfig参数的,服务器自动将参数信息封装到servletconfig对象中.调用init()方法时，servlet可以得到这些参数信息.在servlet中定义一个servletconfig对象，将init()传递过来的servletconfig接收到.private ServletConfig config;public voidinit(ServletConfig config){this.config = config;}String value =config.getInitParameter(“data”);System.out.println(value);参数信息不在程序中，而是在配置文件.同时this.getServletConfig();代替privateServletConfig config;因为父类已经定义了ServletConfig对象，只需调用父类的getServletConfig方法即可.
+
+ 
+
+(5).可以配置多个参数信息，同时为得到所有的参数信息:
+
+Enumeration e =this.getServletConfig().getInitParameterName();
+
+while(e.hasMoreElements())
+
+{
+
+String name = (String)e.nextElement();
+
+String value =this.getServletConfig().getInitparameter(name);
+
+System.out.println(value);
+
+}
+
+(6).开发过程中，参数不能在程序中写死，需要在配置文件中给出参数信息.实例:字符集，连接不通的数据库.读取不同的配置文件.
+
+ 
+
+(7).struts就是个实例.可以到struts实例中查看struts的web.xml文件
+
+ 
+
+4.  ServletContext读取web应用中的资源文件
+
+(1).在web开发中，用于资源文件的类型一般为两种xml,property，如果数据之间是没有关系就是用property，有关系就使用xml，数据库的连接关系没有关系，一般用property文件，
+
+ 
+
+(2).db.properties文件，url=jdbc:mysql://localhost:3306/test;username=root;password=root;读取db.properties文件.通用代码:
+
+InputStream in
+
+= this.getServletContext().getResourceAsStream(“/WEB-INF/classes/db.properties”);
+
+斜杠就代表web应用根目录,Properties props = new Properties();props.load(in);把文件load到Properties对象中，用Map对象存储String url =props.getProperty(“url”);
+
+String username =props.getProperty(“username”);
+
+String password = props.getProperty(“password”);
+
+ 
+
+(3).web应用中不使用FileInputStream in = newFileInputStream(“src/db.properties”);采用的是相对路径，相对路径中有这个资源，这是相对路径相对的是jvm的启动目录.当时jvm的启动目录是服务器的启动目录:服务器/bin
+
+ 
+
+(4).另外的读取资源的方法:
+
+String path = this.getServletContext().getRealPath(“/WEB-INF/classes/db.properties”);得到硬盘的绝对路径 此时就可以使用FileInputStream in = new FileInputStream(path);需求:下载，可以得到资源的名称,读取文件时客户机带来的，当前读取的资源文件的名称.可以从path中截取出来.
+
+String filename =path.substring(path.lastIndexOf(“\\”)+1);
+
+ 
+
+(5).在servlet中用dao对象操作数据库，dao对象需要properties文件的内容即数据库的连接信息.dao一般放到cn.itcast.dao包中.不能将servlet中的context对象传递给dao对象，web层和服务层不能有交织了.如果读取资源文件的程序不是servlet的话，此时要通过类装载器读取资源,在UserDao对象中InputStream in =UserDao.class.getClassLoader().getResourceAsStream,资源文件(“db.properties”);一般只需读取一次，有个习惯:将读取文件代码放在static{};静态代码块中.通常抛出初始化错误throw new ExcepitonInitaliterError(e);文件不能太大，类加载器要装载到内存中
+
+ 
+
+(6).有人可能把properties文件改了.然后读取的内容是原始的，还是修改的，读取的是原始的,因为类装载的方式，但是类只装载一次.但是想读取更新后的内容：String path =UserDao.class.getClassLoader.getResource(“db.properties”).getPath();然后用FileInputStream去读取.
+
+ 
+
+5.  ServletContext对象
+
+(1).web容器在启动时，它会为每个web应用程序都创建一个对应的ServletContext对象,它代表当前web应用,servletconfig对象中维护了servletcontext对象的引用，开发人员在编写servlet时，可以通过servletconfig.getServletContext方法得到servletContext对象.同时也可以context = this.getServletContext();得到父类的context查看servletContext api 文档了解servletContext对象的功能.
+
+ 
+
+(2).servletContext为所有的servlet对象实现数据共享.是全局概念.方法getContext()为了得到别的web应用.getInitParmeter()方法可以得到web应用的配置信息.getNameDispatcher()得到一个转发对象.getRealPath()方法得到资源的硬盘真实路径,方法getResource()得到资源的路径，只是返回的是URL地址.getResourcePaths()方法返回给定目录下的所有资源.getServletContextName()方法返回web应用的名称.setAttribute(),getAttribute(),removeAttribute();
+
+ 
+
+(3).由于一个web应用中所有servlet共享同一个servletcontext对象，所以多个servlet通过servletcontext对象是实现数据共享。servletcontext对象通常也被称之为context域对象.可以获取web应用的初始化参数，实现servlet的转发,利用servletcontext对象读取资源文件:得到文件路径，读取资源文件的三种方式，.properties文件(属性文件),context域，request域，session域，page域.
+
+ 
+
+(4).实例:聊天室,资源共享.开个浏览器说，开个浏览器读
+
+ 
+
+(5).<context-param><param-name>data</param-name>
+
+<param-value>XXXX</param-value></context-param>
+
+和config不同，config是给某个servlet初始化参数，而context是所有的servlet初始化参数
+
+ 
+
+(6).servletconfig中的初始化信息中连接数据库信息，应该写成context的初始化信息，因为可能有多个servlet需要数据库连接
+
+ 
+
+(7).转发和重定向：转发：你找我，我帮你去找他，重定向：你找我，我告诉你，你自己去找他；如果是转发：只有一次请求，地址栏不发生改变重定向：两次请求。servlet中不适合浏览器的数据的输出，因为要数据的排版，应该在html,jsp中输出数据.servlet要将输出数据要转发给jsp显示.
+
+RequestDispatcherrd = this.getServletContext().getRequestDispatcher(“/1.jsp”);
+
+rd.forward(request,response);
+
+在jsp中取数据，
+
+<% String.data=application.getAttribute(“data”);out.write(data);%>servletcontext可以，但是在开发过程中是有问题的：有一个人来访问数据，把它的数据存到context中，当他在jsp中取数据的时候，此时又来一个人，也来存数据，可能覆盖前一个人的数据，那前一个人取得数据可能是后来的那个人的数据，因为context是共享资源，存在线程安全问题.在开发过程中一般用request域带数据.
+
+ 
+
+(8).服务器启动时，为每个web应用创建servletcontext对象，当服务器停止时，servletcontext对象被销毁.
+
+ 
+
+6.  Servlet的生命周期
+
+ie浏览器，web服务器,Servelet程序
+
+浏览器输入地址->连接web服务器，发送HTTP请求，解析出客户机想访问的主机名,解析客户机想访问的web应用和web资源–>使用反射技术创建一个servlet实例对象(servlet第一次访问的时候被创建)–>调用servlet.init()完成对象的初始化->调用servlet.service()响应客户端的请求,服务器创建request,response容器,service方法执行->向response容器中写入客户机请求的数据->服务器从response中取出数据构建一个HTTP响应回写给客户机–>回写http响应
+
+客户机第一次访问服务器,生成一个servlet，第二次在访问同一个servlet就不会再创建了，当关闭服务器时servlet就消亡了
+
+ 
+
+7.  Servlet的线程安全
+
+(1).当多个客户端并发访问同一个servlet时,web服务器会为每一个客户端的访问请求创建一个线程，并在这个线程上调用servlet的service方法，因此service方法如果访问了同一个资源的话，就有可能引发线程安全的问题,如果某个servlet实现了SingleThreadModel接口，那么servlet引擎将以单线程模式来调用其service方法。SingleThreadModel接口中没有定义任何方法，只要在servlet类的定义中增加实现SingleThreadModel接口的声明即可.对于实现了SingleThreadModel接口的servlet,servlet引擎仍然支持对该servlet的多线程并发访问，其采用的方式是产生多个servlet实例对象，并发的每个线程分别条用一个独立的servlet实例对象。实现SingleThreadModel接口并不能真正解决servlet的线程安全问题，因为servlet的引擎会创建多个Servlet实例对象，而真正意义上解决多线程安全问题是指一个servlet实例对象被多个线程同时调用的问题，事实上，在servlet api2.4中，已经将SingleThreadModel标记为Deprecated(过时的).标准的解决方案是同步方式sychronized
+
+ 
+
+(2).如果线程向person的静态list集合中加入了数据(aaa)，数据用完后，一般要移除静态集合中的数据(aaa)，否则集合中的数据越来越多，就会导致内存溢出。对象销毁了，静态资源的字节码仍然驻留在内存中.
+
+ 
+
+(3).web中的异常一般不能抛，要catch住.
+
+ 
+
+8.  Servlet开发的一些重要细节
+
+(1).由于客户端是通过URL地址访问web服务器中的资源，所以Servlet程序若想被外界访问，必须把servlet程序映射到一个URL地址上，这个工作在web.xml文件中，使用<servlet>元素和<servlet-mapping>元素完成
+
+ 
+
+(2).<servlet>元素用于注册Servlet，它包含有两个主要的子元素:<servlet-name>和<servlet-class>，分别用于设置Servlet的注册名称和Servlet的完整名.
+
+一个<servlet-mapping>元素用于映射一个已注册的Servlet的一个对外访问路径，它包含有两个子元素:<servlet-name>和<url-patteren>，分别用于指定Servlet的注册名称和Servlet的对外访问路径
+
+(3).进入myeclipse->Web更改Web-Content-root
+
+ 
+
+(4).一个servlet可以映射到多个对外访问路径.只需多复制个
+
+<servlet-name><url-patteren>(伪静态)
+
+ 
+
+(5).同一个Servlet可以映射到多个URL上，即多个<servlet-mapping>元素的<servlet-name>子元素的设置值可是同一个servlet的注册名
+
+ 
+
+(6).在servlet映射到的URL中可以使用*通配符,但是只能有两种固定的格式：一种格式是：”*.扩展名”,另一种格式是以正斜杠/开头并以”/*”结尾的.
+
+<servlet-mapping><servlet-name>anyName</servlet-name>
+
+<url-pattern>*.do</url-pattern></servlet-mapping>
+
+匹配所有后缀名为do的访问路径(也可以不需要后缀名, 匹配所有的文件)<servlet-mapping><servlet-name>anyName</servlet-name><url-pattern>/action/*</url-pattern></servlet-mapping>服务器在更改web.xml时，无需重启，<WatchedResource>WEB-INF/web.xml</WatchedResource>在服务器的conf文件夹下的context.xml配置文件中，监视web.xml是否发生改动
+
+ 
+
+(7).servlet1 映射到 /abc/*
+
+servlet2 映射到 /*
+
+servlet3 映射到 /abc
+
+servlet4 映射到 *.do
+
+问题:
+
+1.当请求URL为”/abc/a.html”,”/abc/*”和”/*”都匹配，但是servlet引擎会调用servlet1
+
+2.当请求URL为”/abc”时,”/abc/*”和”/abc”都匹配,但是servlet引擎会调用servlet3
+
+3.当请求URL为”/abc/a.do”时,”/abc/*”和”*.do”都匹配,但是servlet引擎会调用servlet1
+
+4.当请求URL为”/a.do”时,”/*”和”*.do”都匹配,但是servlet引擎会调用servlet2
+
+5.当请求URL为”/xxx/yyy/a.do”时,”/*”和”*.do”都匹配，但是servlet引擎会调用servlet2
+
+总结:谁长的最像，谁先匹配，同时*的优先级最低.
+
+ 
+
+(8).Servlet是一个供其他Java程序(Servlet引擎:服务器端调用servlet的程序)调用的Java类，它不能独立运行，它的运行完全由servlet引擎来控制和调度.针对客户端的多次servlet请求,通常情况下，服务器只会创建一个servlet实例对象,也就是说servlet实例对象一旦创建,他就会驻留在内存中，为后续的其他请求服务，直至web容器退出，servlet实例对象才会销毁.在servlet的整个生命周期内，servlet的init方法只会被调用一次,而对一个servlet的每次访问请求都导致servlet引擎调用一次servlet的service方法,对于每次访问请求，servlet引擎都会创建一个新的httpservletrequest请求对象和一个新的httpservletresponse响应对象,然后将这两个对象作为参数传递给她调用的servlet的service方法，service方法再根据请求方式分别调用doXXX方法.
+
+ 
+
+(9).右击，可以选择父类的方法，进行重写父类的方法
+
+ 
+
+(10).服务器启动时，servlet并未创建，只有当访问web资源时会创建一个servlet，调用init()方法.一个servlet为多个请求服务，当服务器停了，servlet就被摧毁了，调用destory()方法.
+
+ 
+
+(11).针对客户端的每一次请求，服务器端都会为用户创建一个request和reponse，他们的生命周期很短，如果是并发的请求，大量的请求可能创建大量的request和reponse对象，可能导致服务器运行变慢，但是不是并发的话，可能不会创建那么多个对象
+
+ 
+
+(12).如果在<servlet>元素中配置一个<load-on-startup>元素，那么web应用程序在启动时，就会装载并创建servlet的实例对象，以及调用servlet实例对象的init()方法,<servlet><servlet-name>invoker</servlet-name><servlet-class>…</servlet-class><load-on-startup>2</load-on-startup>;用途为web应用写一个initservlet,这个servlet配置为启动时装载,为整个web应用创建必要的数据库表和数据.(即启动服务器时就创建了servlet),struts就是一个非常大的servlet，其中数字的大小就是启动的优先级,数值越小优先级越高.struts中的数值为2，担心用户需要扩张，所以不使用1.
+
+ 
+
+(13).如果某个servlet的映射路径仅仅为一个正斜杠/，那么这个servlet就成为当前web应用程序的缺省servlet；凡是在web.xml文件中找不到匹配的<servlet-mapping>元素的URL,它们的访问请求都将交给缺省servlet处理,也就是说,缺省servlet用于处理所有其他servlet都不处理的访问请求.在<tomcat的安装目录>\conf\web.xml文件中，注册了一个名称为org.apach.catalina.servlets.DefaultServlet的Servlet，并将这个servlet设置为缺省servlet；当访问tomcat服务器中的某个静态html文件和图片时，实际上是在访问这个缺省servlet。这个用途主要用于:用户请求一个数据(html,jpg,avi等)服务器将启动一个缺省的servlet提供给客户数据.在浏览器看到的任何内容都是数据都需要由一个servlet来为客户提供数据，包括错误信息.
+
+ 
+
+(14).配置文件修改了，不需要重启服务器，但是源程序修改了，要重启服务器.
+
+9.  Servlet开发入门
+
+(1).jsp就是servlet，servlet是sun公司提供的一门用于开发动态web资源的技术，编写一个java类，实现servlet接口.获得servlet启动信息,通过getServletConfig(),service的两个参数，ServletRequest req,ServletResponse res,这个方法是服务器调用的，获取客户机的对象，只需找request,输出信息找response.getOutputStream();
+
+(2).进入服务器的目录，新建一个web应用,在应用中新建一个java，class,lib，在文件夹java下新建一个servlet文件，
+
+package cn.itcast
+
+public classFistServlet extendsGenericServlet{
+
+public void service(
+
+ServletRequest req,ServletResponseres)throws ServletException,java.io.IOException{
+
+OutputStream out = res.getOutputStream();
+
+out.write(“Servlet”.getBytes());
+
+}
+
+}
+
+(3).servlet所需的架包导入，tomcat能运行servlet，则在服务器的lib目录下含有架包，为servlet配置对外访问路径web.xml，代码可以到服务器的web.xml文件中拷贝
+
+ 
+
+第五天：
+
+1.     HttpServletResponse简介
+
+(1).web服务器收到客户端的http请求，会对每一次请求，分别创建一个用于代表请求的request对象，和代表响应的reponse对象.request和reponse对象既然代表请求和响应，那我们要获取客户及提交过来的数据，只需要找request对象就行了，要向客户机输出数据，只需要找response对象就行了.
+
+ 
+
+(2).reponse的相关方法，构建一个http响应的方法，getStatus(),setHeader(),getWriter(),getOutputStream();字节流可以写任何数据
+
+ 
+
+2．request获取请求头和请求数据
+
+(1).用户点击链接和表单提交向服务器提交数据
+
+ 
+
+(2).在服务器端获取数据:
+
+request.getParameter(“username”);
+
+request.getParmeterName();
+
+得到所有的名称的枚举.
+
+request.getParameterValues();
+
+得到名称相同的值
+
+(3).在用户提交的数据中，可能抛空指针异常，加强代码的健壮性.
+
+ 
+
+(4).Mapmap=request.getParameterMap();将用户的数据封装到对象中User，先获取Map，再用JavaBeans将Map转化成对象User,其中map关键字是请求参数名称，关键字的类型是String,值的类型是String[]，因为可能有多个相同名称对应的值就有多个，所以是个数组;Map将值填充对象User,迭代Map，得到关键字和对应的值，利用反射技术将这些数据填充到User对象中.设计一个对象代表表单.BeanUtils.copyProperties(user,formbean);将表单beans拷贝到user对象beans中；BeanUtils.populate(user,map);对象上的字段必须是八种基本类型，不是的话，要自己写个转换器.
+
+ 
+
+(5).服务器以断点的方式运行进行调试,
+
+ 
+
+(6).request.getInputStream();获取输入流，进行获取数据，进行文件上传.
+
+3.  request简介.txt
+
+(1).HttpServletRequest对象代表客户端的请求，当客户端通过HTTP协议访问服务器时，HTTP请求头中的所有信息都封装在这个对象中，开发人员通过这个对象的方法，可以获得客户这些信息.
+
+ 
+
+(2).getMethod();获取请求方式，getRequestURI();获取客户想我访问的资源;getHeader();getDateHeader();getHeaderNames();获取所有的头信息，getHeaders();与getHeaderNames();不同的是：可能有同名的头信息，此时就要用getHeaders()方法，a-xx;y-xx；getParameter获取客户带来的数据name=”aaa”;password=”rot”;getParameterNames();getParameterValues();getInputStream()：将用户的数据当做流读入，如:客户进行文件上传;
+
+ 
+
+(3).getRequestURL():/day07/servlet/demo1;
+
+getRequestURI():http://localhost:8080/day07/servlet/demo1
+
+用在权限拦截上，不同的网页有不同访问权限，做个拦截器，过滤器，还有是在记录页面的访问次数.getQueryString()客户携带的查询信息,地址栏后的类容，getRemoteAddr();得到访问者的ip地址;getRemoteHost():主机在DNS注册了，打印了主机名.getRemotePort();来访者的端口，ie也是一个程序，需要一个端口getLocalAddr();返回web服务器的ip地址,getMethod():获取请求方式，默认是get方式
+
+ 
+
+4．request乱码
+
+(1).在文本框中敲入中文，浏览器提交数据的码表就是浏览器使用哪个码表打开.request容器也是默认码表是iso8859码表，所以在获取数据时，request.setCharsetsEncoding(“UTF-8”);这种改变码表的方式只对post方式有效，对get方式无效.这种方式解决的是post方式提交的数据.
+
+ 
+
+(2).但是这种方式不能用于get方式,如果是get提交，必定是乱码，所以必须在servlet中手动的改变乱码，newString(username.getBytes(“iso8859″),”UTF-8″);
+
+ 
+
+(3).用户使用超链接提交数据时，带有中文，其实超链接就是一个get方式，所以要使用get方式去解决乱码问题.
+
+ 
+
+(4).更改服务器的配置，解决乱码问题，但是在开发中严禁这种方式的使用，从浏览器中进入tomcat，修改连接器，HTTP->URLEncoding,然后到tomcat目录下的server.xml中修改连接器Connector,在其中添加一个属性:URLEncoding=”UTF-8″;还有一种方法，在连接器中添加一个属性，useBodyEncodingForURI=”true”;是将post方式解决乱码的方法可以用于解决get方式乱码.所以还要事先设置好request容器的码表.
+
+ 
+
+(5).request.setCharacterEncoding(“UTF-8”);
+
+String username =request.getParameter(“username”);
+
+response.setCharacterEncoding(“gb2312”);
+
+response.setContentType(“text/html”;charset=”gb2312″);
+
+response.getWriter.write(username);不会有乱码
+
+5．request实现请求转发和mvc设计模式.txt
+
+(1).request是个域对象，request作用的范围是请求范围中，主要用于设计mvc中.
+
+ 
+
+(2).servlet中转发到jsp显示数据，
+
+request.getRequestDispatcher(“/mesage.jsp”).forward(request,response);
+
+在开发中一般都是用这种方式，而不是用ServletContext的转发方式.每一次请求都对应一个request，正好，request的作用域是一个请求，所有request的转发，都是一个请求，都在这个作用域中.
+
+ 
+
+(3).request.getParameter()方法是获取客户机带来的数据，而request.getAttribute()方法是获取request域中获取数据.
+
+ 
+
+(4).forward方法用于将请求转发到requestDispatcher对象封装的资源，如果在调用forward方法之前，在servlet程序中写入的部分内容已经被真正的传送到了客户端(关闭response流)，forward方法将抛出IlegalStateExcepiton异常，如果在调用forward方法之前向servlet引擎的缓冲区(response)中写入了内容，只要写入到缓冲区中的内容还没有被真正输出到客户端，forward方法就可以被正常执行，原来写入到输出缓冲区中的内容将被清空，但是，已经写入到HTTPServletResponse对象中的响应头字段信息保持有效.
+
+ 
+
+(5).if(true){request.getRequestDispatcher(“/index.jsp”).forward(request,response)}
+
+跳转到index.jsp向客户机写数据
+
+request.getRequestDispatcher(“/index.jsp”).forward(request,response)也要向用户写数据。所以一个良好的习惯是跳转之后一定要return；
+
+ 
+
+(6).String data =”aaa”;response.getWriter().write(data);不要关闭这个流，这是可以request.getRequestDispatcher(“/index.jsp”).forward(request,response);理论上应该是两部分内容的组合，即data和jsp中的内容，但是实际上只显示jsp中的内容，因为jsp的内容将覆盖data内容，但是消息头不改变，在这个过程中创建了两个servlet，因为jsp也是一个servlet，但是只有一起请求.不会创建两个容器.
+
+ 
+
+6.     request实现页面包含
+
+所有的网页都有相同的网头和网脚，此时只需要将网头和网脚设置共同的部分html，request.getRequesetDispatcher(“head.jsp”).include(request,response);response.getWriter().writer(“hhh”);request.getRequestDispatcher(“foot.jsp”).incude(request,response);被包含页面不能出现全局架构标签，因为可能重复.实现页面包含的作用
+
+ 
+
+7．response的outputstream输出数据的问题
+
+(1).在程序中的”中国”变成了UTF-8码表,但是浏览器默认的是gb2312打开内容,在程序中发送一个头，告诉浏览器用哪个码表打开.
+
+response.setHeader(“Content-type”,”text/html;charset=UTF-8″);
+
+ 
+
+(2).html中的标签<meta>可以模拟一个http响应头.<meta http-equiv=’conten-type’content=’text/html;charset=’UTF-8′>;
+
+ 
+
+(3).当Content-type写成content-type就变成下载了.
+
+ 
+
+(4).out.write(1);在浏览器上显示的并不是1，因为1对应的码表.
+
+ 
+
+8．response的writer输出数据的问题.txt
+
+(1).String data =”中国”;PrintWriter out =response.getWriter();out.writer(data);有问题显示乱码
+
+ 
+
+(2).servlet将”中国”写入response中，但是response用的是iso8859码表，对应没有” 中国”，所以在浏览器中看到乱码,response.setCharacterEncoding(“UTF-8”);设置response的码表为UTF-8;同时也要告诉浏览器以utf-8码表打开.
+
+ 
+
+(3).简便的调用response.setContentType(“text/html;charset=”UTF-8”);可以代替以上两条设置码表的代码.
+
+ 
+
+9．response实现请求重定向和response的一些细节
+
+(1).怎么实现请求重定向：发送状态码302，
+
+response.setStatus(302);response.setHeader(“location”,”/day06/index.jsp”);
+
+同时sun公司提供了一个方法response.sendRedirect(“/day06/index.jsp”);重定向的特点是地址栏发生改变.可能加重服务器的负担，因为有多次请求，一般用于用户登录，因为转发，地址栏不变，用户看不到是否跳到首页了，重定向的地址栏变化，可以告诉用户跳到首页，还有一种是购物，点击购买，服务器的一个servlet帮你买成了，servlet会跳到购物车显示页面，显示你购买的东西.当使用转发时，用户点击刷新，可能又买了一次，重新干一次就不好了，所以用重定向，其他情况下都最好使用转发，减轻服务器的负担
+
+ 
+
+(2).getOutputStream和getWriter方法分别用于得到输出二进制数据，输出文本数据的servletoutputstream,printwriter对象，但是这两个方法是互斥的，条用了其中的任何一个方法后，就不能再调用另一个方法，servlet程序向ServletOutputStream或printwriter对象中写入的数据将被servlet引擎从response里面获取，servlet引擎将这些数据当做响应消息的正文，然后再与响应状态行和个响应头组合后输出到客户机，servlet的service方法结束后，servlet引擎将检查getWriter或getOutputStream方法返回的输出流对象是否已经调用过close方法，如果没有，servlet引擎调用close方法关闭该输出流对象
+
+ 
+
+(3).当在demo1中使用了getOutputStream()方法，转发到demo2，但是在demo2中使用了getWriter();就是在一条调用链中不能存在这两个方法,当使用重定向了，有两次请求，产生了两个response对象所以不会有问题，但是转发就有问题了.
+
+ 
+
+(4).无需关心流的关闭，servlet引擎会自动关闭，但是你自己定义的流需要自己关闭，引擎不会去关闭的.
+
+ 
+
+10．response实现文件下载
+
+(1).在webroot应用下新建一个download文件夹，存放下载资源.
+
+当下载的文件是中文文件，则文件名需要经过url编
+
+码,URLEncoder.encode(filename,”UTF-8″);filename是下载文件名.
+
+ 
+
+11．web工程中各类地址的写法
+
+(1).request.getRequestDispatcher(“/form1.html”).forward(request,response);给服务器用的
+
+ 
+
+(2).response.sendRedirect(“/day05/form1.html”);给浏览器用的
+
+ 
+
+(3).this.getServletContext().getRealPath(“/form1.html”);给服务器用的
+
+ 
+
+(4).this.getServletContext().getResourceAsStream(“/form1.html”);给服务器用的
+
+ 
+
+(5).<ahref=”/day05/form1.html”>ddd</a>给浏览器用的
+
+ 
+
+(6).<formaction=”/day05/form1.html”></form>给浏览器用的
+
+ 
+
+总结:写地址以斜杠开头，如果地址是给浏览器用的，这个斜杠代表一个网站，如果是给服务器用的，这个斜杠代表web应用.浏览器向服务器发送请求，就是给浏览器用的
+
+ 
+
+12.   防盗链
+
+首先检查你是否从我指定的网页来的，没有的话,String referer =request.getHeader(“referer”);直接在地址栏上粘贴地址，还有就是refer.startsWith(“http://localhost”);检查是否从首页跳转过来的.首页上放广告，再有凤姐日记的链接.网站就是靠广告运行的.
+
+ 
+
+13．输出随机认证码图片
+
+(1).BufferedImage：内存中的一幅图片.构造函数指定了图片的长和宽，像图片上写随机数，getGraphics()方法返回一个图形的对象，然后向该图像上写数据.在把内存中的这幅图片输出到浏览器，ImageIO图像的输入输出;write();方法，指定一个和浏览器相关的输出流.
+
+ 
+
+(2).告诉浏览器以图片的方式读取数据.
+
+ 
+
+(3).<imgsrc=”/day04/servlet/ResponseDemo3″>;
+
+ 
+
+(4).刷新后图片为改变，没有控制浏览器是否进行缓存，浏览器默认是进行缓存的，所以每次拿的都是缓存图片，没有改变，所以要控制浏览器不要缓存，
+
+response.setDateHeader(“expries”,-1);response.setHeader(Cache-Control”,”no-cache”);response.setHeader(“Parma”,”no-cache”);必须三个都要设置好，才起作用.刷新有两个作用:重新向服务器发出请求，还有就是把上一次的事情在干一次.(防止表单重复提交);
+
+ 
+
+(5).<imgsrc=”/day05/servlet/ResponseDemo4″ onclick=”change(this)”alt=”换一张”style=”cusor:hand”><br/><scripttype=”text/javascript”>function change(img){img.src = img.src+”?”+new Date().getTime()}</script>如果后面不跟随机数，还是拿缓存了.
+
+ 
+
+14． 用Expires头控制浏览器缓存
+
+(1).控制浏览器缓存,在servlet向客户会送的数据不变，就需要进行缓存,不需要向服务器发送请求，只需要到硬盘的缓存存放文件夹中读取缓存
+
+ 
+
+(2).Internet选项->常规->点击设置->查看文件,浏览器把index.jsp缓存了，缓存时间是当前时间值:System.currentTime()+1000*3600;
+
+ 
+
+15． 用refresh控制浏览器定时刷新
+
+(1).刷新头:response.setHeade(“refresh”,”3;url=’/day04/index.jsp'”);控制浏览器每隔3秒刷新一次，
+
+ 
+
+(2).假设是一个用于登陆的servlet:提交用户名和密码，需要到数据库查询是否登陆成功，response.getWriter(“恭喜你，登陆成功，本浏览器将在3秒后，跳到首页，如果没有调，请点击<a href=”  “>点击</a>”);
+
+ 
+
+(3).this.getServletContext().getRequestDispatcher(“/message.jsp”).forword(request,response);
+
+ 
+
+(4).servlet怎么告诉jsp定时刷新.字符串写给jsp”<metahttp-equiv=’refresh’conten=’3;url=/day08/index.jsp’>”
+
+ 
+
+第六天：
+
+1.  Cookie的细节
+
+一个Cookie只能标识一种信息，它至少含有一个标识该信息的名称(name)和设置值(value),一个web站点可以给以一个web浏览器发送多个Cookie，一个web浏览器也可以存储多个web站点提供的Cookie，浏览器一般只允许存放300个Cookie，每个站点最多存放20个Cookie，每个Cookie的大小限制为4KB，如果创建了一个cookie，并将他发送到浏览器，默认情况下它是浏览器之后即被删除，若希望浏览器将该cookie存储到磁盘上，则需要使用maxAge,并给出一个以秒为单位的时间，将最大失效设置为0，则是命令浏览器删除该cookie，注意，删除cookie时，path必须一致，否则不会删除.cookie不能太大，不然可能造成网络拥堵，也可以将cookie删除.当两个cookie的名称相同时，删除其中一个，就是删除两个.即这两个cookie必须相同，setPath();也要设置.可以到ie保存Cookie的文件中查看文件.javascript也可以删除cookie
+
+ 
+
+2．Cookie显示用户上次访问网站的时间
+
+(1).javax.servlet.http.Cookie类用于创建一个Cookie，response接口也定义了一个addCookie方法，它用于在其响应头中增加了一个相应的Set-Cookies方法，它用于获取客户端提交的Cookie，使用Cookie封装用户的数据.
+
+ 
+
+(2).构造函数，Cookie(name,value);给Cookie一个名称name，用户下一次访问时，带着上一次访问的Cookiet，所以在Request.getCookies();返回一个Cookie数组，即用户的所有Cookie,Cookie的有效期默认是浏览器的进程过程，可以通过setMaxAge()方法设置有效期，案例:用户在一段时间内自动登录。方法setPath();用于设置访问哪个web资源时携带Cookie，方法setDomain()，设置访问哪个域名时携带Cookie.IE默认禁止这种第三方Cookie,你访问我的网站，我给你带回一个的网站的Cookie.
+
+ 
+
+(3).用户第一次访问时，没有携带Cookie，Cookie cookie[] =request.getCookies();cookie可能为空，
+
+首先要判断一下是否为空，
+
+for(inti=0;cookies!=null&&i<cookies.length;i++){if(cookies[i].getName().equals(“lastAccessTime”)
+
+{long cookieValue= Long.parseLong(cookies[i].getValues()}};
+
+新建一个
+
+Cookie:Cookiecookies = new Cookie(“lastAccessTime”,System.currentTimeMillis());
+
+设置Cookie有效期:cookie.setMaxAge(,,,);
+
+设置有效路径(默认的是”/day04/servlet”);cookie.setPath(“/day04”);
+
+ 
+
+3．session的工作原理
+
+(1).如果把Cookie禁止，则不能购买东西，Internet选项->隐私->高级
+
+ 
+
+(2).URL重写，你访问我的服务器，都是超链接点击过来的，不同用户访问首页时，就帮用户创建session得到session的id号，然后将id号放在超链接URL中携带过来，不是Cookie携带了，所以所有的URL要重写，
+
+request.getSession();Stringurl = response.encodeURL(“/day03/servlet/SessionDemo”)此方法自动将session的id号加入该地址中.<a href = ‘+url+’>点击</a>
+
+ 
+
+(3).如果没有禁止Cookie，浏览器带一个Cookie来了，就不会进行URL重写
+
+ 
+
+4．session的一些细节问题
+
+(1).一个浏览器就占用一个session，开一个新的网页，不创建session，超链接弹出的新窗口也是共享一个session，同时开多个浏览器，创建多个session，这个问题也不是绝对的，不同的浏览器，功能不一样，将session的id号写到浏览器进程，
+
+ 
+
+5．Session简介
+
+(1).默认情况下，一个浏览器独占一个session对象
+
+ 
+
+(2).HttpSessionsession = request.getSession();
+
+session.setAttribute(“name”,”value”);
+
+session.getAttribute(“name”);
+
+ 
+
+(3).写好过滤器，就可以解决web应用中的乱码问题
+
+ 
+
+(4).一个session只为一个会话服务.(只打开一个浏览器窗口)
+
+ 
+
+(5).session的生命周期，第一次访问getSession()方法时，session就被创建，session是30分钟没有人用了(即使浏览器不关闭)，服务器就将其删除.而不是结束会话服务.当然这个时间可以实现的.
+
+<session-config><session-timeout>10</session-timeout></session-config>单位是分钟，同时在代码中也可以控制，session.invalidate();request.getSession(true)方法是指:有session，不创建，没有session就创建，request.getSession(false)方法是指：只获取session，不创建session，显示购物车的时候，没必要创建session只需要获取session.
+
+ 
+
+(6).request.getSession()方法怎么知道获取指定用户的session，即session的工作原理:servlet1中：session=request.getSession(),产生一个session的id号，以Cookie的形式回写给用户，下一次用户就带着session的id号来，所以该方法就知道获取指定用户的session，但是这个Cookie没有写有效期，会话结束后，这个id号就没有了，下一次访问，服务器又要创建session，买东西的过程中，关闭浏览器，下一次再接着买，上次买的东西，都没有了，所以解决这个问题，只需设置到这个Cookie的有效期即可.sessionid = session.getId();回写一个Cookie，名称为JSESSIONID，值为sessionid,覆盖默认的Cookie.
+
+ 
+
+6．防止表单的重复提交
+
+(1).用javascript防止表单的重复提交，<script type=”text/javascript”>variscommitted = false;function dosubmit(){if(!iscommitted){iscommitted =true;return ture}else return false;}</script>
+
+<formaciton=”/day01/servlet/Demo1″ method=”post”onsubmit=”return dosubmit()”>客户端阻止，第一个问题是，用户可以查看页面的源代码，修改js代码，用户也可以点击刷新，把上次干的事在干一次，也可以点击后退按钮.但是在开发过程中还是用js，
+
+ 
+
+(2).在服务器端防止表单提交，表单是由程序给出，为用户提交的表单提供一个随机数(表单号)，服务器端，查看表单的id号，检查表单是否提交过了，如果提交了，删除该表单的id号，产生令牌的发生器class TokenProcessor{}为了保证令牌是独立的，一般讲其设置为单例模式，是一个对象创建的随机数重复性低，还是多个对象创建的随机数重复对象低，是后一种重复性低，为了得到随机数的长短一样，就要用数据的指纹(摘要)，数据的指纹都是一样大的，是128位，类MessageDigest dis =MessageDigest.getInstatnce(“md5″);使用md5码,byte[] md5 = dis.digest(input);input是传过来的数据，用字节数组变成字符串返回，用到新的算法:base64编码，任何数据的base64码变成ASCII码，原理：将数据字节变成四个字节，0011 0010 1100 1101 0010 1001，这三个字节变成四个字节，每六位装到一个字节，少两位，就在前面补两个零，为：00001100 00101100 00110100 00101001，最小数为0，最大数为63，不会超过64，base64自己定义了一个码表，比如：0:a,1:b,3:c ……..63: 所以任何数据都可以变成键盘上对应的字符，人们熟悉的字符，应用在数据的传输过程中，需要给数据的带一个结束符号和开始符号，所以把要传输的数据变成base64,开始符号和结束符号使用base64中没有的字符即可，BASE64Encoder encoder=newBASE64Encoder();return encoder.encoder(md5);这个方法可能在api中查找不到，
+
+ 
+
+(3).在servlet中产生一个令牌String token 然后跳到jsp中，这是将token存到session域中，而不是request中，因为token是id号，以后还要使用，在jsp中<input type=”hidden”name=”token” value=”${token}”>在用户不知道的情况下将令牌带过去，
+
+ 
+
+(4).将已经提交过的表单号删除，struts中就是这样防止表单的重复提交的.
+
+ 
+
+7．会话管理
+
+(1).会话可简单理解为:用户开一个浏览器，点击多个超链接，访问服务器多个web资源，然后关闭浏览器，整个过程称之为一个会话，
+
+ 
+
+(2).会话过程中要解决的一些问题:每个用户与服务器进行交互的过程中，各自会有一些数据，程序想办法保存每个用户的数据，例如:用户点击超链接通过一个servlet购买一个商品，程序应该保存用户购买的商品，以便用户点结账servlet时，结账servlet可以得到用户商品，为用户结账。
+
+ 
+
+(3).如果用户的数据存到request中，结账servlet是一个重新的浏览器请求，所以结账servlet与购买servlet是两次请求，不是共享request，所以结账servlet不能得到购买servlet的内容.ServletContext存在并发问题
+
+ 
+
+(4).一般使用Cookie和Session;Cookie是客户端技术，程序把每个用户的数据以cookie的形式写给用户各自的浏览器，当用户使用浏览器再去访问服务器中的web资源时，就会带着各自的数据去，这样，web资源处理的就是用户各自的数据,你找我买个的东西，买完了东西，你带回去(可能将东西cookie放在ie缓存,在本地硬盘中)，当你来结账时，把东西在带来，即访问结账请求，浏览器拿缓存(cookie);
+
+ 
+
+(5).Session是服务器端技术，利用这个技术，服务器在运行时可以为每个用户的浏览器创建一个其独享的Session对象，由于session为用户浏览器独享，所以用户在访问服务器的web资源时，可以把各自的数据放在各自的session中，当用户再去访问服务器中的其他web资源时，其他web资源再从用户各自的session中取出数据为用户服务.用户的数据存在服务器端.购买Servlet：session =request.getSession();Session.setAttribute(name,object);结账Servlet：Session=request.getSession();obj=Session.getAttribute(name);不会再为这个用户创建一个session，而去拿服务器中该用户的session
+
+ 
+
+8．三个域对象的总结
+
+(1).request，session，servletContext三个域:request:程序显示完，数据没有用了，就用request(转发)；session:程序显示完数据后，该数据还有用，就用session，servletContext:显示完了，除了该自己用，还要给别人用(聊天室)
+
+ 
+
+(2).md5码，数据指纹，保存用户名的密码，为了安全性，将密码的指纹保存，根据md5码反推，需要时间很长，也可以暴力破解，因为密码的长度是一定的，所以一般把数据加上一个随机数，还有一种用途是进行数据完整性的校验，
+
+ 
+
+第七天：
+
+1.     jsp入门和jsp运行原理
+
+(1).<%Date date= new Date();out.write(date.toLocaleString();%>显示当前时间.
+
+ 
+
+(2).jsp的运行原理:首先将jsp中翻译成servlet放在服务器的work目录下，调用servlet的service方法，在这个方法中将jsp中内容通过流out.write()写到浏览器中，jsp中的java代码将原封不动的运行,可以查看jsp的servlet代码，查看所有定义的对象，不仅有out对象，还有其他对象,JspWriter就相当于PrintWriter
+
+ 
+
+(3).最佳实践：一种技术可以用在多个地方，但是只有一个最佳的地方就是最佳实践.
+
+ 
+
+2.     jsp语法page指令详解
+
+(1).修改jsp的模板，进入到MyEclipse,搜索servlet.java，在这个目录下，点开jsp找到Jsp.vtl
+
+ 
+
+(2).jsp指令是为jsp引擎，引擎就是将jsp翻译成servlet的程序，他们并不直接产生任何可见输出，而是告诉引擎如何处理jsp页面中的其余部分，在jsp2.0规范中共定义了三个指令:page指令，include指令，taglib指令
+
+ 
+
+(3).指令的语法：<%@ 指令属性名=“值”%>，不会产生任何输出，举例:<%@ pagecontentType=”text/html;charset=gb2312″%>,如果一个指令有多个属性，这多个属性可以写在一个指令中，也可以分开写，例如:<%@ pagecontenType=”text/html”;charsetgb2312″%><%@ pageimport=”java.util.Date”%>也可以写作<%@ pagecontentType=”text/html;charset=gb2312″ import=”java.util.Date”%>
+
+ 
+
+(4).page指令用于定义JSP页面的各种属性，无论page指令出现在JSP页面中的什么地方，它的作用都是整个JSP页面，为了保持程序的可读性和遵循良好的变成习惯，page指令最好是放在整个JSP页面的起始位置.
+
+ 
+
+(5).JSP2.0规范中定义的page指令的完整语法：
+
+<%@ page
+
+[language=”java”]
+
+[extends=”package.class”]
+
+[import=”{package.class|package.*},…”]
+
+JSP引擎自动导入下面的包：java.lang.*;javax.servlet.*;javax.servlet.jsp;javax.servlet.http;可以在一条page指令的import属性中引入多个类或包，其中的每个包或类之间使用逗号分隔：<%@ pageimport=”java.util.Date,java.sql.*,java.io.*”%>
+
+[session=”true|false”]:session是否创建，如果为true，则翻译成servlet时，就创建一个session，否则不创建,设置true，后就可以在JSP中片段中使用session对象，否则不能使用，默认值为true，因为session的周期比较长，为了减轻服务器的负载
+
+[buffer=none|8kb|sizeKb]：默认值为none,jsp的out直接写到response中，没有缓冲了
+
+[autoFlush=”true|false”]：自动刷新，默认值为true
+
+[isThreadSafe=”true|false”]：JSP是否是线程安全的,设置true后，将发现翻译后的servlet就继承了SingleThreade接口，一个servlet只为一次请求服务，不会出现线程安全问题
+
+[info=”text”]:带信息
+
+[errorPage=”relative_url”]:指定JSP错误的处理页面，errorPage属性的设置值必须使用相对路径，如果以”/”开头，表示相对于当前web应用程序的更目录(注意不是站点根目录)，否则，表示相对于当前页面，errorPage=”/errors/error.jsp”；也可以在web.xml文件中使用<error-page>元素为整个web应用程序设置错误处理页面，其中的<excepiton-type>子元素指定异常类的完全限定名，<location>元素指定以”/”开头的错误处理页面的路径.作用域不同一个是在一个页面，一个是全局的配置，<error-page><exception-type>java.lang.ArithmeticException></exception-type><location>/errors/error.jsp</location></error-page>;<error-page><error-code>404</error-code><location>/errors/404.jsp</location></error-page>;如果设置了某个JSP页面的errorPage属性，那么在web.xml文件中设置的错误处理将不对该页面起作用，全局性的优先级高，会覆盖页面的配置
+
+[isErrorPage=”true|false”]:这个页面是否为错误处理页面，默认值为false，好处是：服务器在翻译成servlet时将异常封装成一个对象，九大隐式对象中包含一个Excepiton，但是这个对象并不是任何时候都有，只有设置这个参数后，才有，记住
+
+[contentType=”mimeType[ ;charset=charachterSet]”|”text/html;charset=ISO-8859-1″]页面的类型
+
+[pageEncoding=”charachterSet|ISO-8859-1″]：页面的编码
+
+[isELIgnored=”true|false”]:是否忽略EL表达式，EL表达式时JSP2.0的新语法，使用EL表达式时需要将其设置为false.默认都支持EL表达式
+
+ 
+
+(6).jsp乱码问题：Jsp程序存在有与Servlet程序完全相同的中文乱码问题，输出响应正文时出现的中文乱码问题，读取浏览器传递的参数信息时出现的中文乱码问题，Jsp引擎将JSP页面翻译成Servlet源文件时也可能导致中文乱码问题，jsp引擎将jsp源文件翻译成servlet源文件默认采用UTF-8编码，而jsp开发人员可以采用各种字符集编码来编写jsp源文件，因此，jsp引擎将jsp源文件翻译成servlet源文件时，需要进行字符编码的转换，如果jsp文件中没有说明他采用的字符集编码，jsp引擎将把它当做默认的ISO8859-1字符集编码处理，通过page指令的contentType属性说明JSP源文件的字符集编码，page指令的pageEncoding属性说明JSP源文件的字符集编码
+
+ 
+
+(7).tomcat6已经不存在乱码问题了，在jsp中是”中国”，将”中国”保存到硬盘中，默认的查本机的码表，web服务器，翻译jsp的时候就是用iso8859-1码表，所以翻译后的servlet中的”中国”将是乱码，所以要改变服务器的编码，所以就用pageEncoding=”gb2312″设置服务器翻译的码表，翻译到servlet后”中国”是正常的，但是此时还要设置浏览器以哪个码表打开所以需要设置:contentType=”text/html;charset=UTF-8″,其实最后的一个设置不需要设置了，因为response是以UTF-8编码的
+
+ 
+
+3.     jsp中常用标签
+
+(1).jsp标签也称之为Jsp Action(jsp动作)元素，它用于在jsp页面中提供业务逻辑功能，避免在jsp页面中直接编写java代码，造成jsp页面难以维护.
+
+ 
+
+(2).<jsp:include>,<jsp:forward>:<jsp:forwardpage=”/index.jsp”></jsp:forward>应用场景：通常为网站配置首页，首页是个servlet，显示是jsp，配置首页的时候，servlet是无效的，但是jsp是有效的，所以可以使用这个标签从jsp跳转到servlet.<jsp:includepage=”/1.jsp”></jsp:include>是动态包含，翻译成两个servlet，在运行时进行合并，静态包含是在源代码的基础上进行合并<jsp:param>标签是设置参数，<jsp:forward page=”/servelet/ServletDemo”><jsp:paramname=”username” value=”xxxx”/></jsp:forward>,跳转到servlet时带数据过去，value可以是一个脚本表达式<%=x%>,x为变量.
+
+ 
+
+4.     div+css
+
+(1).盒子模型:每一块数据都用div套起来，可能控制div的边框，属性border,上边框:Border-top;下边框:Border-bottom;左边框：Border-left;右边框：Border-right，Padding-top,Padding-bottom,Padding-left,Padding-right;控制数据在div盒子中的位置，Margin-top,Margin-bottom,Margin-left,Margin-right：控制一个盒子在页面的位置，
+
+ 
+
+(2).div是个行级元素，默认的是div单独排在一行，有时想将两个div排成一行，这是就要用到定位技术:Float和Position两种技术
+
+ 
+
+(3).<style>
+
+body{margin:4px 3px 2px 1px;}
+
+#father{
+
+background-color:#FFFFEE;
+
+width:100;
+
+height:100px;
+
+border:1px dashed green;//边框是绿色的虚线，
+
+}
+
+#son1{float:left;}
+
+#son2{float:left;}
+
+#son3{float:left;}
+
+</style>
+
+<body>
+
+<div id=”father”>
+
+<divid=”son1″>aaaaaaa></div>
+
+<divid=”son2″>bbbbbb</div>
+
+<div id=”son3″>ccccc</div>
+
+</div>
+
+</body>
+
+这个代码是有问题的，当添加<div id=”son4″>ddddd</div>时，也会浮动，受到前面几个div的影响，所以要清楚浮动效果<divid=”clear”></div>,#clear{clear:both;}
+
+ 
+
+(4).position技术就是将#son1{position:relative;left:60%}
+
+ 
+
+5．jsp九大隐式对象
+
+(1).每个jsp页面在第一次被访问时，web容器都会把请求交给JSP引擎(就是一个Java程序)去处理，JSP引擎先将JSP翻译成一个_jspServlet(实质上也是一个servlet),然后按照servlet的调用方式进行调用，由于JSP第一次访问时会翻译成servlet，所以第一次访问通常会比较慢，但是第二次访问，JSP引擎如果发现JSP没有变化，就不在翻译，而是直接调用，所以程序的执行效率不会受到影响，JSP引擎在调用JSP对应的_jspServlet时，会传递或创建9个与web开发相关的对象供_jspServlet使用，JSP技术的设计者为便于开发人员在编写JSP页面时获得这些web对象的引用，特意定义了9个相应的变量，开发人员在JSP页面中通过这些变量就可以快速获得这9大对象的引用，
+
+ 
+
+(2).HttpServletRequestrequest，HttpServletResponse response，ServletContextapplication,ServletConfig config JspWriter out,Exception,PageContextpageContext,Object page,Session session,具体的可以查看文档
+
+ 
+
+6．jsp映射和jsp常见错误处理
+
+在web.xml中
+
+<servlet><servlet-name>xxx</servlet-name><jsp-file>/1.jsp</jsp-file></servlet><servlet-mapping><servlet-name>xxx</servlet-name><url-pattern>/12.html</url-pattern>
+
+ 
+
+7．jsp语法
+
+(1).jsp语法:jsp模板元素，jsp表达式，jsp脚本片段，jsp注释，jsp指令，jsp标签，jsp内置对象，如何查找jsp页面中的错误
+
+ 
+
+(2).jsp脚本表达式(expression)用于将程序数据输出到客户端：语法：<%=变量或表达式%>举例：当前时间:<%=new java.util.Date()%>;jsp引擎在翻译脚本表达式时，会将程序数据转成字符串，然后再相应位置用out.print(…)将数据输出给客户端，jsp脚本表达式中的变量或表达式后面不能有分号(;)
+
+ 
+
+(3).jsp脚本片段<% %>,中写入java代码，原封不动的变成java代码
+
+ 
+
+(4).变量可以再多个脚本片段中是可以相互访问的.
+
+ 
+
+(5).jsp声明:jsp页面中编写的所有代码，默认会翻译到servlet的service方法中，而jsp声明中的java代码被翻译到_jspService方法的外面，语法：<%! java代码%>(多个感叹号),所以，jsp声明可用于定义jsp页面转换成的Servlet程序的静态代码块、成员变量和方法，多个静态代码块、变量和函数可以定义在一个jsp声明中，也可以分别单独定义在多个jsp声明中，jsp隐式对象的作用范围仅限于Servlet的_jspService方法，所以在jsp声明中不能使用这些隐式对象,<% public void run(){} %>这种语法是错误的，<%! public void run(){}%>这种语法是正确的.
+
+ 
+
+(6).注释：<%– –%> jsp中的注释不会打给浏览器，但是html注释会打给浏览器.
+
+ 
+
+8． out隐式对象
+
+(1).out隐式对象用于向客户端发送文本数据，out对象是通过调用pageContext对象的getOut方法返回的，其作用和用法与ServletResponse.getWriter()方法返回的PrintWriter对象非常相似，JSP页面中的OUT隐式对象的类型为JspWriter，JspWriter相当于一种带有缓存功能的PrintWriter,设置JSP页面的page指令的buffer属性可以调整它的缓存大小，甚至关闭它的缓存，只有向out对象中写入了内容，且满足如下任何一个条件时，out对象才去调用servletresponse.getWriter方法，并通过该方法返回的PrintWriter对象将out对象的缓冲区中的内容真正写入到servlet引擎提供的缓冲区中:设置page指令的buffer属性关闭了out对象的缓存功能，out对象的缓冲区已经满了，整个JSP页面结束.
+
+ 
+
+(2).out.write(“hahahahhahha”);response.getWriter().write(“wowowowo”);理论上是先看到hahahah在看到wowowowowwo，但是实际是wowowowowowo hahahahhaha，原因就是out有缓存，JspWriter向缓冲区中写入内容，respose的缓冲中是wowowwowowwo,当jsp结束后，response缓冲区发现JspWriter的缓冲区中有内容，就将其刷新到response，所以先看到wowowowowwo,然后就是hahahahahhaha，就是response写入的内容最先显示，所以在开发过程中不要两种方式都使用，一般使用out.write();
+
+ 
+
+9．pageContext对象
+
+(1).pageContext对象是JSP技术中最重要的一个对象，它代表JSP页面的运行环境，这个对象不仅封装了对其他8大隐式对象的应用，它自身还是一个域用来保存数据，并且，这个对象还封装了web开发中经常涉及到的一些常用操作，例如引入和跳转其他资源，检索其他对象中的属性等
+
+ 
+
+(2).它的方法:getException()返回exception隐式对象，getPage()方法返回page隐式对象，getRequest()返回request隐式对象，getResponse()返回response隐式对象,getServletConfig返回config隐式对象，getServletContext返回application隐式对象，getSession()方法返回session隐式对象，getOut()方法返回out隐式对象，pageContext封装了其他8中内置对象，用途是在自定义标签中，jsp中最好不要出现java代码，有时想显示数据，又不能有java代码，String data -(String)request.getAttribut(“data”);out.write(data);在页面中写入一个标签<flx:viesData/>传递一个pageContext对象就相当于传递8大隐式对象.
+
+ 
+
+(3).pageContext也是一个域对象,pageContext.setAttribut(“data”,”aaa”);域的生命周期是整个页面的周期，作用域是整个页面，四个域中，作用范围最小的一个,request就是一个请求范围内，session就是在一个会话范围内，servletContext整个web应用
+
+ 
+
+(4).代表各个域的常量:
+
+PageContext.APPLICATION_SCOPE,PageContext.SESSION_SCOPE,PageContext.REQUEST_SCOPE,PageContext.PAGE_SCOPE
+
+ 
+
+(5).封装了访问其他域的方法，方法public java.lang.Object getAttribute(java.lang.Stringname,int scope)是个重载的方法：Stringdata=(String)pageContext.getAttribut(“data”,PageContext.REQUEST_SCOPE);管理所有域的入口
+
+ 
+
+(6).最重要的一个方法：findAttribute:查找各个域中的属性，pageContext.findAttribut(“data”)首先从page,request,session,application逐级查找，找不到返回空.用于el表达式，el的执行就是按照这个方法的原理执行的.
+
+ 
+
+(7).引入和跳转到其他资源，PageContext类中定义了一个forward方法和两个include方法来分别简化和代替RequestDispatcher.forward方法和include方法，方法接受的资源如果以”/”开头，就代表当前的web应用
+
+ 
+
+10．jsp语法include指令详解
+
+(1).include指令用于引入其他JSP页面，如果使用include指令引入了其他JSP页面，那么JSP引擎将把这两个JSP翻译成一个Servlet，所以include指令引入通常称之为静态引入
+
+ 
+
+(2).语法：<%@ include file=”relativeURL”%>其中的file属性用于指定被引入文件的路径，路径以”/”开头，表示代表当前web应用，细节：被引入的文件必须遵循JSP语法，被引入的文件可以使用任意的扩展名，即使其扩展名为html，JSP引擎也会按照处理jsp页面的方式处理它里面的内容，为了见明知意，JSP规范建议使用jspf(JSP fragments)作为静态引入文件的扩展名，由于使用include指令将会涉及到2JSP页面，并会把2个JSP翻译成一个servlet，所以这2个JSP页面的指令不能冲突(除了pageEncoding和导入包除外);
+
+ 
+
+(3).查看源文件，不是格式良好的html页面，就将被包含的页面的头删除
+
+ 
+
+(4).动态包含:request.getRequestDispatcher(“/public/head.jsp”).inlude(request,response);它会把三个JSP翻译成三个servlet，静态包含只翻译一个Servlet，
+
+ 
+
+(5).在开发过程中两种包含都用到:静态包含编译时包含，性能高，动态包含是运行时包含
+
+ 
+
+第八天：
+
+1．  sun公司的jstl标签库
+
+(1).JSTL标签库：核心标签，国际化标签，数据库标签，XML标签，JSTL函数(EL函数)
+
+ 
+
+(2).sun公司的所有标签都放在standard.jar架包中，
+
+ 
+
+(3).<c:out>标签用于输出一段文本内容到pageContext对象当前保存的”out”对象中，
+
+ 
+
+(4).<c:set>标签用于把某一个对象存在指定的域范围内，或者设置web域中的java.util.Map类型的属性对象或JavaBean类型的属性对象的属性.
+
+ 
+
+(5).<c:remove>标签用于删除各种web域中的属性
+
+ 
+
+(6).<c:catch>标签用于捕获嵌套在标签体中的内容抛出异常
+
+ 
+
+(7).<c:if>,<c:foreach>标签
+
+ 
+
+2．标签案例-打包自己的标签库
+
+(1).首先建一个java工程，将所有的标签处理器类考到这个java工程中，然后将tld文件存放到meta-inf文件夹中,然后将java工程导出为jar
+
+ 
+
+3．标签案例-开发foreach
+
+(1).List list =new ArrayList();然后迭代输出list中的数据
+
+ 
+
+(2).<c:foreachvar=”str” items=”$(list)”>$(str)，var属性记录list中数据的类型.var的类型为String
+
+ 
+
+(3).在doTag()方法中，List list = (List)items;Iteratro it =list.iterator();while(it.hasNext()){Object value =it.next();this.getJspContext().setAttribute(var,value);this.getJspBody().invoke(null);标签中的内容执行回到pagecontext的域中拿去属性var的值，然后输出}
+
+ 
+
+(4).将foreach功能加强可以迭代数组，Map，Collection判断是不是Map，还是Collection，还是Object[]，但是要进行类型转换，可能有很多重复代码，所以都直转型Collection collection即可，if(items instanceof Collection){collection =(Collection)items;}if(itemsinstanceof Map){Map map (Map) items;collection = map.entrySet();} if(itemsinstanceof Object[]){Object obj[] =(Object[])items;CollectionArrays.asList(obj);}当碰到基本数据类型时，就需要迭代数组，将数组中的数据放到collection中，
+
+ 
+
+(5).sun公司的foreach标签在standard架包中,在web-inf，c.tld,查找forEach标签对应的类
+
+ 
+
+(6).反射技术，Class类中有一个方法isArray()判断是否是数组类型，不仅适用于任何类型，在反射类中有一个类Array,它有个方法
+
+getLength(),for(inti=0;i<length;i++){Object value =Array.get(items,i);this.collection.add(value);}
+
+对任意数组进行操作.
+
+ 
+
+4．标签案例-开发if-else标签
+
+(1).<c:iftest=”$(user!=null)”>aaa</c:if><c:else>bbb</c:else>这两个标签是共享一个变量，即让他们两个共享同一父标签<c:choose></c:choose>,共享的变量在父标签中定义，则此时需要写三个标签处理器类，
+
+ 
+
+(2).同时在父标签中要让其标签体执行，所以在父标签中的doTag()方法，this.getJspBody().invoke(null);
+
+ 
+
+(3).得到父标签的变量，所以在子标签的doTag()方法中Choose parent = (Choose)this.getParent();就可以得到父标签的处理器类
+
+ 
+
+5．  标签案例-开发防盗链标签
+
+就是将前面的request的课程中的方法定义为标签处理类即可
+
+ 
+
+6．  标签案例-开发转义
+
+(1).比如超链接的原始输出，
+
+StringWriter sw =new StringWriter();JspFragment jf = this.getJspBody();jf.invoke(sw);Stringcontent = sw.getBuffer().toString();服务器的webapps/examples/web-inf/htmlFilter,java中的方法filter();
+
+ 
+
+7．  标签简介和开发第一个标签
+
+(1).自定义标签主要用于移除jsp页面中java代码，使用自定义标签移除jsp页面中的java代码，只需要完成以下两个步棸：编写一个实现Tag接口的Java类，把页面java代码移动这个java类中(标签处理类),编写标签库描述符(tId)文件，在tId文件中对标签处理器类描述成一个标签，
+
+ 
+
+(2).<%request.getRemoteAddr();out.print(ip);%>,显示用户的IP，使用自定义标签，首先将java代码移动到java类，继承Tag接口，标签有开始标签和结束标签，doEndTag()方法，doStartTag()方法，标签可能有爸爸，所以方法getParent()将父标签作为一个对象传给jsp引擎，方法setPageContext()方法最重要，就是传递一个PageContext对象，他同时也携带了其他8个对象，所以将java代码移动到doStartTag();Tag是个接口，所以使用其继承类，TagSupport，自己编写的类只需要覆盖doStartTag();准备好request,response,所以要得到PageContext，又因为服务器在执行doStartTag()方法之前，默认执行了setPageContext()方法了，所以可以写为:HttpServletRequest request =(HttpServletRequest)this.pageContext.getRequest();还有获取out对象，用于输出.移动完java代码后，第二步：就是在标签库中将标签处理器描述标签，可以到tomcat的webapps中自带的一些例子，web-inf/jsp2/taglib.tld.
+
+ 
+
+(3).<tag><name>viewIP</name><tag-class>cn.itcast.web.tag.ViewIPTag</tag-class><body-content>empty</body-content></tag>.<url><http://www.itcast.cn</url>
+
+ 
+
+(4).导入标签<@taglib url=”http://www.itcast.cin”prefix=”itcast”%>:prefix是前缀，可以容易定位到描述标签的文件
+
+ 
+
+(5).<itcast:viewIP/>即可itcast就是前缀prefix，viewIP就是tag的名称name
+
+ 
+
+(6).tld文件的位置必须放在web-inf中.
+
+ 
+
+8．  传统标签库功能详解
+
+(1).控制标签体内容是否输出:覆写父类的doStartTag()方法，public int doStartTag(){returnTag.EVAL_BODY_INCLUDE}执行标签体，然后再添加tld文件,<body-content>JSP</body-content>,如果不执行只需要return Tag.SKIP_BODY即可
+
+ 
+
+(2).控制整个JSP是否输出，就在JSP开始头定义一个标签,doEndTag()的返回值是否继续执行余下的JSP内容，只需覆盖父类的doEndTag()方法，public int doEndTag(){return Tag.SKIP_PAGE}不执行JSP内容，然后添加tld文件,一定要将该定义的标签放在JSP开始的部分.返回Tag.EVAL_PAGE就可以执行余下的JSP内容.
+
+ 
+
+(3).控制某一部分内容重复执行，只需将重复类容套在自定义的标签中，Tag接口找不到指定的方法，必须要使用其子接口IterationTag接口，其内部中有个方法：doAfterBody(),这个方法在标签体结束后执行，如果返回EVAL_BODY_AGAGIN，就接着执行，直到返回SKIP_BODY,所以继承IterationTag接口，但是TagSupport继承IterationTag,所以还是继承TagSupport即可，首先覆写方法doStartTag()方法，返回Tag.EVAL_BODY_INCLUDE;然后覆写方法doAfterBody(){x–;if(x>0)return IterationTag.EVALBODY_AGAIN;elsereturn IterationTag.SKIP_BODY;}其中x应该定义为成员变量，而不是在doAfterBody的局部变量，因为doAfterBody()方法是多次执行的，不是只执行一次.
+
+ 
+
+(4).修改jsp页面的内容，将显示的内容修改成大写的，将内容套在自定义标签中，接口BodyTag接口，此接口继承了IterationTag接口，覆写BodyTagSupport方法doStartTag()返回EVAL_BODY_BUFFERED,会将标签体最为一个对象通过方法setBodyContent传给标签处理器类，然后在doEndTag()方法中BodyCotned bc = this.getBodyContent();得到标签体，String content = bc.getString();content=content.toUpperCase;然后通过pageContext输出，最后要记得返回EVAL_PAGE，执行余下的jsp内容，就拿到标签体中的内容，然后对内容进行操作.
+
+ 
+
+(5).IterationTag接口的子类为TagSupport类，TagSupport类的子类为BodyTagSupport类，同时BodyTagSupport类是实现BodyTag接口，同时BodyTag接口继承了IterationTag接口，IterationTag接口继承了Tag接口，同时Tag接口和SimpleTag接口都继承JspTag接口，但是Tag接口时JSP2.0以前定义的，现在不用了，而现在主要用的就是SimpleTag接口，其子类为SimpleTagSupport类.所以称Tag接口为传统标签，SimpleTagSupport为简单标签
+
+ 
+
+9．  简单标签库功能详解
+
+(1).SimpleTag接口集成了以前的Tag,IterationTag,BodyTag三个传统标签的功能,所以SimpleTag有个默认实现类SimpleTagSupport
+
+ 
+
+(2).JspContext就是PageContext,方法，setJspBody(JspFragment jspBody),服务器通过这个方法将PageContext对象传递给标签处理器，然后调用doTag()方法，没有开始和结束标签，doTag()方法中抛出个异常，返回SKIP_PAGE控制整个页面不输出，
+
+ 
+
+(3).简单标签的一般逻辑都在doTag()方法中，JspFragment jf = this.getJspBody();jf.invoke(this.getJspContext().getOut());简单标签中写成<body-content>scriptless</body-content>，JSP2.0规定了jsp中不能写脚本代码了，所以不死JSP，而是scriptless,jf是得到了一个标签体，jf.invoke()标签体运行，在this.getJspContext().getOut()的out对象写入浏览器
+
+ 
+
+(4).如果想让标签体不执行，jf.invoke()方法不执行就可以了
+
+ 
+
+(5).jf就是标签体，可以写成:for(int i=0;i<5;i++)jf.invoke(null);这样写也行，就是默认的也是写给浏览器，重复将标签体
+
+ 
+
+(6).StringWritersw = new StringWriter();jf.invoke(sw);将jf的标签体的内容输入到自己的缓冲，可以自己定义一个缓冲流，String content = sw.toString();content =content.toUpperCase();
+
+ 
+
+(7).控制整个标签是否执行，只需在doTag()方法中抛出异常，throw new SkipPageException();即可.同时这个标签也要放在jsp页面的开始处，jsp余下的内容就不执行了
+
+ 
+
+(8).jsp运行时遇到简单标签，实例化标签处理器类，然后通过调用对象setJspContext()方法，将PageContext对象传递给标签处理器类，接着调用setParent()方法将父标签传递给标签处理器类，然后把标签体的内容封装JspFragment对象传递给标签处理器类，然后调用doTag()方法执行自定义标签，执行完后，标签就变成垃圾了，等待垃圾回收器回收，这一点和传统的自定义标签不同
+
+ 
+
+10．开发带属性的标签
+
+(1).要想让一个自定义标签具有属性，通常需要完成两个任务：在标签处理器中编写每个属性对应的setter方法，在TLD文件中描述标签的属性，为自定义标签定义属性时，每个属性都必须按照JavaBean的属性命名方式，在标签处理器中定义属性名对应的setter方法，用来接收JSP页面中调用自定义标签时传递过来的属性值，例如属性url，在标签处理器类中就要定义相应的setUrl(String url)方法，在标签处理器中定义相应的set方法后，JSP引擎在解析执行开始标签前，也就是调用doStartTag方法前，会调用set属性方法为标签设置属性
+
+ 
+
+(2).在tld文件中声明:
+
+<body-content>scriptless</body-content>,<attribute><name>count</name><required>true</required><rtexprvalue>true</retexprvalue>这个设置为true说明不仅可以传递变量，也可以传递脚本表达式</body-content>
+
+ 
+
+(3).count=”5″属性传递过去的是字符串，但是count是int型的，服务器自动转型，但是只支持8中基本类型
+
+ 
+
+11．自定义标签功能概述
+
+(1).自定义标签功能扩展，开发人员在编写JSP页面时，经常还需要在页面中引入一些逻辑例如：控制jsp页面某一部分内容是否执行，控制整个jsp页面是否执行，控制jsp页面内容重复执行，修改jsp页面内容输出，
+
+ 
+
+(2).希望有段jsp代码只有权限的人才能访问，就是控制某一部分内容是否执行，格式化页面输出的内容.
+
+ 
+
+12．自定义标签运行原理
+
+(1).ie->web服务器->1.jsp(1.servlet)[<itcast:viewIP/>]首先实例化标签处理器类，然后调用自定义的继承Tag接口的类的方法，调用setPageContext方法，把页面的pageContext对象传递给标签处理器类，如果有父类标签，就把标签对象通过setParent方法传递给标签处理器类，完成以上初始化工作后，就开始执行开始标签，doStartTag()方法，如果标签有标签体，服务器一般会执行标签体，然后执行结束标签.然后标签调用release()方法，释放标签占用的资源，一般是web应用停止时调用，服务器接着执行jsp余下的内容，web服务器会将web-inf中的tld文件加载到内存中，
+
+ 
+
+(2).jsp翻译成Servlet中可以看到service方法，调用自定标签的动作放在方法中，首先获取pageContext,将标签处理器类的对象创建出来，
+
+ 
+
+第九天：
+
+1.     el表达式和jstl快速入门
+
+(1).EL表达式用于获取数据，在jsp页面中可以使用${标示符}的形式，通知JSP引擎调用pageContext.findAttribute()方法，以标示符为关键字从各个域对象中获取对象，如果域对象中不存在标示符所对应的对象，则返回结果为””(注意不是null),EL表达式中也可以使用$(customerBean.address)的形式来访问JavaBean对象的属性，结合JSTL标签，EL表达式也可以轻松获取各种集合中的元素，EL表达式也可以使用类如${1==1}的新办公室进行简单的逻辑判断
+
+ 
+
+(2).<% Person p= new Person();p.setName(“aaa”);request.setAttribute(“person”,p);%>  ${person.name}
+
+ 
+
+(3).用el表达式在取数据时，通常用.号，若取不出来，就用[]，${map[‘aaa’].name};
+
+ 
+
+(4).${pageContext.request.contextPath}获取当前web应用的路径,<a href=${pageContext.request.contextPath}>点击</a>
+
+ 
+
+(5).<c:forEachvar=”entry” items=”${map}”>${entry.key}:${entry.value.name} </c:forEach>
+
+ 
+
+2.     jsp和javabean
+
+(1).javabean是一个遵循特定写法的Java类，它通常具有如下特点：这个Java类必须具有一个无参的构造函数，属性必须私有化，私有化的属性必须通过public类型的方法暴露给其他程序，并且方法的命名也必须遵守一定的命名规范
+
+ 
+
+(2).javabean在j2ee开发中，通常用于封装数据，对于遵循以上写法的javabean组件，其他程序可以通过反射技术实例化javabean对象，并且通过反射那些遵守命名规范的方法，从而获知javabean的属性，进而调用其属性保存数据
+
+ 
+
+(3).属性的修改器和访问器就是set,get;
+
+ 
+
+(4).JSP技术提供了三个关于JavaBean组件的动作元素，即JSP标签，他们分别是：<jsp:useBean>标签：用于在JSP页面中查找或实例化一个JavaBean组件，<jsp:setProperty>标签：用于在JSP页面中设置一个JavaBean组件的属性，<jsp:getProperty>标签：用于在JSP页面中获取一个JavaBean组件的属性
+
+ 
+
+(5).<jsp:useBean>标签用于在指定的域范围内查找指定名称的JavaBean对象：如果存在则直接返回该JavaBean对象的引用，如果不存在则实例化一个新的JavaBean对象并将它以指定名称存储到指定的域范围中，常用语法：<jsp:useBean id=”beanName”class=”package.class”scope=”page|request|session|application”/>;id属性用于指定JavaBean实例对象的引用名称和其存储在域范围中的名称，class属性用于指定JavaBean完整的类名(即必须带有包名)scope属性用于指定JavaBean实例对象所存储的域范围，其取值只能是page,request,session和application等四个值中的一个，其默认值是page，从page中查找，查到不到就创建一个javabean，查找到了就返回定义的javabean，反正最后肯定有一个javabean
+
+ 
+
+(6).<jsp:useBean….>body</jsp:useBean>标签体只会在javabean实例化时执行.
+
+ 
+
+3.     mvc开发模式
+
+(1).按照三层结构开发流程:servlet,jsp是web层，service,javabean是业务逻辑层(service层)，dao是数据访问层(dao层),通常在层与层之间定义接口，所以在dao层和service层之间定义dao接口，同理在web层和service层之间定义一个service接口，dao层使用jdbc,hibernate编写，当dao层修改了，service的代码不需要修改，因为在service中使用的的是dao接口
+
+ 
+
+(2).组织包接口:Cn.itcast.domain:存放javabean类，cn.itcast.dao存放dao层的类，cn.itcast.dao.impl:存放dao层接口，cn.itcast.service:存放service层类,cn.itcast.service.impl:存放service层接口,cn.itcast.web.controller:存放servlet的类，cn.itcast.web.listener:存放监听器类，cn.itcast.web.filter:存放过滤器类，cn.itcast.web.util：存放工具类，cn.itcast.juit.test:存放测试类，jsp页面放在web-inf下的jsp文件夹下.
+
+ 
+
+ 
+
+ 
+
+二、       Struts1
+
+1.     ActionForm的工作流程分析
+
+(1).ActionForm的工作原理：处理ActionForm的一般步骤：
+
+第一步：检查Action的映射，确定Action中已经配置了对ActionForm的映射
+
+第二步：根据name属性，查找form-bean的配置信息
+
+第三步：检查Action的form-bean的使用范围，确定在此范围下(request,session),是否已经有此form-bean的实例
+
+第四步：假如当前范围下，已经存在了此form-bean的实例，而是对当前请求来说，是同一种类型的话，那么就重用
+
+ 
+
+第五步：否则，就重新构建一个form-bean的实例(调用构造方法)，并且保存在一定作用范围
+
+第六步：form-bean的reset()方法被调用
+
+第七步：调用对应setter方法，对状态属性赋值
+
+第八步：如果validate的属性设置为true,那么就调用form-bean的validate()方法
+
+第九步：如果validate()方法没有返回任何错误，控制器将ActionForm作为参数，传给Action实例的execute()方法并执行
+
+注意：直接从ActionForm类继承的reset()和validate()方法，并不能实现什么处理功能，所以要自己重新覆盖方法
+
+ 
+
+2.     ActionForm相关的attribute属性
+
+(1).配置文件简介：使ActionServlet，ActionMapping，Action，ActionForm这几个不同层次的组件相互协调工作，这些配置文件是在系统启动的时候，读入到内存中，供控制器使用的
+
+ 
+
+(2).<action-mappings>元素帮助进行框架内部的流程控制，可将请求URL映射到Action类，将Action对象与ActionForm对象相关联，<action-mappings>元素内可定义多个<action>子元素,<action>元素，所描述的是特定的请求路径和一个相应的Action类之间的映射关系，有以下属性：attribute:设置和Action关联的form bean在request/session内的属性key,通过request/session的getAttribute(attribute)方法返回该form bean实例,用来存取form的关键字，缺省值与name一样.而不是attribute的值.(ActionForm),input:当表单验证失败时将请求转发的URL
+
+ 
+
+(3).ActionForm相关的input属性
+
+input属性是用来记录路径:当validate校验不通过，即ActionForm的validate方法返回为ActionErrors对象，且该对象携带一些错误信息，就跳转到指定的错误页面(action)的路径,一般是结合validate=true是结合使用的，当为false时，input属性就没有意义了.
+
+ActionForm获取用户的请求参数，其属性的名称必须要和请求参数名相同，必须要定义对应的get/set方法
+
+ 
+
+3.     ActionForm相关的validate属性
+
+(1).数据校验:判断用户带来的数据是否符合规定的格式.
+
+ 
+
+(2).服务器端的校验:看ActionForm有没有调用validate(),可以返回ActionErrors对象，此对象返回一个错误封装对象，没有错误就返回null，缺省的情况是返回null，所以子类要覆盖这个方法.也可以通过在actionForm子类的配置中设置validate=”false”的值，使该方法不调用
+
+复位:是总控制器恢复bean属性的默认值
+
+ 
+
+4.     ActionForward的有关问题
+
+(1).ActionForward对象的配置对象，这些配置对象拥有独一无二的标识以允许他们按照name属性等来检索，ActionForward对象封装了向前进的URL路径且被请求处理器用于识别目标视图
+
+ 
+
+(2).其内部的方法就是两种方法:request.Dispatch().forward();和response.sendRedirect()，前面讲到的重定向和转发.
+
+ActionForward:Redirect是false，就是容器内跳转，就是Request.Dispathcer.forward();在这种情况下path为相对路径是true，就是容器外跳转，就是Response.sendRedirect(),在这种情况下path为绝对路径，要在域名前加上协议头错误！超链接引用无效。
+
+ 
+
+6．ActionMapping的深入研究
+
+(1).ActionMapping：每个<action>元素都与类ActionMapping的一个实例对应，代表着请求信息，该类就是对<action>元素中的信息进行封装保存.该类含有这些信息的访问器和修改器.
+
+ 
+
+(2).mapping.getName();mapping.getPath();mapping.getType();mapping.findForwards();返回局部跳转的页面信息，即就在一个action内部.
+
+ 
+
+7．Action的深入研究和分析
+
+(1).怎么测试Action实例化了，根据构造函数即可，public Action(){System.out.println(“Action isrunning!”);}Action在发出请求时初始化，不是在读取配置时初始化，每个action只会初始化一次，即使在不同的会话中(打开两个浏览器).内存中只有一份,资源可以共享和重用，但是不安全.对以多个请求只创建一个action，含有并发问题.需要进行同步.struts2.x是安全的,
+
+ 
+
+(2).安全的话注意两点:第一、不要用类变量或实例变量共享只是针对某个请求的数据，第二、注意资源操作的同步性
+
+ 
+
+(3).一个action被调用多少次?这是就可以使用action的不安全性，定义一个变量count即可
+
+ 
+
+8．bean-message标签的讲解
+
+bean-message：国际化信息，key是信息的关键字，其对应value是资源文件
+
+bean-message的使用：
+
+第一步：定义资源文件，
+
+com.itcast.ApplicationResources.properties;com.itcast.ApplicationResources_zh-cn;ApplicationResoruces是基名，后面可以跟不同国家的名称
+
+第二步：在struts-config中添加：<message-resourcesparameter=”com.itcast.ApplicationResources”key=”myKey”/>
+
+例如:<message-resourcesparameter”cn.itcast.ApplicationResource” key=”myKey”>写的是基名，在资源文件中定义greeting=welcome username=root password=root键值对key属性是防止所有的properties文件混淆
+
+第三步：在页面中使用：bean:message test<br> <bean:message bundl
+
+e=”myKey”key=”userName”/> <bean:message bundle=”myKey”key=”password”/>
+
+例如:
+
+<tr>
+
+<td colspan=”2″>
+
+<bean-message bundle=”myKey”key=”greeting”/>
+
+</td>
+
+</tr>
+
+ 
+
+<tr>
+
+<td colspan=”2″>
+
+<bean-message bundle=”myKey”key=”username”/>
+
+</td>
+
+</tr>
+
+ 
+
+第四步：切换浏览器的语言类型，工具–>Internet选项->常规->语言
+
+ 
+
+在struts-config.xml文件内的<message-resources>标签中也可以不指定key属性，那么，该<message-resources>标签指定资源包将成为struts的默认资源包；响应的，在JSP文件内的<bean:message>标签中特可以不指定bundle属性，这表示要在struts的默认资源包中去查找信息.
+
+ 
+
+9．bean-write标签的讲解
+
+<bean-writescope=”request” name=”user”property=”username”/>
+
+从哪个域中输出指定bean以及bean的一些属性
+
+ 
+
+10． DispatchAction的讲解
+
+(1).实现一个模块，需要对学生信息进行CRUD操作：
+
+AddStudentAction
+
+DeleteStudentAction
+
+UpdateStudentAction
+
+QueryStudentAction
+
+分别调用四个类的execute方法，但是四个定义四个类有点过多.所有可以合并相关的Action
+
+ 
+
+(2).特殊的Action的使用:DispatchAction,起作用是可以减少Action的数量，使用方法：继承DispatchAction，在里面添加上需要使用的所有方法，参数和返回值与原来的execute方法完全一样，配置文件中带上parameter属性，如parameter=”opertationType”;使用的时候才用如下形式:/*.do?operationType=add
+
+ 
+
+(3).一个Action可以调用CRUD的方法，DispatchAction中的四个方法的参数和返回类型都和原先的execute方法一样，就是将execute复制四份，同时将方法的名称改为addStudent,deleteStudent,updateStudent,queryStudent即可，然后在这四个方法中编写响应的代码.
+
+ 
+
+(4).在地址栏中输入…./DispatchAction.do?operationType=addStudnt，就是访问增加学生页面
+
+ 
+
+(5).第一步：可以开发一个DispatchAction的子类，这里的方法注意必须与原来的execute方法同参数同返回值
+
+第二步：配置parameter属性
+
+ 
+
+11．ForwardAction的讲解
+
+(1).访问jsp访问形式:需要统一访问模式*.do;所有的jsp在web-inf下,所以请求jsp之前需要先访问action
+
+ 
+
+(2).因为每个jsp对应一个Action，可能要许多Action，所以我们只定义一个跳转Action：ForwardAction 访问：/testForwardAction.do,目的是统一以*.do形式访问所有的模块；<action path=”/testForwardAction”forward=”/TestForwardAction.jsp”/>
+
+ 
+
+12． logic_iterate标签的讲解
+
+(1).逻辑标签：逻辑库的标记能够用来处理外观逻辑而不需要使用scriptlet，struts逻辑标签库包含的标记能够有条件的产生输出文本，在对象集合中循环从而重复的产生输出文本，以及应用程序流程控制，它也提供了一组在jsp页面中处理流程控制的标记，这些标记封装在文件名为struts-logic.tld的标记包中，逻辑标记库定义的标记能够执行下列三个功能：条件逻辑，重复，转发/重定向响应
+
+ 
+
+(2).Logic:iterate的使用：单重循环，双重循环,对指定的集合的循环，这个集合必须是一个Iterator,Collection,Map,Array；
+
+ 
+
+(3).
+
+<%String[]usernames={“aa”,”bb”,”cc”,”dd”};
+
+request.setAttribute(“usernames”,usernames);%>
+
+<logic:iterate id=”username” scope=”request”name=”usernames”>
+
+${username}
+
+</logic:iterate>
+
+name所指代的bean必须是一个集合类型
+
+name+property:每一个人的所有爱好:
+
+User mengfanlong = new User();
+
+mengfanlong.setUsername(“mengfanlong”);
+
+String[]mengfanlongFavorites={“sports”,”sleep”,”study”};
+
+mengfanlong.setFavorites(mengfanlongFavorites);
+
+用ArrayList存储用户
+
+<logic:iterate id=”user”scope=”request” name=”userList”>
+
+${user.username}
+
+<logic:iterate id=”favorite”name=”user” property=”favorites”>
+
+${favorite}
+
+</logic:iterate>
+
+</logic:iterate>
+
+ 
+
+(4).id是迭代时的临时属性，还有其他属性:length,offset,indexId等控制循环变量
+
+ 
+
+13．struts插件的讲解
+
+(1).插件(Plugin)生命周期方法:init,destroy,用户提供setter方法，告诉ActionServlet中心控制器把属性设置
+
+ 
+
+(2).应用:在struts启动时把hibernate加载进来，就是要把hibernate的配置文件读进来，同时打开hibernate的sessionfactory
+
+需要struts.jar包+hibernate.jar包
+
+设计一个类 HibernatePlugin，实现plugin接口，读取hibernate配置文件，打开SessionFactory;
+
+在struts-config.xml配置文件中添加一对<plugin>标签,在plugin中加上子标签
+
+ 
+
+(3).
+
+<plug-inclassName=”cn.itcast.HibernatePlugin”>
+
+<set-property property=”hibernateConfigFile”value=”/WEB-INF/hibernate.cfg.xml”/>
+
+</plug-in>
+
+ 
+
+(4).struts当服务启动时启动，插件在struts启动时读取配置文件时启动.可以在中心控制器ActionServlet的init方法对plugin初始化，destroy销毁了
+
+ 
+
+(5).服务启动–>ActionServlet->读取struts-config.xml->根据各种标签的内容进行一系列的初始化(plugin,ActionMapping)
+
+ 
+
+14．struts的MVC组件
+
+(1).组件：ActionServlet，ActionClasses,ActionMapping,ActionForward,ActionFormBean
+
+ 
+
+(2).struts中的MVC：
+
+第一：模型：本质上来说在struts中model是一个商业逻辑类，开发者实现商业逻辑
+
+第二：视图：View是由与控制器Servlet配合工作的一整套JSP定制标签库构成，利用他们可以快速建立应用系统的界面
+
+第三：控制器：前端控制器是一个Servlet，它将客户端请求转发到相应的后端控制器Action类
+
+ 
+
+15．struts的工作原理
+
+第一步:初始化，读取struts-config.xml，Struts框架总控制器(ActionServlet)是一个Servlet，在web.xml中配置成自动启动的Servlet，读取配置文件(struts-config.xml)的配置信息，为不同的struts模块初始化相应的ModuleConfig对象：ActionConfig、ControlConfig、FormBeanConfig、ForwardConfig、MessageResourceConfig
+
+第二步:等待Http请求：用户提交表单或调用URL向Web应用服务器提交一个请求，请求的数据用HTTP协议上传给Web服务器
+
+第三步:填充FormBean：实例化、复位、ActionServlet拿到用户的数据填充FormBean、校验、保存等，(*.do)从ActionConfig中找到对应该请求的Action子类，如没有对应的Action，控制器直接转发给JSP或静态页面，如有相应的Action且这个Action有一个相应的ActionForm，ActionForm被实例化并用HTTP请求的数据填充其属性，并且保存在ServletContext中(request或session中),这样它们就可以被其它Action对象或者JSP调用
+
+第四步:将请求转换到具体Action处理:控制器根据配置信息ActionConfig将请求派发到具体的Action，相应的FormBean一并传给这个Action的execute()方法.(后台控制器)
+
+第五步:调用后台的业务功能类完成商务逻辑:Action一般只包含一个execute方法，它负责执行相应的业务逻辑(调用其他业务模块)，完成后返回一个ActionForward对象，控制器通过该ActionForward对象来进行转发工作.
+
+第六步:返回响应对象:Action根据业务处理的不同结果返回一个目标响应对象给总控制器(前端控制器actionservlet)，该目标响应对象对应一个具体的JSP页面或另一个Action
+
+第七步:转换Http请求到目标响应对象(jsp):总控制器根据业务功能action返回的目标响应对象，找到相应的资源对象，通常是一个具体的JSP页面
+
+第八步:Http响应：前几步都在服务器端，这一步在客户端，目标响应对象将结果展现给用户目标响应对象(jsp)将结果页面展现给用户
+
+控件：总控制器ActionServlet的作用最大，Action(execute)ActionForm，配置文件，将各个模块连接起来
+
+注意web.xml和struts-config.xml的区别，总控制器ActionServlet要在web.xml中注册，ActionForm中的属性，Action等的信息都在struts-config.xml中注册.
+
+ 
+
+16．Struts相关基础理论介绍
+
+(1).案例:实现一个用户登录功能，如果用户输入的用户和密码都正确，就跳转到登录成功页面，否则跳转到登录错误页面
+
+ 
+
+(2).知识点:为什么要使用Struts，FrameWork的概念，Struts的概念和体系结构，Struts的工作原理，Struts的组件，Struts配置文件简介，Struts标记库，错误处理框架，校验框架，高级特性，Struts优缺点
+
+ 
+
+(3).框架(Framework):人们用于解决相同或者相似类型问题的方案，可重用性，可扩展性，可收缩性
+
+ 
+
+(4).Struts是Apache组织的一个开源项目，主要是采用了servlet和jsp技术来实现的，是基于Sun JavaEE平台开发的
+
+ 
+
+17．struts中的异常处理
+
+(1).异常的作用：增加健壮性，模块间传递信息
+
+(2).配置异常:定制异常有两种：全局异常(所有Action使用的)和局部异常(一个Action使用的),
+
+(3).全局异常的定义方法：
+
+<global-exceptions>
+
+<exceptionkey=”user.login.invalideUser” path=”/Login.jsp”type=”com.future.struts.MyException”/>
+
+</global-exceptions>
+
+局部异常的定义方法：
+
+<action-mappings>
+
+<action attribute=”loginForm” name=”loginForm”path=”/loginAction” scope=”request”type=”com.future.struts.LoginAction” validate=”false”/>
+
+<exceptionkey=”user.login.invalideUser” path=”/Login.jsp”/>
+
+</action-mappings>
+
+ 
+
+(4).当Action的execute方法抛出异常时，调用异常处理器类ExceptionHandler
+
+ 
+
+(5).怎么使用:
+
+第一步:配置<exception>可以指明path,key,type,Path是指出现异常后的跳转页面，Key是指异常信息的键，对应的值在资源文件当中，Type所要处理的异常
+
+第二步：在相应的action中的execute方法抛出异常
+
+第三步：在异常处理页面(path所指页面)使用html:errors标签打印提示信息
+
+ 
+
+18．struts注册程序的组件设计和流程分析
+
+(1).编写action，actionform，首先编写actionform，因为action中要用到actionform，在struts-config.xml中注册
+
+actionform,action<form-bean name=”addStudentForm”type=”cn.itcast.AddStudentForm”></form-bean>  <action path=”/addStudentAction”type=”cn.itcast.AddStudentAction”name=””></action>
+
+,还有跳转页面:
+
+<forwardname=”addStudentSuccess”path=”/AddStudentSuccess.jsp”/><forwardname=”addStudentFailure” path=”/AddStudent.jsp”/>
+
+ 
+
+(2).对action的编写要控制线程安全
+
+ 
+
+(3).ActionServlet将请求参数封装成FormBean的属性时进行转换而导致的结果，ActionServlet内部调用BeanUtil这个工具包来将字符串类型的请求参数转换成FormBean中对应的属性的类型，然后再将转换结果装配到FormBean中，这时候可以打印出FormBean中各个属性的结果看看，就大概清楚BeanUtil转换后的结果了，我们在以后的项目实战课程中有对此问题的详细分析和巧妙的解决方案
+
+ 
+
+19．搭建struts开发环境
+
+导入jar包，使用相关类，建立一个配置文件：struts-config.xml 放在web-inf下，web.xml注册struts中心控制器—ActionServlet,注意事项：struts配置文件的位置，预先加载控制器，可以到struts自带的例子程序，从这些例子程序中的web-inf项目下拷贝struts-config.xml文件
+
+ 
+
+20．动态FormBean的讲解
+
+(1).动态form不需要用户自己写代码ActionForm
+
+ 
+
+(2).    <form-bean name=”dynaFormForm”type=”org.apache.struts.action.DynaActionForm”>
+
+<form-property name=”userName”type=”java.lang.String”/>
+
+<form-property name=”password”type=”java.lang.String”/>
+
+<form-property name=”age”type=”java.lang.Integer”/>
+
+</form-bean>
+
+需要告诉form-bean的名称，属性名，属性的类型等信息,其中type必须为包装类型.
+
+ 
+
+(3).提交一个表单数据，用数据填充动态表单，在Action中的execute方法中，
+
+DynaActionForm addStudentForm =(DynaActionForm)form;
+
+String sname =(String)addStudentForm.get(“sname”);
+
+java.sql.Date birth =(java.sql.Date)addStudentForm.get(“birth”);
+
+ 
+
+21．分析struts程序的执行流程
+
+(1).ie->服务器->控制器ActionServlet(前端控制器)(送ActionForm给后端控制器)->LoginAction(后端控制器，第一句要进行转型LoginForm loginForm = (LoginForm)form;)->前端控制器->显示页面
+
+ 
+
+(2).if(loginForm.getUsername().equals(“itcast”)){returnURLKeyWord= “loginSuccess”;}else{returnURLKeyWord=”loginFailure”;}
+
+ 
+
+(3).前端控制器是根据struts-config.xml配置文件找到后端控制器，跳转到成功或者失败的页面也是根据struts-config.xml配置文件的.后端控制器才是真正执行代码.
+
+ 
+
+(4).问题:谁来填充From?,什么时候填充?,根据什么内容来填?
+
+ActionServlet怎样把请求派发给Action?
+
+Action运行完后怎样跳转?
+
+ 
+
+22．分析自己写struts框架的思路
+
+开发以下类:
+
+ActionServlet：读取配置文件dom4j，填充form，派发请求:调用对应的action的execute方法,查找响应，跳转
+
+ActionForm{reset(),validate()}
+
+Action{execute(ActionMapping,ActionForm,HttpServletRequest,HttpServletResponse}
+
+ActionMapping{path,name,type,validate}使用HashMap存储
+
+ActionForward{name,path}使用HashMap存储
+
+配置文件struts-config.xml
+
+ 
+
+23．配置全局跳转
+
+ActionA—–>Error.jsp
+
+ActionB—–>Error.jsp
+
+ActionC—–>Error.jsp
+
+以前的方法是在三个Action中都写上forward
+
+ 
+
+全局跳转:Action A,B,C—->Error.jsp，在struts-config.xml文件中添加标签:<global-forwards><forward name=”error”path=”Error.jsp”/></global-forwards>
+
+ 
+
+24．通过bean_define标签入门struts标签库
+
+(1).JSP视窗组件所使用的struts标记库由四类标记组成：Bean标记：用来在JSP页面中管理bean，Struts-bean.tld;逻辑标记：用来在JSP页面中控制流程，Struts-logic.tld;HTML标记：用来生成HTML标记，在表单中显示数据，使用会话ID对URL进行编程Struts-html.tld；tiles标记：使用动态模板构造普通格式的页struts-tiles.tld
+
+ 
+
+(2).Bean标记，这个标记库中包含用于定义新bean、访问bean及其属性的标记，Bean标记库将标记定义在四个子类别中：创建和复制bean的标记，脚本变量定义标记，bean翻译标记，消息国际化标记.
+
+ 
+
+(3).Bean:define:从已经有的变量或者变量的属性定义一个新的变量:id,name,property,scope(老bean),toScope(新bean)，
+
+查找:到scope中查找name的变量获取它的property,
+
+定义:定义一个新变量的名字(id)，同时这个属性是必须的
+
+保存:将新变量保存到toScope
+
+ 
+
+25．通过代码了解ActionForm的基本工作流程
+
+(1).通过ActionForm的构造函数来观察是否被实例化了，通过reset()方法来观察是否执行了复位方法.set()方法，观察他们三者的运行顺序,
+
+ 
+
+(2).首先调用构造方法，然后调用reset方法，然后在调用set方法，复位只需要只对请求复位.
+
+ 
+
+26．用struts开发简单的登陆示例程序
+
+(1).建一个类，继承ActionForm，注册，修改配置文件struts-config.xml
+
+ 
+
+(2).public classLoginForm extends ActionForm{
+
+private String username = null;
+
+private String password = null;
+
+}
+
+ 
+
+(3).在struts-config-xml文件中添加一个标签<form-beans></form-beans>
+
+ 
+
+(4).开发Action，建立一个类，继承Action，覆盖execute方法，需要强制转型，调用其他模块，跳转(根据关键字，关键字参照action中forward标签中的name属性),注册:修改配置文件struts-config.xml，Path：指明调用者(jsp)能通过中心控制器ActionServlet找到Action，Type：指明该action类全名，Name:该action引用的form的名称
+
+ 
+
+(5).public classLoginAction extends Action{覆盖execute方法}
+
+ 
+
+27．用监听器探索ActionForm如何被存储
+
+(1).怎样检查ActionForm被存储了，有两种方法：一种是从过程去查看,另一种从结果去查看.
+
+ 
+
+(2).从过程查看，通过监听器，从结果查看execute方法
+
+ 
+
+(3).制作监听器：定义一个类，AttributeListener，然后实现两个接口，HttpSessionAttributeListener，HttpRequestAttributeListener，在web.xml中写入:<listener><listener-class>cn.itcast.AttributeListener</listener-class></listener>监听session,request域中属性的变化.
+
+ 
+
+28．在execute方法中分析ActionForm的问题
+
+(1).从结果查看，
+
+AddStudentFormaddStudentFormInSession
+
+=(ActionForm)request.getSession().getAttribute(“addStudentForm”);
+
+或者
+
+AddStudentFormaddStudentFormInScope
+
+=null;if(mapping.getScope().equals(“request”)){addStudentFormInScope
+
+=(AddStudentForm)request.getAttribute(“addStudentForm”);}else{addStudentFormInScope
+
+=(AddStudentForm)request.getSession().getAttribute(“addStudentForm”);}从不同的域中获取ActionForm
+
+ 
+
+(2).参数form是和存储在域中的form是相同的(ActionForm);
+
+ 
+
+(3).没有sname成员变量，但是有setName()方法，所以准确来说是看是否有setName();页面中的控件<input type=”text”name=”name”>中的name是否和ActionForm中成员变量的名称一样，其实不是看成员变量，而只是看标准的set方法，通过反射技术执行.
+
+ 
+
+ 
+
+三、       Struts2
+
+1．  Action名称的搜索顺序
+
+(1).获取请求路径的URL，例如URL是：http://server/struts2/path1/path2/path3/test.action
+
+ 
+
+(2).首先寻找namespace为/path1/path2/path3的package，如果不存在这个package则执行步棸3，如果存在这个package，则在这个package中寻找名字为test的action，当在该package下寻找不到action时就会直接跑到默认namespace的package里面中寻找action(默认的命名空间为空字符串),如果在默认namespace的package里面还寻找不到该action，页面提示找不到action
+
+ 
+
+(3).寻找namespace为/path1/path2的package，如果不存在这个package，则转至步棸4，如果存在这个package，则在这个package中寻找名字为test的action，当在该package中寻找不到action时就会直接跑到默认namespace的package里面去找名字为test的action，在默认的namespace的package里面还寻找不到该action，页面提示找不到action
+
+ 
+
+(4).寻找namespace为/path1的package，如果不存在这个package则执行步棸5，如果存在这个package，则在这个package中寻找名字为test的action，当在该package中寻找不到action时就会直接跑到默认namespace的package里面去找名字为test的action，在默认namespace的package里面还寻找不到该action，页面提示找不到action
+
+ 
+
+(5).寻找namespace为”/”的package，如果存在这个package，则在这个package中寻找名字为test的action，当在package中寻找不到action或者不存在这个package时，都会去默认namespace的package里面寻找action，如果还是找不到，页面提示找不到action
+
+ 
+
+(6).在struts2中默认的处理后缀是.action,不加后缀也可以
+
+ 
+
+2．  Action配置的各项默认值
+
+(1).struts1中：<actionpath=”/control/employee/addUI”forward=”/WEB-INF/page/employeeAdd.jsp”/>实现请求转发，action将请求转发给视图jsp
+
+ 
+
+(2).在struts2中，<actionname=”addUI”><result>/WEB-INF/page/employeeAdd.jsp</result></action>,不需要设置addUI的类路径class属性了
+
+ 
+
+(3).Action配置中的各项默认值：
+
+<package name=”itcastnamespace=”/test” extends=”struts-default”>
+
+<action name=”hellowrold”class=”cn.itcast.action.HelloWorldAction”method=”execute”>
+
+<result name=”success”>/WEB-INF/page/hello.jsp</result>
+
+</action>
+
+</package>
+
+如果没有为action指定class,默认是ActionSupport,可以查看ActionSupport的源代码,首先交给ActionSupport类处理.
+
+如果没有为action指定method，默认执行action中的execute()方法,这个方法的返回值为”success”;
+
+ 
+
+(4).如果没有指定result的name属性，默认值为success,正好和execute方法的返回值相同，所以可以实现视图的转发
+
+ 
+
+3．OGNL表达式
+
+(1).OGNL表达式：OGNL是Object Graphic Navigation Language(对象图导航语言)的缩写，它是一个开源项目，struts2框架使用OGNL作为默认的表达式语言
+
+第一：相对EL表达式，它提供了平时我们需要的一些功能，如：
+
+支持对象方法的调用，如：xxx.sayHello();
+
+第二：支持类静态方法调用和值访问，表达式的格式为@[类全名 (包括包路径) ]@[方法名|值名]，例如：@java.lang.String@format(‘foo %s,’bar’)或@cn.itcast.Constant@APP_NAME
+
+第三：操作集合对象
+
+ 
+
+(2).OGNL有一个上下文(Context)概念，说白了上下文就是一个MAP结构，他实现了java.utils.Map接口，在struts2中上下文(context)的实现为ActionContext
+
+ 
+
+(3).struts2中的OGNLContext是实现者为ActionContext，它的结构为：OGNL Context：ValueStack(值栈，他是根对象)，parameters,request,session,application,attr,当struts2接受一个请求时，会迅速创建ActionContext，ValueStack，action，然后把action存放进ValueStack，所以action的实例变量可以被OGNL访问
+
+ 
+
+(4).当要访问某个对象只需在其前面加上一个’#’,例如：#request,当然有一个特殊的例子，就是根对象，会省略’#’,OGNL会设定一个根对象(root对象),在struts2中根对象就是ValueStack(值栈),如果要访问根对象(即ValueStack)中的对象的属性，则可以省略#命名空间，直接访问该对象的属性即可.
+
+ 
+
+(5).在struts2中，根对象ValueStack的实现类为OgnlValueStack,该对象不是我们想象的只存放单个值，而是存放一组对象，在OgnlValueStack类里有一个List类型的root变量，就是使用它存在一组对象，在root变量中处于第一位的对象叫栈定对象(存放action)，通常我们在OGNL表达式里直接写上属性的名称即可访问root变量对象的属性，搜索顺序是从栈定对象开始寻找，如果栈定对象不存在该属性，就会从第二个对象寻找，如果没有找到就从第三个对象寻找，依次往下访问，直到找到为止。大家注意：struts2中，OGNL表达式需要配合struts标签才可以使用，如：<s:property value=”name”/>，value属性接受的是OGNL表达式，搜索是否含有name属性
+
+ 
+
+(6).由于ValueStack(值栈)是struts2中OGNL的根对象，如果用户需要访问值栈中的对象，在JSP页面可以直接通过下面的EL表达式访问ValueStack(值栈)中对象的属性：
+
+${foo}获得值栈中某个对象的foo属性
+
+如果访问其他Context中的对象，由于他们不是根对象，所以在访问时，需要添加#前缀
+
+第一：application对象：用于访问ServletContext，例如#application.userName或者#application[‘userName’],相当于调用ServletContext的getAttribute(“username”);
+
+第二：session对象：用来访问HttpSession，例如#session.userName或者#session[‘userName’],相当于调用session.getAttribute(“userName”);
+
+第三：request对象：用来访问HttpServletRequest属性(attribute)的Map，例如#request.userName或者#request[‘userName’],相当于调用request.getAttribut(“userName”);
+
+第四：parameters对象：用于访问HTTP的请求参数，例如#parameters.userName或者#parameters[‘userName’],相当于调用request.getParameter(“username”);
+
+第五：attr对象：用于按page->request->session->application顺序访问其属性.
+
+ 
+
+(7).为何使用EL表达式能够访问valueStack中对象的属性：原因是struts2对HttpServletRequest做了进一步的封装，简单代码如下
+
+public class StrutsRequestWrapper extends HttpServletRequestWrapper{
+
+publicStrutsRequestWrapper(HttpServletRequest req){
+
+super(req);
+
+}
+
+public Object getAttribut(String s){
+
+ActionContext ctx = ActionContext.getContext();
+
+Object attribute = super.getAttribute(s)//先从request范围获取属性值
+
+if(ctx !=null){
+
+if(attribute==null){
+
+….
+
+ValueStack stack =ctx.getValueStack();
+
+attribute=stack.findValue(s);//寻找规则就是前面的寻找规则
+
+….
+
+}
+
+}
+
+return attribute
+
+}
+
+}
+
+EL表达式只能访问ValueStack对象中的内容
+
+ 
+
+(8).采用OGNL表达式创建List/Map集合对象，如果需要一个集合元素的时候(例如List对象或者Map对象)，可以使用OGNL中同集合相关的表达式，使用如下代码直接生成一个List对象：
+
+<s:set name=”list”value=”{‘zhangming’,’xiaoi’,’liming’}”/>把当前迭代的对象放在值栈的栈顶
+
+<s:iterator value=”#list”>
+
+<s:property/><br>
+
+</s:iterator>
+
+Set标签用于将某个值放入指定范围
+
+scope：指定变量被放置的范围，该属性可以接受application,session,request,page或action.如果没有设置该属性，则默认放置在OGNL Context中.
+
+value：赋给变量的值，如果没有设置该属性，则将ValueStack栈顶的值赋给变量
+
+生成一个Map对象：
+
+<s:set name=”foobar”value=”#{‘foo1′:’bar1′,’foo2′:’bar2′}”/>
+
+<s:iteratorvalue=”#foobar”>//迭代标签，把当前迭代的对象放在值栈的栈顶(entry对象),foobar是Map对象和request等对象是同等地位，访问时需要使用’#’
+
+<s:property value=”key”/>=<s:propertyvalue=”value”/><br>
+
+</s:iterator>
+
+数字不用任何符号，字符串使用单引号(‘),对于Map采用的是maps.entrySet()这个方式进行迭代的.
+
+ 
+
+(9).property标签用于输出指定值：
+
+<s:set name=”name”value=”kk”/>
+
+<s:property value=”#name”/>
+
+default:可选属性，如果需要输出的属性值为null,则显示该属性指定的值
+
+escape:可选属性，指定是否格式化HTML代码
+
+value:可选属性，指定需要输出的属性值，如果没有指定该属性，则默认输出ValueStack栈顶的值
+
+id:可选属性，指定该元素的标识
+
+ 
+
+(1)0.对于集合类型，OGNL表达式可以使用in和not in两个元素符号，其中in表达式用来判断某个元素是否在指定的集合对象中，not in判断某个元素是否不在指定集合对象中，如下所示：
+
+in表达式：
+
+<s:if test=”‘foo’ in {‘foo’,’bar’}”>
+
+在
+
+</s:if>
+
+<s:else>
+
+不在
+
+</s:else>
+
+no in 表达式
+
+<s:if test=”‘foo’ not in {‘foo’,’bar’}”>
+
+不在
+
+</s:if>
+
+<s:else>
+
+在
+
+</s:else>
+
+ 
+
+(11).OGNL表达式的投影功能，除了in和not in之外，OGNL还允许使用某个规则获得集合对象的子集，常用的有以下3个相关操作符：
+
+第一：?:获得所有符号逻辑的元素
+
+第二：^:获得符合逻辑的第一个元素
+
+第三：$:获得符合逻辑的最后一个元素
+
+例如代码：
+
+<s:iterator value=”books.{?#this.price>35}”>
+
+<s:propertyvalue=”title”/>-$<s:propertyvalue=”price”/><br>
+
+</s:iterator>
+
+在上面代码中，直接在集合后紧跟{}运算符表明用于取出该集合的子集，{}内的表达式用于获取符合条件的元素，this指的是为了从大集合books筛选数据到小集合，需要对大集合books进行迭代，this代表当前迭代的元素，本例的表达式用于获取集合中价格大于35的书集合.
+
+public class BookAction extends ActionSupport{
+
+private List<Book> books;
+
+ 
+
+@Override
+
+public String execute(){
+
+books = new LinkedList<Book>();
+
+books.add(new Book(“aadfsd”,”spring”,23));
+
+books.add(newBook(“basdfd”,”ejb3.0″,15));
+
+}
+
+}
+
+ 
+
+4．result配置的各种视图转发类型
+
+(1).在struts1中有两种视图转发类型：容器内转发，容器外转发(重定向);
+
+<actionpath=”/control/employee/manage”…/>
+
+<forwardname=”add”>/index.jsp</forward>
+
+<forward name=”add”redirect=””/index.jsp</forward>
+
+</action>
+
+ 
+
+(2).struts2中的视图转发类型：result配置类似于struts1中的froward,但是struts2中提供了多种结果类型，常用的类型有：dispatcher(默认值)、rdierect、redirectAction、plainText;dispatcher对应于struts1中的容器内部请求转发,redirect对应于struts1中的容器外部转发(重定向)
+
+ 
+
+(3).<actionname=”helloworld”class=”cn.itcast.action.HelloWorldAction”>
+
+<resultname=”success”>/WEB-INF/page/hello.jsp</result>
+
+</action>
+
+在result中还可以使用${属性名}表达式访问action中的属性，表达式里的属性名对应的action中的属性，如下：<resulttype=”redirect”>/View.jsp?id=${id}</result>,使用重定向可能需要将Action中的数据属性代入视图页面，这种方式太重要了，很实用.这种表达式叫做ognl表达式，struts1中是没有的，只能将属性值在代码中写死了，不像struts2中的这个表达式，很灵活.当传递的属性是中文时,需要进行URLEncoder.encode(“传智播客”,”UTF-8″)编码.
+
+ 
+
+(4).下面是redirectAction结果类型的例子，如果重定向的action中同一个包下：
+
+<resulttype=”redircetAction”>helloworld</result>
+
+如果重定向的action在别的命名空间下：
+
+<resulttype=”redirectAction”>
+
+<paramname=”actionName”>helloworld</param>
+
+<paramname=”namespace”>/test</param>
+
+</result>
+
+当添加用户完后，可以回到一个用户列表，此时可以重定向到action
+
+ 
+
+(5).plaintext显示原始文件内容，例如：当我们需要原样显示JSP文件源代码的时候，我们可以使用此类型
+
+<result name=”source”type=”plainText”>
+
+<paramname=”location”>/xxx.jsp</param>
+
+<paramname=”charSet”>UTF-8</param><!–指定读取文件的编码–>
+
+</result>
+
+在Eclipse中jsp是用UTF-8编码存放的，当读取jsp的内容时，是用本地字符编码的，可能出现乱码，所以要设置读取文件的编码集.
+
+ 
+
+(6).浏览器重定向的JSP不能放在web-inf目录中，而请求转发的JSP可以放在web-inf目录中
+
+ 
+
+(7).struts2中的全局视图:
+
+<global-results>
+
+<resultname=”index.jsp”></result>
+
+<global-results>
+
+和struts1中的全局视图是很相似的
+
+我们可以定义一个包，然后将全局视图的配置放到这个包中
+
+ 
+
+5．struts2常用标签
+
+(1).property标签用于输出指定值：
+
+<s:setname=”name” value=”kk”/>
+
+<s:propertyvalue =”#name”/>
+
+default:可选属性，如果需要输出的属性值为null,则显示该属性指定的值
+
+escape:可选属性，指定是否格式化HTML代码
+
+value:可选属性，指定需要输出的属性值，如果没有指定该属性，则默认输出ValueStack栈顶的值
+
+id:可选属性，指定该元素的标识
+
+ 
+
+(2).iterator标签用于对集合进行迭代，这里的集合包含List、Set和数组
+
+<s:set name=”list”value=”{‘aa’,’bb’,’cc’}”/>
+
+<s:iterator value=”#list”status=”st”>
+
+<font color=<s:iftest=”#st.odd”>red</s:if><s:else>blue</s:else>>
+
+<s:property/></font><br>
+
+</s:iterator>
+
+value:可选属性，指定被迭代的集合，如果没有设置该属性，则使用ValueStack栈顶的集合，
+
+id:可选属性，指定集合里元素的id(已被标注为过时)
+
+status:可选属性，该属性指定迭代时的iteratorStatus实例，该实例包含如下几个方法：
+
+int getCount(),返回当前迭代了几个元素
+
+int getIndex(),返回当前迭代元素的索引
+
+boolean isEven(),返回当前被迭代元素的索引是否为偶数
+
+boolean isOdd(),返回当前被迭代元素的索引是否是奇数
+
+boolean isFirst(),返回当前被迭代元素是否是第一个元素
+
+boolean isLast(),返回当前被迭代元素是否是最后一个元素
+
+ 
+
+(3).<s:setname=”age” value=”21″ scope=”request”/>
+
+<s:iftest=”#request.age==23″>
+
+23
+
+</s:if>
+
+<s:elseif test =”#age==21″>
+
+21
+
+</s:elseif>
+
+<s:else>
+
+都不等
+
+</s:else>
+
+ 
+
+(4).url标签：
+
+<s:url action=”helloworld_add”namespace=”/test”>
+
+<s:param name=”personid”value=”3″/>
+
+</s:url>
+
+生成类似如下路径：
+
+/struts/test/helloworld_add.action?persionid=3
+
+ 
+
+当标签的属性值作为字符串类型处理时，”%”符号的用途是计算OGNL表达式的值
+
+<s:set name=”myurl”value='”http://www.foshanshop.net”‘/>
+
+<s:url value=”#myurl”/>
+
+<s:url value=”%{#myurl}”/>
+
+输出结果：
+
+#myurl
+
+http://www.foshanshop.net
+
+ 
+
+(5).表单标签checkboxlist复选框
+
+如果集合为list
+
+<s:checkboxlist name=”list”list={‘Java’,’Net’,’RoR’,’PHP’}” value=”{‘Java’,’Net’}”/>
+
+<input type=”checkbox”name=”list” value=”Java”checked=”checked”/><label>Java</label>
+
+<input type=”checkbox”name=”list” value=”Net” checked=”checked”/><label>Net</label>
+
+<input type=”checkbox”name=”list” value=”RoR” ><label>Java</label>
+
+<input type=”checkbox”name=”list” value=”Java”/><label>Java</label>
+
+如果集合为MAP
+
+<s:checkboxlist name=”map”list=”#{1:’aa’,2:’bb’}” listKey=”key”listValue=”value” value=”{1}”/>
+
+生成如下html代码：
+
+<input type=”checkbox”name=”map” value=”1″checked=”checked”/><label>aa</label>
+
+<input type=”checkbox”name=”map” value=”2″ /><label>bb</label>
+
+当然集合里面存放的也可以是对象类型
+
+ 
+
+(6).单选框
+
+<s:radio name=”beans”list=”#request_person” listKey=”personid”listValue=”name”/>
+
+ 
+
+6．struts2的处理流程与Action的管理方式
+
+(1).用户请求->(查看web.xml文件)StrutsPrepareAndExecuteFilter->Interceptor(struts2内置的一些拦截器或用户自定义拦截器)->Action(用户编写的Action类，类似Struts1中的action,针对每一次请求，都创建一个Action)->Result(类似struts1中的forward)->Jsp/html(响应)
+
+ 
+
+(2).StrutsPrepareAndExecuteFilter是struts2框架的核心控制器，它负责拦截由<url-pattern>/”</url-pattern>指定的所有用户请求，当用户请求到达时，该fileter会过滤用户的请求，默认情况下，如果用户请求的路径不带后缀或者后缀以.action结尾，这时请求将被转入到struts2框架处理，否则struts2框架将略过该请求的处理，当请求转入struts2框架处理时会先经过一系列的拦截器，然后再到Action，与struts1不同，struts2对用户的每一次请求都会创建一个Action，所以struts2中的action是线程安全的.
+
+ 
+
+7．XML配置方式实现对action的所有方法进行校验
+
+(1).基于XML配置方式实现对action的所有方法进行输入校验：
+
+使用基于XML配置方式实现输入校验时，Action也需要继承ActionSupport，并且提供校验文件，校验文件和action类放在同一个包下，文件的取名格式为：ActionClassName-validation.xml,其中，ActionClassName为action的简单类名，-validation为固定写法，如果Action类为cn.itcast.UserAction，那么该文件的取名应为：UserAction-validation.xml，下面是校验文件的模板：
+
+<validators>
+
+<field name=”username”>
+
+<field-validatortype=”requiredstring”>
+
+<paramname=”trim”>true</param>
+
+<message>用户名不能为空</message>
+
+</field-validator>
+
+</field>
+
+</validators>
+
+<field>指定action中要校验的属性，<field-validator>指定校验器，上面指定的校验器requirestring是由系统提供的，系统提供了能满足大部分验证需求的校验器，这些校验器的定义可以在xwork-2.x.jar中的com.opensymphony.xwork2.validator.validators下的default.xml中找到，<message>为校验失败后的提示信息，如果需要国际化，可以为message指定key属性，key的值为资源文件中的key，在这个校验文件中，对action中字符串类型的username属性进行验证，首先要求调用trim()方法去掉空格，然后判断用户名是否为空.
+
+ 
+
+(2).struts2提供的校验器列表:
+
+required(必填校验器，要求field的值不能为Null)
+
+requiredstring(必填字符串校验器，要求field的值不能为null，并且长度大于0，默认情况下会对字符串取钱后空格)
+
+stringlength(字符串长度校验器，要求field的值必须在指定的范围内，否则校验失败，minLength参数指定最小长度，maxLength参数指定最大长度，trim参数指定校验field之前是否去除字符串前后的空格)
+
+regex(正则表达式校验器，检查被校验的field是否匹配一个正则表达式，expression参数指定正则表达式，caseSensitive参数指定进行正则表达式匹配时，是否区分大小写，默认值为true)
+
+int(整数校验器，要求field的整数值必须在指定范围内，min指定最小值，max指定最大值)
+
+double(双精度浮点数校验器，要求field的双精度浮点数必须在指定范围内，min指定最小值，max指定最大值)
+
+fieldexpression(字段OGNL表达式校验器，要求field满足一个OGNL表达式，expression参数指定OGNL表达式，该逻辑表达式基于ValueStack进行求值，返回true时校验通过，否则不通过)
+
+email(邮件地址校验器，要求如果field的值非空，则必须是合法的邮件地址)
+
+URL(网址校验器，要求如果field的值非空，则必须是合法的URL地址)
+
+date(日期校验器，要求field的日期值必须在指定范围内，min指定最小值，max指定最大值)
+
+conversion(转换校验器，指定在类型转换失败时，提示的错误信息)
+
+visitor(用于校验action中的符合属性，它指定一个校验文件用于校验符合属性中的属性)
+
+expression(OGNL表达式校验器，expression参数指定ognl表达式，该逻辑表达式基于ValueStack进行求值，返回true时校验通过，否则不通过，该校验器不可用在字段校验器风格的配置中)
+
+ 
+
+(3).![CDATA[文本内容]]：文本内容不会被解析，只会原封不动的当做文本处理
+
+ 
+
+(4).编写校验文件时，不能出现帮助信息：
+
+在编写ActionClassName-validation.xml校验文件时，如果出现不了帮助信息，可以按照下面方式解决：
+
+windows->preferences->myeclipse->filesand editors->xml->xmlcatalog:点击add,在出现的窗口中的location中选”file system”然后再xwork-2.1.2戒烟目录的src\java目录中选择xwork-validator-1.0.3.dtd,回到设置窗口的时候，不要急着关闭窗口，应把窗口中的Key Type改为URI，Key改为http://www.opensymphoney.com/xwork/xwork-validaor-1.0.3.dtd
+
+ 
+
+8．XML配置方式实现对action的指定方法校验
+
+(1).基于XML配置方式对指定action方法实现输入校验：
+
+当校验文件的取名为ActionClassName-validation.xml时，会对action中的所有处理方法实施输入校验，如果你只需要对action中的某个action方法实施校验，那么校验文件的取名应为：ActionClassName-ActionName-validation.xml，其中ActionName为struts.xml中的action的名称，例如：在实际应用中，常有以下配置：
+
+<action name=”user_*”class=”cn.itcast.action.UserAction” method=”{1}”>
+
+<resultname=”success”>/WEB-INF/page/message.jsp</result>
+
+<resultname=”input”>/WEB-INF/page/addUser.jsp</result>
+
+</action>
+
+UserAction中有以下两个处理方法：
+
+public String add() throws Exception{
+
+ 
+
+}
+
+public String update() throws Exception{
+
+ 
+
+}
+
+要对add()方法实施验证，校验文件的取名为：UserAction-user_add-validation.xml
+
+要对update()方法实施验证，校验文件的取名为：UserAction-user_update-validation.xml
+
+ 
+
+(2).基于XML校验的一些特点：
+
+当为某个action提供了ActionClassName-validation.xml和ActionClassName-ActionName-validation.xml两种规则的校验文件时，系统按下面顺序寻找校验文件：
+
+ActionClassName-validation.xml
+
+ActionClassName-ActionName-validation.xml
+
+系统寻找到第一个校验文件时还会继续搜索后面的校验文件，当搜索到所有校验文件时，会把校验文件里的所有校验规则汇总，然后全部应用于action方法的校验，如果两个校验文件中指定的校验规则冲突，则只使用后面文件中的规则。
+
+当action继承了另一个action，父类action的校验文件会先被搜索到
+
+假设UserAction继承BaseAction
+
+<actionname=”user” class=”cn.itcast.action.UserAction”method=”{1}”>
+
+</action>
+
+访问上面的action，系统先搜索父类的校验文件：BaseAction-validation.xml,BaseAction-user-validation.xml,接着搜索子类的校验文件：UserAction-validation.xml,UserAction-user-validation.xml,应用于上面action的校验规则为这四个文件的总和
+
+ 
+
+9．动态方法调用和使用通配符定义action
+
+(1).在struts1中实现方法的动态调用：
+
+<actionpath=”/control/employee/manage” type=”….DispatchAction”parameter=”method”/>
+
+</action>
+
+/control/employee/manage?method=addUI
+
+但是Action必须继承DispatchAction
+
+ 
+
+(2).在struts2中有两种方式：
+
+第一种：(struts2.1版本后就不建议使用了)是动态方法调用：如果Action中存在多个方法时，我们可以使用!+方法名调用指定方法，如下：
+
+public class HelloWorldAction{
+
+private String message;
+
+….
+
+public String execute()throws Exception{
+
+this.message=”我的第一个struts2应用”;
+
+}
+
+public String other() throws Exception{
+
+this.message=”第二个方法”;
+
+return “success”;
+
+}
+
+}
+
+假设访问上面的action的URL路径为：/struts/test/helloworld.action，要访问action的other方法，我们就可以这样调用：/struts/test/helloworld!other.action，如果不想使用动态方法调用，我们可以通过常量struts.enable.DynamicMethodInvocation关闭动态方法调用：
+
+<constantname=”struts.enable.DynamicMethodInvocation”value=”false”/>
+
+第二种：使用通配符定义action(推荐使用的)
+
+<package name=”itcast”namespace=”/test” extends=”struts-default”>
+
+<action name=”helloworld_*”class=”cn.itcast.action.HelloWorldAction” method=”{1}>
+
+<resultname=”success”>/WEB-INF/page/hello.jsp</result>
+
+</action>
+
+</package>
+
+public class HelloWorldAction{
+
+private String message;
+
+….
+
+public String execute()throws Exception{
+
+this.message=”我的第一个struts2应用”;
+
+}
+
+public String other() throws Exception{
+
+this.message=”第二个方法”;
+
+return “success”;
+
+}
+
+}
+
+要访问other()方法，可以通过这样的URL访问：/test/helloworld_other.action
+
+name=”helloworld_*”后可根据多个*,method={1},’1’表示匹配*的位置
+
+name=”helloworld_*_*”,method={2}：要访问other()方法，可以通过这样的URL访问：/test/helloworld_xxx_other.action
+
+ 
+
+10．对action指定的方法进行校验
+
+手工编写代码实现对action指定方法输入校验：
+
+通过validateXxx()方法实现，validateXxx()只会校验action中方法名为Xxx的方法，其中Xxx的第一个字母要大写，当某个数据校验失败时，我们应该调用addFieldError()方法往系统的fieldErrors添加校验失败信息，(为了使用addFieldError()方法，action可以继承ActionSupport(),如果系统的fieldErrors包含失败信息，struts2会将请求转发到名为input的result，在input视图中可以通过<s:fielderror/>显示失败信息.
+
+validateXxx()方法使用例子：
+
+public Stringadd() throws Exception{return “success”;}
+
+public voidvalidateAdd() {
+
+if(username==null&&””.equals(username.trim()))this.addFieldError(“username”,”用户名不能为空”);
+
+}
+
+验证失败后，请求转发至input视图：<resultname=”input”>/WEB-INF/page/addUser.jsp</result>
+
+在addUser.jsp页面中使用<s:fielderror/>显示失败信息
+
+ 
+
+11．对Action中所有方法进行输入校验
+
+(1).在struts2中，我们可以实现对action的所有方法进行校验或者对action的指定方法进行校验
+
+ 
+
+(2).对于输入校验struts2提供了两种实现方法：一种是采用手工编写代码实现，另一种是基于XML配置方式实现
+
+ 
+
+(3).手工编写代码实现对action中所有方法输入校验：通过重写validate()方法实现，validate()方法会校验action中所有与execute方法签名相同的方法，当某个数据校验失败时，我们应该调用addFieldError()方法往系统的fieldErrors添加校验失败信息(为了使用addFieldError()方法，action可以继承ActionSupport()，如果系统的fieldErrors包含失败信息，struts2会将请求转发到名为input的result,在input视图中可以通过<s:fielderror/>显示失败信息.
+
+validate()使用例子：
+
+public voidvalidate(){
+
+if(this.mobile==null||””.equals(this.mobile.trim())){this.addFieldError(“username”,”手机号不能为空”)}else{if(Pattern.compile(“^1[358]\\d{9}”).matcher(this.mobile.trim()).matchers()){this.addFieldError(“mobile”,”手机号的格式不正确”);}}
+
+}
+
+验证失败后，请求转发至input视图：
+
+<resultname=”input”>/WEB-INF/page/addUser.jsp</result>
+
+在addUser.jsp页面中使用<s:fielderror/>显示失败信息
+
+ 
+
+12．多文件上传
+
+(1).多文件上传，就是在一个文件上传的基础上，将属性File变成数组类型File[]类型即可，同时该字段的名称必须要和上传页面中属性name的名称一样.
+
+然后进行一次迭代，就可以得到所有的文件
+
+ 
+
+13．防止表单重复提交
+
+<s:token>标签防止表单重复提交
+
+第一步：在表单中加入<s:token/>
+
+<s:form action=”helloworld_other”method=”post” namespace=”/test”>
+
+<s:textfieldname=”person.name”/><s:token/><s:submit/>
+
+</s:form>
+
+第二步：<action name=”helloworld_*”class=”cn.itcast.action.HelloWorldAction” method=”{1}”>
+
+<interceptor-refname=”defaultStack”/>
+
+<interceptor-refname=”token”/>
+
+<resultname=”invalid.token”>/WEB-INF/page/message.jsp</result>
+
+<result>/WEB-INF/page/result.jsp</result>
+
+</action>
+
+以上配置加入了”token”拦截器和”invalid.token”结果，因为”token”拦截器在会话的tlent与请求的token不一致时，将会直接返回”invalid.token”结果
+
+在debug状态，控制台出现下面信息，是因为Action中并没有struts.token和struts.token.name属性，我们不用关心这个错误
+
+使用了<s:form/>标签可以不指定action的上下文标签路径，可以通过命名空间实现.和前面的原理是一样的，在路径后面添加上sessionid号，只是这步操作不需要我们自己得到sessionid号，struts帮我们操作.
+
+在值栈中的对象，访问无需添加’#’
+
+ 
+
+14．访问或添加几个属性
+
+(1).访问或添加request/session/application属性,在struts2中的Action中的execute方法中没有Servlet api(没有响应的参数);
+
+public String scope() throws Exception{
+
+ActionContextctx=ActionContext.getContext();
+
+ctx.getApplication().put(“app”,”应用范围”);
+
+ctx.getSession().put(“ses”,”session范围”);
+
+ctx.put(“request”,”request范围”);
+
+return “scope”;
+
+}
+
+ 
+
+<body>
+
+${applicationScope.app}
+
+${sessionScope.ses}
+
+${requestScope.req}
+
+</body>
+
+ 
+
+(2).获取HttpServletRequest/HttpSession/ServletContext/HttpServletResponse对象：
+
+方法一：通过ServletActionContext类直接获取
+
+public String rsa() throws Exception{
+
+HttpServletRequest request =ServletActionContext.getRequest();
+
+ServletContextservletContext=ServletContext.getServletContext();
+
+request.getSession();
+
+HttpServletResponseresponse=ServletActionContext.getResponse();
+
+return “scope”;
+
+}
+
+方法二：实现指定接口，由struts框架运行时注入：
+
+public class HelloWorldAction implementsServletRequestAware,ServletResponseAware,ServletContextAware{
+
+private HttpServletRequest request;
+
+private ServletContext servletContext;
+
+private HttpServletResponse response;
+
+public voidsetServletRequest(HttpServletRequest req){
+
+this.request.req;
+
+}
+
+public voidsetServletResponse(HttpServletResponse res){
+
+this.response=res;
+
+}
+
+public voidsetServletContext(ServletContext ser){
+
+this.servletContext=ser;
+
+}
+
+注意1和2的不同，一个不需要得到对象，一个需要得到对象，所以要区分两个的应用场景
+
+}
+
+ 
+
+15．解决struts配置文件无提示问题
+
+找到struts2.0.dtd文件即可，windows->preferences->MyEclipse->XML->XMLCatalog,点击添加strut2.dtd
+
+ 
+
+16．介绍struts2及struts2开发环境的搭建
+
+(1).struts2是在webwork2基础发展而来的，和struts一样，struts2也属于MVC框架，不过有一点大家需要注意的是：尽管struts2和struts1在名字上的差别不是很大，但是struts2和struts1在代码编写分割上几乎是不一样的，那么既然有了struts1，为何还要推出struts2，主要是因为有一下有点：
+
+第一：在软件设计上struts2没有像struts1那样跟Servlet api和struts api有着紧密的耦合，struts2的应用可以不依赖于servlet api 和struts api,struts2的这种设计属于无侵入式的设计，而struts1却属于侵入式设计，因为其的
+
+execute()方法中的参数为ActionMapping,ActionForm,HttpServletRequest,HttpServletResponse
+
+第二：struts2提供了拦截器，利用拦截器可以进行AOP编程，实现如权限拦截等功能
+
+第三：struts2提供了类型转换器，我们可以把特殊的请求参数转换成需要的类型，在struts1中，如果我们要实现同样的功能，就必须向struts1的底层实现BeanUtils注册类型转换器才行
+
+第四：struts2提供支持多种表现层技术，如：JSP，freeMarker，Velocity等
+
+第五：struts2的输入校验可以对指定方法进行校验，解决了struts1长久之痛,struts1中的validate方法对所有的方法进行校验
+
+第六：提供了全局范围、包范围、和Action范围的国际化资源文件管理实现.
+
+ 
+
+(2).搭建struts2的环境和struts1是相同的，第一步导入相关包，第二步建立struts2的配置文件，第三步在web.xml中注册struts2框架的配置
+
+ 
+
+(3).所需的包：struts2-core-2.x.x.jar,xwork-2.x.x.jar(webwork的核心架包),ognl-2.6.x.jar
+
+ 
+
+(4).struts2默认的配置文件为struts.xml,该文件需要放在/web-inf/classes目录下
+
+ 
+
+(5).在struts1中，struts框架是通过servlet启动的，在struts2中，struts框架是通过Filter启动的，它在web.xml中的配置如下所示：可以参照struts文件夹下的例子中拷贝，在strutsperpareExecuteFilter的init()方法中将会读取类路径下默认的配置文件struts.xml完成初始化操作，注意：struts2读取到struts.xml的内容后，以javabean形式存放在内存中，以后struts2对用户的每次请求处理将使用内存中的数据，而不是每次都读取struts.xml文件
+
+ 
+
+(6).自从struts2.1.3以后，下面的FilterDispatcher已经标注为过时了，struts2.1.3后期版本为StrutsPrepareAndExecuteFilter类
+
+ 
+
+17．开发第一个应用
+
+(1).在struts.xml中的配置：
+
+<package name=”itcast”namespace=”/test” extends=”struts-default”>
+
+<actionname=”helloworld” class=”cn.itcast.action.HelloWorldAction”method=”execute”>
+
+<resultname=”success”>/WEB-INF/page/hello.jsp</result>
+
+</action>
+
+</package>
+
+在struts2框架中使用包来管理Action，包的作用和Java中的类包是非常类似的，它主要用于管理一组业务功能相关的action，在实际应用中，我们应该吧一组业务功能相关的Action放在同一个包下
+
+配置包时必须指定name属性，该name属性可以任意取名，但必须唯一，它不对应java的类包，如果其他包要继承该包，必须通过该属性进行引用，包的namespace属性用于定义该报的命名空间，命名空间作为访问该包下Action的路径的一部分，如访问上面例子的Action，访问路径为：/test/helloworld.action,namespace属性可以不配置，对本例而言，如果不指定该属性，默认的命名空间为” “(空字符串).当然配置可以减少重复的代码，struts1中的重复代码就可以使用命名空间来解决
+
+通常每个包都应该继承struts-default包，因为struts2很多核心的功能都是拦截器来实现的，如：从请求中把请求参数封装转到action、文件上传和数据验证等都是通过拦截器实现的，struts-defaul定义了这些拦截器和Result类型，可以这么说：当包继承了struts-default才能使用struts2提供的核心功能，struts-default包是在struts2-core-2.x.x.jar文件中的struts-default.xml中定义，struts-default.xml也是struts2默认配置文件，struts2每次都会自动加载struts-default.xml文件，包还可以通过abstract=”true”定义为抽象包，抽象包中不能包含action，可以查看struts-default.xml文件中，就可以看到定义了很多拦截器
+
+<result></result>和struts1中的forward很相似，定义视图
+
+ 
+
+(2).public Stringexecute(){return 视图的名称;}注意到这个方法和struts1不同，没有参数，返回类型也不同，这就降低了耦合性，非侵入式的编程了.
+
+ 
+
+(3).在jsp中使用el表达式即可${message},message是Action中的一个方法getMessage()方法，而不是根据Action中的成员变量message
+
+ 
+
+18．配置Action范围国际化资源文件
+
+(1).我们也可以为某个action单独制定资源文件，方法如下：在Action类所在的路径，放置ActionClassName_language_country.properties资源文件，ActionClassName为Action类的简单名称当查找指定key的消息时，系统会先从ActionClassName_language_country.properties资源文件查找，如果没有找到对应的key，然后沿着当前包往上查找基本名为package的资源文件，一直找到最顶层包，乳沟还没有找到对应的key，最后会从常量struts.custom.i18n.resources指定的资源文件中查找
+
+ 
+
+(2).JSP中直接访问某个资源文件
+
+struts2为我们提供了<s:i18n>标签，使用<s:i18n>标签我们可以在类路径下直接从某个资源文件中获取国际化数据，而无需任何配置：
+
+<s:i18n name=”itcast”>
+
+<s:text name=”welcome”/>
+
+</s:i18n>
+
+itcast为类路径下资源文件的基本名
+
+如果要访问的资源文件在类路径的某个包下，可以这样访问：
+
+<s:i18nname=”cn/itcast/action/package”>
+
+<s:text name=”welcome”>
+
+<s:param>小张</s:param>
+
+</s:text>
+
+</s:i18n>
+
+上面访问cn.itcast.action包下基本名为package的资源文件
+
+ 
+
+19．配置包范围的国际化资源文件
+
+(1).在一个大型应用中，整个应用有大量的内容需要实现国际化，如果我们把国际化的内容都放置在全局资源属性文件中，显然会导致资源文件变得过于庞大、臃肿，不便于维护，这个时候我们可以针对不同模块，使用包范围来组织国际化文件
+
+方法如下：在java的包下放置package_language_country.properties资源文件，package为固定写法，处于该包及子包下的action都可以访问该资源，当查找指定key的消息时，系统会先从package资源文件中查找，当找不到对应的key时，才会从常量struts.custom.i18n.resources指定的资源文件中寻找.
+
+ 
+
+20．配置国际化全局资源文件、输出国际化信息
+
+(1).准备资源文件，资源文件的命名格式如下：
+
+baseName_language_country.properties
+
+baseName_language.properties
+
+baseName.properties
+
+其中baseName是资源文件的基本名，我们可以自定义，但是language和country必须是java支持的语言和国家。如：
+
+中国大陆：baseName_zh_CN.properties
+
+美国：baseName_en_US.properties
+
+ 
+
+(2).现在为应用添加两个资源文件：
+
+第一个存放中文：itcast_zh_CN.properties
+
+内容为：welcom=欢迎来到传智播客
+
+第二个存放英语(美国):itcast_en_US.properties
+
+内容为：welcome=welcom to itcast
+
+ 
+
+(3).对于中文的属性文件，我们编写好后，应该使用JDK提供的native2ascii命令把文件转换为unicode编码的文件，命令的使用方式如下：
+
+native2ascii 源文件.properties 目标文件.properties，在MyEclipse6.6版本以及后面的版本会自动转换.
+
+ 
+
+(4).struts2有：全局范围，包范围，action范围的资源文件
+
+ 
+
+(5).配置全局资源与输出国际化信息：
+
+当准备号资源文件之后，我们可以在struts.xml中通过：struts.custom.i18n.resources常量把资源文件定义为全局资源文件，如下：
+
+<constantname=”struts.custom.i18n.resources” vlaue=”itcast”/>
+
+itcast为资源文件的基本名
+
+后面我们就可以在页面或在action中访问国际化信息：
+
+在JSP页面中使用<s:text name=””/>标签输出国际化信息：
+
+<s:textname=”user”/>,name为资源文件中的key
+
+在Action类中，可以继承ActionSupport，使用getText()方法得到国际化信息，该该方法的第一个参数用于指定资源文件中的key,
+
+在表单标签中，通过key属性指定资源文件中的key,如：
+
+<s:textfieldname=”realname” key=”user”/>
+
+ 
+
+21．请求参数接受
+
+(1).struts1中是使用ActionForm接受用户的请求参数
+
+ 
+
+(2).采用基本类型接受请求参数(get/post):
+
+在Action类中定义与请求参数同名的属性，struts2便能自动接受请求参数并赋予给同名属性：请求路径：http://localhost:8080/test/view.action?id=78
+
+public classProductAction{
+
+private Integerid;
+
+public voidsetId(Integer id){//struts2通过反射技术调用与请求参数同名的属性的setter方法获取请求参数值
+
+this.id=id;
+
+}
+
+public IntegergetId(){return id;}
+
+}
+
+ 
+
+(3).采用复合类型接受请求参数
+
+请求路径:http://localhost:8080/test/view.action?product_id=78
+
+public class ProductAction{
+
+private Product product;
+
+public void setProduct(Product product){htis.product=product;}
+
+public Product getProduct(){returnproduct;}
+
+}
+
+struts2首先通过反射技术调用Product的默认构造器创建product对象，然后再通过反射技术调用product中与请求参数同名的属性的setter方法来获取请求参数值
+
+ 
+
+(4).关于struts2.1.6版本中存在一个Bug，及接受到的中文请求参数为乱码(以post方式提交),原因是struts2.1.6在获取并使用了请求参数后才调用HttpServletRequest的setCharacterEncoding()方法进行编码设置，导致应用使用的就是乱码请求参数，这个Bug在struts2.1.8中已经解决，如果你使用的是struts2.1.6，要解决这个问题，你可以这样做：新建一个Filter，把这个Filter放置在Struts2的Filter之前，然后再doFilter()方法中添加以下代码：
+
+public void doFilter(..){
+
+HttpServletRequest req=(HttpServletRequest)request;
+
+req.setCharacterEncoding(“UTF-8”);
+
+filterchain.doFilter(request,response);
+
+}
+
+ 
+
+22．全局类型转换器
+
+自定义全局类型转换器：将上面的类型转换器注册为全局类型转换器：在WEB-INF/classes下放置xword-conversion.properties文件，在properties文件中的内容为：待转换的类型=类型转换器的全类名
+
+对于本例而言，xwork-conversion.properties文件中的内容为：
+
+java.util.Date=cn.itcast.conversion.DateConverter
+
+ 
+
+23．输出带有占位符的国际化信息
+
+(1).资源文件中的内容如下：
+
+welcom={0}欢迎来到传智播客{1}
+
+在jsp页面中输出带占位符的国际化信息
+
+<s:text name=”welcom”>
+
+<s:param><s:propertyvalue=”realname”/></s:param>
+
+<s:param>学习</s:param>
+
+</s:text>
+
+在Action类中获取带占位符的国际化信息，可以使用getText(String key,String[] args)或getText(StringaTextName,List args)方法.
+
+ 
+
+(2).占位符就当是一个变量参数，可以传递给定的参数值.
+
+ 
+
+24．为Action属性注入值
+
+struts2为Action中的属性提供了依赖注入功能，在struts2的配置文件中，我们可以很方便的为Action中的属性注入值，注意：属性必须提供setter方法，
+
+public class HelloWorldAction{
+
+private String savePah;
+
+public String getSavePath(){
+
+return savePath;
+
+}
+
+public void setSavePath(String savePath){
+
+this.savePath=savePath;
+
+}
+
+}
+
+<package name=”itcast”namespace=”/test” extends=”struts-default”>
+
+<action name=”helloworld”class=”cn.itcast.action.helloWorldAction”>
+
+<paramname=”savePath”>/images</param>
+
+<resultname=”success”>/WEB-INF/page/hello.jsp</result>
+
+</action>
+
+</package>
+
+上面通过<param>节点为action的savePath属性注入”/images”;Action的变量的值，不能写死，经常变换，需要通过配置来设置参数
+
+ 
+
+25．为应用指定多个配置文件
+
+(1).在大部分应用中，随着应用规模的增加，系统中的Action的数量也会大量增加，导致struts.xml配置文件变得非常臃肿，为了避免struts.xml文件过于庞大、臃肿，提高struts.xml文件的可读性，我们可以讲一个struts.xml配置文件分解成多个配置文件，然后再struts.xml文件中包含其他配置文件，下面的struts.xml通过<include>元素指定多个配置文件：
+
+<struts>
+
+<includefile=”struts-user.xml”/>
+
+<includefile=”struts-order.xml”/>
+
+</struts>
+
+通过这种方式，我们就可以将struts2的Action按模块添加在多个配置文件中
+
+ 
+
+26．文件上传
+
+第一步：在WEB-INF/lib下加入commons-fileupload-1.2.1.jar、commons-io-1.3.2.jar,这两个文件可以从http://commons.apache.org下载，在struts2.1以前的版本需要添加，以后的版本就不需要添加
+
+ 
+
+第二步：把form表的enctype设置为：”multipart/form.data”,如下：
+
+<form
+
+enctype=”multipart/form-data”action=”${pageContext.request.contextPath}/xxx.action”method=”post”>
+
+<inputtype=”file” name=”uploadImage”>这个属性的name必须要和类中File名称一样
+
+</form>
+
+第三步：在Action类中添加以下属性
+
+public class HelloWorldAction{
+
+private File uploadImage;//得到上传文件；
+
+private String uploadImageContentType;//得到文件的类型
+
+private String uploadImageFileName;//得到文件的名称
+
+//这里省略了属性的get/set方法(但是要注意get/set方法是必须的)
+
+public String upload() throws Exception{
+
+String realpath =ServletActionContext.getServletContext().getRealPath(“/images”);
+
+File file=new File(realpath);
+
+if(file.getParentFile().exists())file.getParentFile().mkdirs();//目录是否存在，不存在就创建
+
+FileUtils.copyFile(uploadImage,newFile(file,uploadImageFileName));
+
+return “success”;
+
+}
+
+}
+
+ 
+
+(1).如果文件不保存，struts2会把文件保存到自己的目录中，但是当这个Action执行完后，该文件就会被删除，所以我们要将上传的文件保存到硬盘上
+
+ 
+
+(2).最好还要判断以下，文件uploadImage是否为空
+
+ 
+
+(3).如果上传大的文件，web都会失败，像一些门户网站上传视频，都是通过一个插件，可以把这个插件看成一个程序，只是这个程序是通过Socket变成的，针对一个端口进行传输数据
+
+ 
+
+27．指定struts2处理的请求后缀
+
+(1).前面我们都是默认使用.action后缀访问Action，其实默认后缀是可以通过常量”struts.action.extension”进行修改的，例如：我们可以配置struts2只处理以.do为后缀的请求路径
+
+<struts>
+
+<constantname=”struts.action.extendsion” value=”do”/>
+
+</struts>
+
+如果用户需要制定多个请求后缀，则多个后缀之间以英文逗号”,”隔开，如：
+
+<constantname=”struts.action.extendsion” value=”do,go”/>
+
+ 
+
+(2).常量可以在struts.xml或struts.properties中配置，建议在struts.xml中配置，两种配置方式如下：
+
+在struts.xml文件中配置常量：
+
+<struts>
+
+<constantname=”struts.action.extendsion” value=”do”/>
+
+</struts>
+
+在struts.properties中配置常量：
+
+struts.action.extension=do
+
+因为常量可以在下面多个配置文件中进行定义，所以我们需要了解struts2加载常量的搜索顺序：
+
+struts-default.xml
+
+struts-plugin.xml
+
+struts.xml
+
+struts.properties
+
+web.xml
+
+如果在多个文件中配置了同一个常量，则后一个文件中配置的常量值会覆盖前面文件中配置的常量值
+
+ 
+
+(3).
+
+第一：默认编码集，作用于HttpServletRequest的setCharacterEncoding方法和freemarker、velocity的输出：
+
+<constantname=”struts.i18n.encoding” value=”UTF-8″/>
+
+第二：该属性指定需要struts2处理的请求后缀，该属性的默认值是action，即所有匹配*.action的请求都由struts2处理，如果用户需要指定多个请求后缀，则多个后缀之间以英文逗号(,)隔开
+
+<constant name=”strtus.action.extension” value=do”/>
+
+第三：设置浏览器是否缓存静态内容默认值为true(生产环境下使用)开发阶段最好关闭，不然看不到修改后的数据
+
+<constantname=”struts.serve.static.browserCache” value=”false”/>
+
+第四：当struts的配置文件修改后系统是否自动重新加载该文件默认值为false(生产环境下使用)，开发阶段最好打开
+
+<constantname=”struts.configuration.xml.reload” value=”true”/>
+
+第五：开发模式下使用，这样可以打印出更详细的错误信息
+
+<constant name=”struts.devMode”value=”true”/>
+
+第六：默认的视图主题
+
+<constantname=”struts.ui.theme” value=”simple”/>
+
+第七：与spring集成时，指定由spring负责action对象的创建
+
+<constantname=”struts.objectFactory” value=”spring”/>
+
+第七：该属性设置struts2是否支持动态方法调用，该属性的默认值是true，如果需要关闭动态方法调用，则可设置该属性为false
+
+<constantname=”struts.enable.DynamicMethodInvocation”value=”false”/>
+
+第八：上传所有文件的总大小限制
+
+constantname=”struts.mulitipart.maxSize” value=”10701096″/>
+
+ 
+
+28．自定义拦截器
+
+(1).如果用户登录后可以访问action中的所有方法，如果用户没有登录不允许访问action中的方法，并且提示”你没有权限执行该操作”
+
+ 
+
+(2).
+
+<interceptors>
+
+<interceptorname=”permission”class=”cn.itcast.interceptor.PermissionInterceptor”/>
+
+</interceptors>
+
+<actionname=”list_*” class=”cn.itcast.action.HelloWorldAction”method=”{1}”>
+
+<interceptor-refname=”permission”/>
+
+如果为某一个Action定义一个拦截器，struts2中对Action的默认的很多拦截器都失去功能，所以要想做到两全其美，需要定义一个拦截器栈：
+
+<interceptors>
+
+<interceptorname=”permission”class=”cn.itcast.interceptor.PermissionInterceptor”/>
+
+<interceptor-stackname=”permissionStack”>
+
+<interceptor-refname=”defaultStack”/>
+
+<interceptor-refname=”permission”/>
+
+</interceptor-stack>
+
+</interceptors>
+
+因为struts2中如文件上传，数据验证，封装请求参数到action等功能都是由系统默认的defaultStack中的拦截器实现的，所以我们定义的拦截器需要引用系统默认的defaultStack，这样应用才可以使用struts2框架提供的众多功能，如果希望包下的所有action都使用自定义的拦截器，可以通过<default-interceptor-refname=”permissionStack”/>把拦截器定义为默认拦截器，注意：每个包只能指定一个默认拦截器，另外，一旦我们为该包中的某个action显示指定了某个拦截器，则默认拦截器不会起作用.
+
+(3).系统默认的拦截器可以到struts-default.xml中查看，很多功能.系统拦截器放在最前面，自定义的拦截器放在后面.
+
+ 
+
+29．自定义类型转换器
+
+(1).struts2中提供了两种类型转换器：局部类型转换器(只对某一个action起作用),全局类型转换器(所有的action起作用)
+
+ 
+
+(2).类型转换器必须继承DefaultTypeConverter最好用xwork2.jar中的，重写converValue(Map<String,Object>context,Objectvalue,Class toType){
+
+returnsuper.convertValue(context,value,toType);
+
+}
+
+其中第一个参数和ognl表达式，第二个参数是需要转换类型的内容(是String数组,因为可能有多个值)，第三个参数是需要转换成什么类型，要实现双向转换
+
+ 
+
+(3).将上面的类型转换器注册为局部类型转换器：
+
+在Action类所在的包下放置ActionClassName-conversion.properties文件，ActionClassName是Action的类名，后面的-conversion.properties是固定写法，对于本例而言，文件的名称应为HelloWorldAction-conversion.properties.在properties文件中的内容为：
+
+需要转换的属性名称=类型转换器的全类名
+
+对于本例而言，HelloWorldAction-conversion.properties文件中的内容为：
+
+createtime=cn.itcast.conversion.DateConverter
+
+ 
+
+ 
+
+四、       Spring
+
+1.     @Autowired注解与自动装配
+
+@Autowired
+
+private PersonDaopersonDao;
+
+拿PersonDao与<bean id=””…./>中的id值进行比较，相同就找到了，即进行类型注解，当然也可以过@Qualifier注解进行名称进行注解.
+
+自动装配：
+
+对于自动装配，大家了解一下就可以了，实在不推荐大家使用，例子：<bean id=”” class=””autowire=”byType”/>
+
+autowire属性取值如下：
+
+byType:按类型装配，可以根据属性的类型，在容器中寻找根该类型匹配的bean，如果发现多个，那么将会抛出异常，如果没有找到，即属性值为null
+
+byName:按名称装配，可以根据属性的名称，在容器中寻找跟该属性名相同的bean，如果没有找到，即属性值为null
+
+construtor与byType的方式类似，不同之处在于它应用于构造器参数，如果在容器中没有找到与构造器参数类型一致的bean，那么将会抛出异常.
+
+autodetect:通过bean类的自省机制，来决定是使用constructor还是byType方式进行自动装配,如果发现默认的构造器，那么将使用byType方式.
+
+ 
+
+2.     @Resource注解完成属性装配
+
+(1).前面讲到了使用构造器注入，属性的setter方法注入，这里还可以使用注解的方式对Field进行注入
+
+ 
+
+(2).注入依赖对象可以采用手工装配或自动装配，在实际应用中建议使用手工装配，因为自动转配会产生未知情况，开发人员无法预见最终的装配结果
+
+ 
+
+(3).手工装配依赖对象，在这种方式中又有两种编程方式
+
+方式一：在XML配置文件中，通过在Bean节点下配置，如：
+
+<bean id=”orderService”class=”cn.itcast.service.OrderServiceBean”>
+
+<construtor-arg index=”0″type=”java.lang.String” value=”xxx”/>构造器注入
+
+<property name=”name”value=”zhao”/>属性的setter方法注入
+
+</bean>
+
+在XML中注入属性，会给XML文件变得很臃肿.特别是对集合类型进行注入时，变得很臃肿.
+
+方式二：
+
+在java代码中使用@Autowire或@Resoruce注解方式进行装配，但我们需要在XML配置文件中配置以下信息：
+
+<beansxmlns=”http://www.springframe…..
+
+….
+
+….
+
+</beans>
+
+这些配置项隐式注册了多个对注释进行解析处理的处理器：AutowiredAnnotationBeanPostProcessor,CommonAnnotationBeanPostProcessor,PersistenceAnnotationBeanPostProcessor,RequireAnnotationBeanPostProcessor,每个注解都有一个注解处理器，注解本身不干活，是相对应的注解处理器在干活
+
+注：@Resource注解在spring安装目录的lib\j2ee\common-annotations.jar
+
+ 
+
+(4).在java代码中使用@Autowired或@Resource注解方式进行装配，这两个注解的区别是：
+
+@Autowired默认按类型装配，@Resource默认按名称装配，当找不到与名称匹配的bean才会按类型装配.
+
+@Autowired
+
+private PersonDaopersonDao;//用于字段上
+
+@Autowired
+
+public voidsetOrderDao(OrderDao orderDao){//用于setter方法上
+
+this.orderDao=orerDao;
+
+}
+
+@Autowired注解是按类型装配依赖对象，默认情况下，它要求依赖对象必须存在，如果允许null值，可以设置它required的属性为false,如果我们想使用按名称装配，可以结合@Qualifier注解一起使用，如下：
+
+@Autowired@Qualifier(“personDaoBean”)
+
+private PersonDaopersonDao;
+
+@Resource注解和@Autowired一样，也可以标注在字段或属性的setter方法上，但他默认按名称装配，名称可以通过@Resource的name属性执行，如果没有指定name属性，当注解标注在字段上，即默认取字段的名称作为bean名称寻找依赖对象，当注解标注在属性的setter方法上，即默认取属性名作为bean名称寻找依赖对象
+
+@Resource(name=”personDaoBean”)
+
+private PersonDaopersonDao;//用于字段上
+
+注意：如果没有指定name属性，并且按照默认的名称仍然找不到依赖对象时，@Resoruce注解会回退到按类型装配，但一旦指定了name属性，就只能按名称装配了.拿personDao与<bean id=” “…/>中的id是否相同，相同就找到，属性的setter方法也不用写,既方便，又优雅.
+
+同时@Resource是j2ee提供的注解(建议使用),@Autowired是spring框架提供的.
+
+ 
+
+3.     Spring的三种实例化Bean的方式
+
+(1).三种实例化bean的方式：
+
+第一种：<bean id=”orderService”class=”cn.itcast.OrderServiceBean/>
+
+第二种：使用静态工厂方法实例化：
+
+<bean id=”personService” class=”cn.itcast.service.OrderFactory”factory-method=”createOrder”/>
+
+public class OrderFactory{
+
+public static OrderServiceBeancreateOrder(){
+
+return new OrderServiceBean();
+
+}
+
+}
+
+第三种：使用实例工厂方法实例化：
+
+<beanid=”personServiceFactory” class=”cn.itcast.service.OrderFactory”/>
+
+<bean id=”personService”factory-bean=”personServiceFactory”factory-method=”createOrder”/>
+
+public class OrderFactory{
+
+public OrderServiceBean createOrder(){
+
+return new OrderServiceBean();
+
+}
+
+}
+
+ 
+
+4.     Spring管理的Bean的生命周期
+
+(1).Bean实例化是在Spring容器实例化时进行的，但是这是Singleton作用域中，实例化的时机是可以更改的，lazy-init=”true”延迟初始化，即更改为调用getBean()方法时进行初始化.同时也可以在配置文件中设置所有的bean延迟初始化，其实这个标签是不建议使用的.
+
+ 
+
+(2).当把作用域改成Prototype时，Bean实例化是在调用getBean()方法进行的
+
+ 
+
+(3).可以指定一个初始化方法:init-method=””;即在bean实例化后执行的初始化方法.如数据库的连接.容器通过反射技术调用的，同时还需要进行资源的释放.destory-method=””;即在bean被销毁时执行的方法.
+
+ 
+
+(4).关闭Spring容器:ctx.close()方法，bean此时被销毁了
+
+ 
+
+5．Spring自动扫描和管理bean
+
+通过在classpath自动扫描方式把组件纳入spring容器中管理，前面的例子我们都是使用XML的bean定义来配置组件，在一个稍大的项目中，通常会有上百个组件，如果这些组件采用xml的bean定义来配置，显然会增加配置文件的体积，查找及维护起来也不太方便，spring2.5为我们引入了组件自动扫描机制，它可以在类路径底下寻找标注了@Componet、@Service、@Controller、@Reponsitory注解的类，并把这些类纳入进spring容器中管理，它的作用和在XML文件中使用bean节点配置组件是一样的，要使用自动扫描机制，我们需要打开以下配置信息:
+
+<beansxmln=”http://www.springframework.org/schema/beans”
+
+….
+
+….
+
+</beans>
+
+其中base-package为需要扫描的包(含子包)
+
+@Service用于标注业务层组件、@Controller用于标注控制层组件(如struts中的action)、@Repository用于标注数据访问组件，即Dao组件，而@Component泛指组件，当组件不好归类的时候，我们可以使用这个注解进行标注.同时也可以通过注解@Scope(“prototype”)修改bean的作用域.@Service(“personService”)中的名称必须和bean的名称相同，只是开头字母变成小写了.当然这是默认设置，可以修改的.
+
+可以使用注解的方式指定初始化方法，在初始化方法init()上添加注解@PostConstruct，同样可以指定销毁方法destroy()，注解为：@PreDestroy
+
+这种扫描方式是很方便的，很多人都采用
+
+即前面所说的功能都使用注解进行操作
+
+ 
+
+6．  SSH整合开发
+
+hibernate核心安装包下的：
+
+hibernate3.jar
+
+lib\required\*.jar
+
+lib\optional\ehcache-1.2.3.jar
+
+hibernate注解安装包下的
+
+lib\test\slf4j-log4j12.jar
+
+ 
+
+Spring安装包下的
+
+dist\spring.jar
+
+dist\modules\spring-webmvc-struts.jar
+
+lib\jakarta-commons\commons-logging.jar、commons-dbcp.jar、commons-pool.jar
+
+lib\aspectj\aspectjweaver.jar、aspectjrt.jar
+
+lib\cglib\cglib-nodep-2.1.3.jar
+
+lib\j2ee\common-annotations.jar
+
+lib\log4j-1.2.14.jar
+
+ 
+
+Struts：下载struts-1.3.8-lib.zip，需要使用到解压目录下的所有jar,建议把jstl-1.0.2.jar和standard-1.0.2.jar更换为1.1版本，Spring中已经存在一个antlr-2.7.6.jar，所以把struts中的antlr-2.7.2.jar删除，避免jar冲突
+
+数据库驱动jar
+
+首先整合struts和hibernate然后再整合spring
+
+ 
+
+7．编码解析@Resource注解的实现原理
+
+(1).新建一个注解
+
+@Retention(RetentionPolicy.RUNTIME)
+
+@Target({ElementType.Field,ElementType.METHOD})
+
+public @interface ItcastResource{
+
+String name() default “”;
+
+}
+
+当然还要编写一个注解处理器.
+
+private voidannotationInject(){
+
+首先循环所有的bean对象，判断其是否使用了注解
+
+如果使用了注解，就进行属性注入.
+
+}
+
+ 
+
+8．编码解析Spring依赖注入的原理
+
+(1).基本类型对象注入：
+
+<bean id=”orderService”class=”cn.itcast.service.OrderServiceBean”>
+
+<constructor-arg index=”0″type=”java.lang.String” value=”xxx”/>构造器注入
+
+<property name=”name”value=”zhao”/>//属性setter方法注入
+
+</bean>
+
+ 
+
+(2).注入其他bean:
+
+方式一：
+
+<bean id=”orderDao”class=”cn.itcast.service.OrderDaoBean”/>
+
+<bean id=”orderService”class=”cn.itcast.service.OrderServiceBean”>
+
+<property name=”orderDao”ref=”orderDao”/>ref是指被注入的对象personDao
+
+</bean>
+
+方式二：(使用内部bean,但该bean不能被其他bean使用)
+
+<bean id=”orderService”class=”cn.itcast.service.OrderServiceBean”>
+
+<property name=”orderDao”>
+
+<beanclass=”cn.itcast.service.OrderDaoBean”/>
+
+</property>
+
+</bean>
+
+ 
+
+(3).依赖注入的内部原理
+
+ 
+
+9．编码解析Spring装配基本属性原理
+
+也可以对基本类型进行注入,类型转换.
+
+ 
+
+10．编码剖析Spring管理bean的原理
+
+使用dom4j读取spring配置文件，使用反射技术即可
+
+ 
+
+11．搭建和配置Spring与JDBC整合的环境
+
+(1).配置数据源：
+
+<bean
+
+id=”dataSource”
+
+class=”org.apache.commons.dbcp.BasicDataSource”destroy-method=”close”>
+
+apache的数据源:BasicDataSource
+
+<propertyname=”driverClassName” value=”org.gjt.mm.mysql.Driver”/>
+
+<property
+
+name=”url” value=”jdbc:mysql://localhost:3306/itcast?useUnicode=true&amp:characterEncoding=UTF-8″/>
+
+<property name=”username”value=”root”/>
+
+<property name=”password”value=”123456″/>
+
+<property name=”initialSIze”value=”1″/>连接池启动时的初始值
+
+<property name=”maxActive”value=”500″/>连接池的最大值
+
+<property name=”maxIdle”value=”2″/>最大空闲值
+
+<property name=”minIdle”value=”1″/>最小空闲值
+
+</bean>
+
+配置事务：
+
+采用注解的方式：
+
+<bean
+
+id=”txManager”class=”org.springframework.jdbc.datasoruce.DataSourceTransactionManager”>
+
+<property name=”dataSource”ref=”dataSource”/>
+
+</bean>
+
+ 
+
+<ts:annotation-driventransaction-manager=”txManage”/>
+
+ 
+
+12．搭建与测试spring的开发环境
+
+(1).dist\spring.jar;
+
+lib\jakarta-commons\commons-logging.jar
+
+以上这两个包是必须的
+
+lib\aspectj\aspectjweaver.jar和aspectjrt.jar
+
+lib\cglib\cglib-nodep-2.1.3.jar
+
+以上这两个包是用于切面编程(AOP)
+
+lib\j2ee\common-annotations.jar
+
+以上的这个包是JSR-250中的注解
+
+ 
+
+(2).Spring项目既可以在j2se中也可以在j2ee中
+
+ 
+
+(3).spring的配置文件模板可以从spring的参考手册或spring的例子中得到，配置文件的取名可以任意，文件可以存放在任何目录下，但考虑到通用性，一般放在类路径下
+
+ 
+
+(4).实例化spring容器常用方式：
+
+第一种方式：在类路径下寻找配置文件来实例化容器
+
+ApplicationContextctx=new ClassPathXmlApplicationContext(new String[]{“beans.xml”});
+
+第二种方式：在文件系统路径下寻找配置文件来实例化容器
+
+ApplicationContextctx=new FileSystemXmlApplicationContext(newString[]{“d:\\beans.xml”});//将路径写死了，通用性不好，不建议使用.
+
+spring的配置文件可以指定多个，可以通过String数组传入
+
+ 
+
+(5).IOC：控制反转：
+
+public class PersonServiceBean{
+
+private PersonDao personDao = newPersonDaoBean();
+
+public void save(Person person){
+
+personDao.save(person);
+
+}
+
+}
+
+PersonDaoBean是在应用内部创建及维护的，所谓控制反转就是应用本身不负责依赖对象的创建及维护，依赖对象的创建及维护是由外部容器负责的，这样控制权就由应用转移到外部容器，控制权的转移就是所谓反转.
+
+ 
+
+(6).建立一个业务bean为PersonServiceBean,放在cn.itcast.service.impl包中.面向接口编程，进行解耦,怎么将业务bean交给spring管理，需要在beans.xml配置文件中：<bean id=”” name=””class=””></bean>,其中id,name都是bean的名称，但是id不能使用特殊字符，id本身就属于XML属性的，如：”/sfs/”就会出错，但是name不会出错，class属性是bean类的路径,需要操纵bean的时候，只需到spring容器中取出bean进行操作，而不需要实例化一个bean了:
+
+ApplicationContext ctx=newClassPathXmlApplicationContext(new String[]{“beans.xml”});
+
+PersonServiceBeanpersonService=(PersonServiceBean)ctx.getBean(“personService”);
+
+personService.save();
+
+ 
+
+(7).当在配置文件中没有标签的提示信息，需要手动添加schema文件，方法如下：windows->preferences->myeclipse->filesand editors->xml->xmlcatalog,点击添加，在出现的窗口中的Key Type中选择URL，在location中选”File System”,然后在spring解压目录的dist/resources目录中选择spring-beans-2.5.xsd,回到设置窗口的时候不要急着关闭窗口，应该把窗口的Key Type改为Schema location,Key改为http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+
+ 
+
+13．配置Spring管理的bean的作用域
+
+(1).Singleton:默认情况下，bean是单例模式的，在每个springIoc容器中一个bean定义只有一个对象实例，默认情况下会在容器启动时初始化bean,但是我们可以指定Bean节点的lazy-init=”true”来延迟初始化bean，这时候，只有第一次获取bean会才初始化bean，如：<bean id=”xxx”class=”cn.itcast.OrderServiceBean” lazy-init=”true”/>
+
+如果想对所有bean都应用延迟初始化，可以在根节点beans设置default-lazy-init=”true”,如下：<beans default-lazy-init=”true”>
+
+Prototype:每次从容器获取bean都是新的对象
+
+Request:在request的域中
+
+Session:在Session的域中
+
+Global Session:在全局的Session的域中
+
+ 
+
+14．全面阐释Spring及其各项功能
+
+(1).Spring是一个开源的控制反转(Inversion of control，IoC)和面向切面(AOP)的容器框架，它的主要目的是简化企业开发
+
+ 
+
+(2).IOC：控制反转：
+
+public class PersonServiceBean{
+
+private PersonDao personDao = newPersonDaoBean();
+
+public void save(Person person){
+
+personDao.save(person);
+
+}
+
+}
+
+PersonDaoBean是在应用内部创建及维护的，所谓控制反转就是应用本身不负责依赖对象的创建及维护，依赖对象的创建及维护是由外部容器负责的，这样控制权就由应用转移到外部容器，控制权的转移就是所谓反转.PersonServiceBean是业务逻辑层类，PersonDaoBean是Dao层类，在业务逻辑层类中控制和创建PersonDaoBean，这就是应用本身创建和维护了，但是有了spring容器后，PersonDaoBean的创建和维护是在容器中进行的，不需要PersonServiceBean进行管理了，控制权进行的反转
+
+ 
+
+(3).依赖注入：当我们把依赖对象交给外部容器负责创建，那么PersonServiceBean类可以改成如下：
+
+public class PersonServiceBean{
+
+private PersonDao personDao;
+
+//通过构造器参数，让容器把创建好的依赖对象注入进PersonServiceBean，当然也可以使用setter方法进行注入
+
+public PersonServiceBean(PersonDaopersonDao){
+
+this.personDao=personDao;
+
+}
+
+public void save(Person person){
+
+personDao.save(person);
+
+}
+
+}
+
+所谓依赖注入就是指：在运行期，由外部容器动态的将依赖对象注入到组件中.
+
+ 
+
+(4).为何要使用spring:
+
+第一：降低组件之间的耦合度，实现软件各层之间的解耦：
+
+Controller->Service->Dao
+
+第二：可以使用容器提供的众多服务，如：事务管理服务，消息服务等，当我们使用容器管理事务时，开发人员就不再需要手工控制事务，也不需要处理复杂的事务传播
+
+第三：容器提供单例模式支持，开发人员不在需要自己编写实现代码
+
+第四：容器提供了AOP技术，利用它很容易实现如权限拦截、运行期监控等功能
+
+第五：容器提供的众多辅助类，使用这些类能够加快应用的开发，如：JdbcTemplate，HibernateTemplate
+
+第六：Spring对于主流的应用框架提供了集成技术，如集成Hibernate、JPA、Struts等，这样更便于应用的开发.
+
+ 
+
+(5).轻量级和重量级概念的划分，其实划分一个应用是否属于轻量级还是重量级，主要看他使用了多少服务，使用的服务越多，容器要为普通的java对象的工作就越多，必然会影响到应用的发布时间或者是运行性能，对于spring容器,它提供了很多服务，但是这些服务并不是默认为应用打开的，应用需要某种服务，还需要指明使用该服务，如果应用使用的服务很少，如：只是用了spring的核心服务，那么我们就可以认为此时应用属于轻量级的，如果应用使用了spring提供的大部分服务，这时应用就属于重量级，目前EJB容器就因为他默认为应用提供了EJB规范中所有的功能，所以他属于重量级
+
+ 
+
+15．使用CGLIB实现AOP功能与AOP概念详解
+
+(1).使用cglib架包，构建代理，不需要被代理的对象需要实现接口
+
+public class CGlibProxyFactory implementsMethodInterceptor{
+
+private Object targetObject;
+
+public Object createProxyIntance(ObjecttargetObject){
+
+this.targetObject=targetObject;
+
+Enhancer enhancer = new Enhancer();
+
+enhancer.setSuperclass(this.targetObject.getClass());
+
+enhancer.setCallback(this);
+
+return enhancer.create();
+
+}
+
+public Object intercep(Object proxy,Method method,Object[]args,MethodProxy methodProxy)throws Throwable{
+
+returnmethodProxy.invoke(this.targetObject,args);
+
+}
+
+}
+
+CGLIB可以生成目标类的子类，并重写父类非final修饰符的方法
+
+ 
+
+16．使用JDK中的Proxy技术实现AOP功能
+
+(1).使用在权限拦截上.
+
+ 
+
+(2).被代理对象必须实现接口
+
+public class JDKProxyFactory implementsInvocationHandler{
+
+private Object targetObject;
+
+public Object createProxyIntance(ObjecttargetObject){
+
+returnProxy.newProxyInstance(this.targetObject.getClass().getClassLoader(),this.targetObject.getClass().getInterfaces(),this);
+
+}
+
+public Object invoke(Object proxy,Methodmethod,Object[]args) throws Throwable{//环绕通知
+
+PersonServiceBean bean=(PersonServiceBean)this.targetObject;
+
+Object result=null;
+
+if(bean.getUser()!=null){
+
+//….advice(),调用方法前处理，叫做前置通知
+
+try{
+
+result=method.invoke(targetObject,args);
+
+//….afteradvice();调用方法后处理，叫做后置通知
+
+}catch(RuntimeException e){
+
+//….exceptionadvice();调用方法出现例外后处理，叫做例外通知
+
+}finally{
+
+//….finallyadvice();调用方法最终都会处理，叫做最终通知
+
+}
+
+}
+
+return result;
+
+}
+
+}
+
+整个invoke方法叫做环绕通知.
+
+ 
+
+(3).AOP中的概念：
+
+Aspect(切面)：指横切性关注点的抽象即为切面，它与类相似，只是两者的关注点不一样，类是对物体特征的抽象，而切面是横切性关注点的抽象。
+
+JoinPoint(连接点):所谓连接点是指那些被拦截到的点，在spring中，这些点指的是方法，因为spring只支持方法类型的连接点，实际上joinpoint还可以是field或类构造器
+
+Pointcut:切入点：所谓切入点是指我们要对那些joinpoint进行拦截的定义
+
+Advice(通知):所谓通知是指拦截到joinpoint之后所要做的事情就是通知，通知分为前置通知，后置通知，异常通知，最终通知，环绕通知
+
+Target(目标对象)：代理的目标对象
+
+Weave(织入):指将aspect应用到target对象并导致proxy对象创建的过程称之为织入
+
+Introduction(引入):在不修改类代码的前提下，Introduction可以在运行期为类动态的添加一些方法或Field
+
+ 
+
+17．使用Spring的注解方式实现AOP
+
+(1).要进行AOP编程，首先我们要在Spring的配置文件中引入AOP命名空间：
+
+<beansxmlns=”http://www.springframework.org/schema/beans”
+
+</beans>
+
+Spring提供了两种切面使用方式，实际工作中我们可以选用其中一种：一种是基于XML配置方式进行AOP开发，另外一种是基于注解方式进行AOP开发
+
+ 
+
+(2).基于注解方式声明切面：首先启动对@AspectJ注解的支持：
+
+<aop:aspectj-autoproxy/>
+
+<bean id=”orderservice”class=”cn.itcast.service.OrderServiceBean”/>
+
+<bean id=”log”class=”cn.itcast.service.LogPrint”/>
+
+</beans>
+
+定义一个切面类(MyInterceptor):
+
+@Aspect
+
+public class MyInterceptor{
+
+@Pointcut(“execution(*cn.itcast.service..*.*(..))
+
+//定义切入点，通配符：*指的是任何返回类型，..是指子包下也进行拦截，*:指的是拦截所有类，*:指定的是所有方法，..是指任意参数
+
+private void anyMethod(){}//声明一个切入点
+
+@Before(“anyMethod()”)//定义一个前置通知，名称为切入点名称
+
+public void doAccessCheck(){
+
+System.out.println(“前置通知”);
+
+}
+
+@AfterReturning(“anyMethod()”)//后置通知
+
+public void doAfterReturning(){
+
+System.out.println(“后置通知”);
+
+}
+
+@After(“anyMethod()”)//最终通知
+
+public void doAfter(){
+
+System.out.println(“最终通知”);
+
+}
+
+@AfterThrowing(“anyMethod()”);//例外通知
+
+public void doAfterThrowing(){
+
+System.out.println(“例外通知”);
+
+}
+
+@Around(“anyMethod()”)//环绕通知
+
+public ObjectdoBasicProfiling(ProceedingJoinPoint pjp)throws Throwable{
+
+System.out.println(“进入方法”);
+
+if(){//判断用户是否有权限,有权限就执行该方法.
+
+Object result = pjp.proceed();
+
+System.out.println(“退出方法”);
+
+}else{
+
+}
+
+return result;
+
+}
+
+ 
+
+}
+
+所以当出现例外通知时，后置通知是不执行的，即它们两者肯定有一个不执行，一个执行.
+
+需要将切面类交给spring管理：基于XML配置管理或者自动扫描管理
+
+ 
+
+(3).想得到参数：
+
+@Before(anyMethod() &&args(userName)”)//添加参数，只会拦截到对应的方法，即一个参数的方法.
+
+public void doAccessCheck(String name){
+
+System.out.println(“前置通知”);
+
+}
+
+ 
+
+(4).想得到返回结果：
+
+@AfterReturning(“anyMethod()”,returning=”result”)//后置通知
+
+public void doAfterReturning(String result){
+
+System.out.println(“后置通知”);
+
+System.out.println(result);//打印返回结果
+
+}
+
+ 
+
+(5).得到异常(例外):
+
+@AfterThrowing(“anyMethod()”,throwing=”e”);//例外通知
+
+public void doAfterThrowing(Exception e){
+
+System.out.println(“例外通知”);
+
+System.out.println(e);//打印例外
+
+}
+
+ 
+
+18．使用Spring配置文件实现AOP
+
+(1).使用配置文件实现AOP，切面类只是个普通的类，其内部没有任何注解
+
+public class MyInteceptor{
+
+public void doAccessCheck(){
+
+System.out.println(“前置通知”);
+
+}
+
+public void doAfterReturning(){
+
+System.out.println(“后置通知”);
+
+}
+
+public void doAfter(){
+
+System.out.println(“最终通知”);
+
+}
+
+public void doAfterThrowing(){
+
+System.out.println(“例外通知”);
+
+}
+
+public ObjectdoBasicProfiling(ProceedingJoinPoint pjp)throws Throwable{
+
+System.out.println(“进入方法”);
+
+Object result=pjp.proceed();
+
+System.out.println(“退出方法”);
+
+return result;
+
+}
+
+}
+
+ 
+
+(2).基于XML配置方式声明切面
+
+<bean id=”orderservice”class=”cn.itcast.service.OrderServiceBean”/>
+
+<bean id=”log”class=”cn.itcast.service.LogPrint”/>
+
+<aop:config>
+
+<aop:aspect id=”myaop”ref=”log”>
+
+<aop:pointcut id=”mycut”expression=”execution(* cn.itcast.service..*.*(..))”/>
+
+<aop:beforepointcut-ref=”mycut” method=”doAccessCheck”/>
+
+<aop:after-returningpointcut-ref=”mycut” method=”doReturnCheck”/>
+
+<aop:after-throwingpointcut-ref=”mycut” method=”doExceptionAction”/>
+
+<aop:afterpointcut-ref=”mycut” method=”doReleaseAction”/>
+
+<aop:aroundpointcut-ref=”mycut” method=”doBasicProfiling”/>
+
+</aop:aspect>
+
+</aop:config>
+
+ 
+
+(3).对于表达式expression的细节：
+
+返回值类型为String:execution(java.lang.Stringcn.itcast.service..*.*(..))
+
+第一个参数为String:execution(java.lang.Stringcn.itcast.service..*.*(java.lang.String..))
+
+返回值类型为非void:execution(!void cn.itcast.service..*.*(..))
+
+ 
+
+19．使用Spring配置文件实现事务管理
+
+(1).
+
+<aop:config>
+
+<aop:pointcutid=”transactionPointcut” expression=”execution(*cn.itcast.service.*.*(..))”/>对指定的方法进行拦截
+
+<aop:advisoradvice-ref=”txAdvice”pointcut-ref=”transactionPointcut”/>
+
+</aop:config>
+
+<tx:adviceid=”txAdvice” transaction-manager=”txManager”>
+
+<tx:attributes>
+
+<tx:method
+
+name=”get*”read-only=”true” 所有已get方法都不开启事务propagation=”NOT_SUPPORTED”/>
+
+<tx:methodname=”*”/>
+
+</tx:attributes>
+
+</tx:advice>
+
+ 
+
+20．使用Spring注解方式管理事务与传播行为详解
+
+(1).只有当遇到RuntimeException时，事务进行回滚.Spring开启的事务管理，当遇到运行期例外(unchecked),而(checked异常)是不进行事务的回滚的.
+
+ 
+
+(2).当然也可修改这种情况.把unckecked异常改成不会进行回滚了：@Transactional(noRollbackFor=RuntimeException.class)，
+
+ 
+
+(3).@Transactional(propagation=Propagation.NOT_SUPPORTED);关闭事务，不开启事务的.spring容器默认是打开事务的.当然还有其他一些值：(事务的传播行为)
+
+REQUIRED：业务方法需要在一个事务中运行，如果方法运行时，已经处在一个事务中，那么加入到该事务，否则为自己创建一个新的事务(容器的默认值)
+
+NOT_SUPPORTED：声明方法不需要事务，如果方法没有关联到一个事务，容器不会为他开启事务，如果方法再一个事务中被调用，该事务会被挂起，在方法调用结束后，原先的事务便会恢复执行
+
+REQUIRESNEW：属性声明不管是否存在事务，业务方法总会为自己发起一个新的事务，如果方法已经运行在一个事务中，则原有事务会被挂起，新的事务会被创建，直到方法执行结束，新事务才算结束，原先的事务才会恢复执行
+
+MANDATORY：该属性指定业务方法只能在一个已经存在的事务中执行，业务方法不能发起自己的事务，如果业务方法再没有事务的环境下调用，容器就会抛出异常
+
+SUPPORTS：这一事务属性声明，如果业务方法再某个事务范围内被调用，则方法成为该事务的一部分，如果业务方法再事务范围外被调用，则方法再没有事务的环境下执行
+
+Never：指定业务方法绝对不能在事务范围内执行，如果业务方法再某个事务中执行，容器会抛出异常，只有业务方法没有关联到任何事务，才能正常执行.
+
+NESTED：如果一个活动的事务存在，则运行在一个嵌套的事务中，如果没有活动事务，则按REQUIRED属性执行，它使用了一个单独的事务，这个事务拥有多个可以回滚的保存点，内部事务的回滚不会对外部事务造成影响，它只对DataSourceTransactionManager事务管理器起效.Savepoint savepoint=conn.setSavepoint();conn.rollback(savepoint);
+
+ 
+
+(4).readOnly值为事务不能修改了.timeout是事务的超时时间，isolation数据库中的隔离级别.
+
+ 
+
+(5).数据库系统提供了四种事务隔离级别供用户选择，不同的隔离级别采用不同的锁类型来实现，在四种隔离级别中，Serializable的隔离级别最高，Read Uncommited的隔离级别最低，大多数据库默认的隔离级别为Read Commited，如SQLServer,当然也有少部分数据库默认的隔离级别为Repeatable Read,如MySql
+
+Read Uncommited:读未提交数据(会出现脏读，不可重复读和幻读)
+
+Read Commited:读已提交数据(会出现不可重复读和幻读)
+
+Repeatable Read:可重复读(会出现幻读)
+
+Serializable:串行化
+
+脏读：一个事务读取到另一个事务未提交的更新数据
+
+不可重复读：在同一事务中，多次读取同一数据返回的结果有所不同，换句话说就是，后续读取可以读到另一事务已经提交的更新数据，相反，“可重复读”在同一事务中多次读取数据时，能够保证所读数据一样，也就是，后续读取不能读到另一事务已提交的更新数据.
+
+幻读：一个事务读取到另一个事务已提交的insert数据.
+
+ 
+
+五、       Hibernate
+
+1．  Criteria查询方式
+
+(1).Criteria查询方式(条件查询)：
+
+Criteriac=s.createCriteria(User.class);
+
+c.add(Restrictions.eq(“name”,name));//添加查询条件，User中的name属性的值是否等于”name”
+
+List<User>list=c.list();
+
+Useru=(User)c.uniqueResult();
+
+ 
+
+2．  hibernate的二级缓存配置与分析
+
+(1).二级缓存：SessionFactory级共享：
+
+实现为可插拔，通过修改cache.provider_class参数来改变；hibernate内置了对EhCache.OSCache,TreeCaceh,SwarmCache的支持，可以通过实现CacheProvider和Cache接口来加入Hibernate不支持的缓存实现
+
+在hibernate.cfg.xml中加入:
+
+<class-cacheclass=”className” usage=”read-only”/>或在映射文件的class元素加入子元素:<cache usage=”read-write”/>
+
+其中usage:read-only,read-write,nonstrict-read-write,transactional
+
+Session的save(这个方法不适合native生成方式的主键),update.saveOrUpdate,list,iterator,get,load,以及Query,Criteria都会填充二级缓存，但只有(没有打开查询缓存时)Session的iterator,get,load会从二级缓存中取数据(iterator可能存在N+1次查询)
+
+Query，Criteria(查询缓存)由于命中率较低，所以hibernate缺省是关闭；修改cache,use_query_cache为true打开对查询的缓存，并且调用query.setCaheable(true)或criteria.setCacheable(true)
+
+SessionFactory中提供了evictXXX()方法用来清除缓存中的内容
+
+统计消息打开generate_statistics，用sessionFactory.getSatistics()获取统计信息，获取统计信息成本是很高的，消耗资源.对程序的调试是很有帮助的，可以看到session的初始化时间，打开多少次，关闭多少次等信息.
+
+ 
+
+(2).相对user对象进行缓存:
+
+<class-cacheclass=”cn.itcast.hibernate.domain.User”usage=”read-only”/>只读方式，效率高，User类不会再改变了.能够保证并发.
+
+ 
+
+(3).先到一级缓存中查找，找不到在到二级缓存中查找
+
+ 
+
+3．Hibernate的拦截器和监听器
+
+(1).拦截器和事件
+
+拦截器与事件都是hibernate的扩展机制，Interceptor接口是老的实现机制，现在改成事件监听机制，他们都是hibernate的回调接口，hibernate在save,delete,update等会回调这些查询
+
+ 
+
+(2).拦截保存的的事件：
+
+实现SaveOrUpdateEventListener接口
+
+public classSaveListener implements SaveOrUpdateEventListener{
+
+public voidonSaveOrUpdate(SaveOrUpdateEvent event){
+
+if(event.getObject()instantce of cn.itcast.hibernate.domain.User){
+
+User user =(User)event.getObject();
+
+System.out.println(user.getName().getFirstName());
+
+}
+
+}
+
+}
+
+配置文件中:
+
+<eventtype=”save”>
+
+<listenerclass=”cn.itcast.hibernate.SaveListener”/>自己定义的监听器，不同监听器的注册顺序，输出的结果也是不同的.
+
+<listenerclass=”org.hibernate.evetn.def.DefaultSaveOrUpdateEventListenter”/>hibernate缺省的监听器，自己定义的监听器会覆盖缺省的，所以在这里还要把缺省的监听器注册一下.
+
+</event>
+
+当保存user时，会监听到.
+
+ 
+
+4.hibernate的内部缓存分析
+
+(1).第一级缓存是在session中，第二缓存是在sessionFactory
+
+ 
+
+(2).Useruser=(User)s.get(userClass,id);
+
+System.out.println(user.getClass());
+
+user=(User)s.get(userClass,id);
+
+只有一条select语句
+
+ 
+
+(3).当session关闭时，缓存也就没有数据了.
+
+ 
+
+(4).缓存的作用主要用来提高性能，可以简单的理解成一个Map,使用缓存涉及到三个操作：把数据放入缓存、从缓存中获取数据、删除缓存中的无效数据
+
+ 
+
+(5).一级缓存，Session级共享，save,update,saveOrUpdate,load,get,list,iterate,lock这些方法都会将对象放在一级缓存中，一级缓存不能控制缓存的数量，所以要注意大批量操作数据时可能造成内存溢出，可以用evict,clear方法清除缓存的内容.
+
+ 
+
+(6).只要有sql语句，就不会去缓存中拿数据，直接到数据库中拿数据
+
+ 
+
+(7).手工的对缓存中的数据进行清除.清除一条记录：s.evict(user);清除所有的记录s.clear()；定时的清除可以降低内存溢出的可能性.
+
+ 
+
+(8).session的生命周期很短，只在一个web请求内
+
+ 
+
+5．hibernate介绍与动手入门体验
+
+(1).模型不匹配：Java面向对象语言，对象模型，其主要概念有：继承，关联，多态等，数据库是关系模型，其主要概念有：表，主键，外键等
+
+ 
+
+(2).解决方法：第一种：使用JDBC手工转换，第二种使用ORM框架来解决，主流的ORM框架有Hibernate、TopLink、OJB
+
+ 
+
+(3).下载hibernate，将下载目录/hibernate3.jar和/lib下的hibernate运行时必须的包
+
+ 
+
+(4).配置文件hibernate.cfg.xml和hibernate.properties,XML和properties两种，这两个文件的作用一样，提供一个即可，推荐XML格式，下载目录/etc下是示例配置文件
+
+可以在配置文件制定：
+
+数据库的URL，用户名，密码，JDBC驱动类，方言等，启动时Hibernate会在CLASSPATH里找这个配置文件.映射文件(hbm.xml,对象模型和关系模型的映射)，在/eg目录下有完整的hibernate示例
+
+ 
+
+(5).首先建立一个对象：
+
+public class User{
+
+private int id;
+
+private String name;
+
+private Date birthday;
+
+//省略了get/set方法
+
+}
+
+编写映射文件：User.hbm.xml
+
+<hibernate-mappingpackage=”cn.itcast.hibernate.domain”>
+
+<class name=”User”>
+
+<id name=”id”>
+
+<generator class=”native”/>
+
+</id>
+
+<property name=”name”/>
+
+<property name=”birthday”/>
+
+</class>
+
+</hibernate-mapping>
+
+在配置文件中hibernate.cfg.xml:
+
+<hibernate-configuration>
+
+<session-factory>
+
+<propertyname=”connection.url”>jdbc:mysql://localhost:3306/jdbc</property>
+
+<propertyname=”connection.username”>root</property>
+
+<propertyname=”connection.password”></property>
+
+<property name=”dialect”>org.hibernate.dialect.MySQLDialect</property>
+
+<propertyname=”hbm2ddl.auto”></property>
+
+<mappingresource=”org/hibernate/test/legacy/User.hbm.xml”/>
+
+<class-cacheclass=”org.hibernate.test.legacy.Simple” region=”Simple”usage=”read-write”/>
+
+</session-factory>
+
+</hibernate-configuration>
+
+方言dialect就是哪种数据库.hibernate自己可以建立表(hbm2ddl.auto)
+
+ 
+
+(6).初始化：
+
+Configuration cfg = new Configuration();
+
+cfg.configure();
+
+SessionFactory sf=cfg.buildSessionFactory();//SessionFactory相当于JDBC中DriverManager
+
+Session s=sf.openSession();//工厂模式，生产connection
+
+Transaction tx=s.beginTransaction();
+
+User user = new User();
+
+user.setBirthday(new Date());
+
+user.setName(“name”);
+
+s.save(user);
+
+ts.commit();
+
+s.close();
+
+ 
+
+(7).hibernate默认会把事务自动提交功能关闭了，所有自己要手动打开，查看表的结构命令:show create table user,看表的引擎是否支持事务，查看引擎命令:show engines
+
+ 
+
+(8).开发流程：
+
+方式一：由Domain object->mapping->db
+
+方式二：由DB开始，用工具生成mapping和Domain object
+
+方式三：由映射文件
+
+ 
+
+(9).hibernate管理的Domain对象类定义必须要符合JavaBean的定义规则:默认的构造方法(必须的)，有无意义的标示符id(主键)，非final的，对懒加载有影响
+
+public class User{
+
+private int id;
+
+private String name;
+
+private Date birthDay;
+
+//get/set方法
+
+}
+
+ 
+
+10.编写一个工具类进行初始化Hibernate
+
+public final class HibernateUtil{
+
+private static SessionFactorysessionFactory;
+
+private HibernateUtil(){
+
+}
+
+static{//静态代码块
+
+Configuration cfg = new Configuration();
+
+cfg.configure();//默认的传入是hibernate.cfg.xml文件
+
+sessionFactory = cfg.buildSessionFactory();
+
+}
+
+public static SessionFactorygetSessionFactory(){
+
+return sessionFactory;
+
+}
+
+}
+
+ 
+
+11.static void addUser(User user){//标准规范代码
+
+Session s=null;
+
+Transaction tx=null;
+
+try{
+
+s=HibernateUtil.getSession();
+
+tx.s.beginTransaction();
+
+s.save(user);
+
+tx.commit();
+
+}catch(HibernateException e){
+
+if(tx!=null)
+
+tx.rollback();//不仅要回滚，还有抛出异常
+
+throw e;
+
+}finally{
+
+if(s!=null)
+
+s.close();
+
+}
+
+}
+
+ 
+
+6．hibernate配置文件中的配置项
+
+(1).hibernate.cfg.xml和hbm.xml内容解释:
+
+第一:数据类型：<property name=”name”type=”java.lang.String”/> type可以是hibernate、java类型或者你自己的类型(需要实现hibernate的一个接口)
+
+第二:基本类型一般不需要在映射文件中说明，只有在一个java类型和多个数据库数据类型相对应时并且你想要的和hiberante缺省映射不一致时，需要在映射文件中指明类型(如：java.util.Date,数据库DATE,TIME,DATATIME,TIMESTAMP,hibernate缺省会把java.util.Date映射成DATATIME型)，而如果你想映射成TIME，则你必须在映射文件中指定类型
+
+第三：数据类型的对应关系
+
+ 
+
+(2).Session是非线程安全的，生命周期短，代表一个和数据库的连接，在B/S系统中一般不会超过一个请求；内部维护以及缓存和数据库连接，如果session长时间打开，会长时间占用内存和数据库连接
+
+ 
+
+(3).SessionFactory是线程安全的，一个数据库对应一个SessionFactory，生命周期长，一般在整个系统生命周期内有效；SessionFactory保存着和数据库连接的相关信息(user,password,url)和映射信息，以及Hibernate运行时要用到的一些信息.
+
+ 
+
+7．  Hibernate映射类型
+
+serializable:序列化到数据库中.
+
+ 
+
+8．Hibernate中使用的集合类型
+
+(1).集合映射(set,list,array,bag,map)
+
+List<Employee>emps = new ArrayList<Employee>();
+
+映射文件中：
+
+<listname=”emps”>
+
+</list>配置和set标签是相同的，只是区分List,Set的区别
+
+<list-indexcolumn=”order_col”/>这一列是给hibernate使用的，需要记录该员工是第几个加进来的,即加入的顺序.
+
+ 
+
+(2).由于懒加载的问题，Hibernate重写了java中的集合类,使其具有懒加载的功能.所以在定义的时候，必须要定义成接口类型即List,Set,Map
+
+ 
+
+9．hql的命名参数与Query接口的分页查询
+
+(1).匿名参数：不使用占位符了
+
+String hql =”from User as user where user.name=:n”;
+
+query.setString(“n”,name);
+
+不会依赖参数的位置
+
+ 
+
+(2).Query接口中的方法
+
+query.setFirstResult(0);
+
+第一条记录从哪开始，参数为开始的位置
+
+query.setMaxResult(10);
+
+实现分页功能
+
+ 
+
+10．Hql与Criteria查询的补充知识
+
+HQL：查询多个对象select art,user from Article art,User user where art.author.id=user.idand art.id=:id这种方式返回的是Object[]，Object[0]:article,Object[1]:user;
+
+ 
+
+11．Iterate查询与N+1次查询
+
+(1).假设已经加入到了10个用户
+
+static void iterator(){
+
+Session s=HibernateUtils.getSession();
+
+Query q=s.createQuery(“fromUser”);
+
+Iterator<User> users =q.iterate();
+
+while(users.hasNext()){
+
+System.out.println(users.next().getName().getFirstName());
+
+}
+
+}
+
+首先把10个用户的id都查询出来，然后按照id去查询详细信息，这是会到一级缓存中查找，找不到在到二级缓存，找不到在到数据库中查找.假设都到数据库中查询，那么就进行了11次查询，第一次把所有的id都查询，然后再逐一按照id查询进行10次，总共进行了11次，所以在使用时一定要小心，是否确定一级缓存和二级缓存中有我们想要查询的数据，不然的话，性能就下降了
+
+ 
+
+(2).在懒加载的情况下，就会出现N+1次查询，比如一对一：
+
+首先查询IdCard得到id,然后再去访问Person
+
+Session s=HibernateUtil.getSession();
+
+Query q=s.createQuery(“fromIdCard”);
+
+List<IdCard> ics=q.list();
+
+for(IdCard> ic:ics){
+
+System.out.println(ic.getPerson().getName());
+
+}
+
+因为懒加载，每次访问数据的时候，都进行查询数据库.
+
+ 
+
+12．load方法的懒加载及原理分析
+
+(1).Useruser=(User)s.load(userClass,id);
+
+System.out.println(user.getClass());
+
+就是说s.load(userClass,id)返回的是User的一个代理对象.即是User的子类.在session没有关闭前，去访问数据库user.getName();但是这种方式不好，最好使用Hibernate.initialize(user);初始化懒加载.
+
+ 
+
+(2).懒加载是将与数据库的交互延迟，提高性能.load()方法，不会到数据库查询，只会返回一个User的一个子类.
+
+ 
+
+(3).asm.jar,cglib.jar这两个包实现懒加载,能够动态的修改内存中的字节码.即动态的生成一个User的子类.
+
+ 
+
+(4).employee.setUser(user);这是就可以使用懒加载，建立employee和user之间个关联，但是不需要去访问数据库的时候
+
+ 
+
+(5).通过asm和cglib两个包实现的，Domain是非final的，session.load懒加载
+
+one-to-one懒加载：必须满足三个条件才能实现懒加载：第一：主表不能有constrained=true,所以主表没有懒加载，第二:lazy!=false,第三：fetch=select;
+
+one-to-many懒加载：第一：lazy!=false,第二：fetch=select
+
+many-to-one:第一：lazy!=false,第二：fetch=select
+
+many-to-many:第一：lazy!=false,第二：fetch=select
+
+ 
+
+(6).能够懒加载的对象都是被改写过的代理对象，当相关联的session没有关闭时，访问这些懒加载对象(代理对象)的属性(getId和getClass除外),hibernate会初始化这些代理，或用Hibernate.initialize(proxy)来初始化代理对象，当相关联的session关闭后，再访问懒加载的对象将出现异常.
+
+ 
+
+(7).方法getId和getClass不需要访问数据库也是知道的，所以不是出现懒加载的初始化异常.
+
+ 
+
+(8).表中的属性也可以使用懒加载的，只是需要在编译后的内容进行处理，这种用途主要在字段是大文本类型时需要.
+
+ 
+
+13．OpenSessionInView模式的代码分析
+
+(1).ThreadLocal类
+
+private static ThreadLocal session=newThreadLocal();
+
+线程级变量，作用域在一个线程内.
+
+Session s=(Session)session.get();
+
+if(s==null)}
+
+s=getSession();
+
+session.set(s);
+
+}
+
+当有一个web请求来时，服务器创建一个线程进行服务，将创建一个session，所以在这个线程内可以访问到session
+
+ 
+
+(2).sessioncontext和事务边界
+
+用current_session_context_class属性来定义context(用sessionFactory.getCurrentSession()来获得session),其值为：
+
+第一：Thread:ThreadLocal来管理Session实现多个操作共享一个Session，避免反复获取Session，并控制事务边界，此时session不能调用close，当commit或rollback的时候session会自动关闭(connection.realease_mode:after_transaction).Opensession in view:在生成(渲染)页面时保持session打开,前面所说的懒加载时，可以保证session没有关闭，可以访问到数据.
+
+第二：由JTA事务管理器来管理事务(connection.release_mode:after_statement)
+
+ 
+
+(3).用户发送请求->web容器->doFilter(过滤器)->OpenSessionView->打开session，事务->ActionServlet(struts)的service方法->根据配置文件找到->Action(execute方法)->业务逻辑层(register方法)->Dao层(addUser方法)->返回，直到doFilter的commit,提交事务.在这个过程中session都没有关闭，可以解决事务的边界问题，解决懒加载的问题(即什么时候使用懒加载).缺点：延长事务，session的生命周期，session延迟关闭，那么一级缓存不会释放，长时间占用内存.客户端的网速比较慢，导致事务和session长时间不能关闭.即延迟关闭.会给服务器端造成很大的负载.
+
+ 
+
+14．Session接口及getloadpersist方法
+
+(1).由于Session可以管理多个数据库表对应的多个实体对象，如果要查询id为1的实体对象，Session.get方法需要知道去哪个数据库表中查询id为1的记录，所以，除了给get方法传递所要查询的实体对象的id值外，还必须给get方法传递实体对象的类型，get方法才能知道去哪个数据库表中进行查询
+
+ 
+
+(2).通过类的类型可以去hibernate.cfg.xml文件中查找到对应的表
+
+ 
+
+(3).在配置文件中添加标签<propertyname=”show_sql”>true</property>//可以打印sql语句
+
+ 
+
+(4).Useruser=(User)s.get(userClass,id);与User user=(User)s.load(userClass,id);的区别，load不会去访问数据库，只有第一次访问时，才会访问数据库.增加一条打印出user1的类名的代码，就可以看到load方法所返回的User子类的名称了，该语句如下：
+
+System.out.println(user1.getClass().getName());
+
+ 
+
+(5).s.save(user)和s.persist(user);都是存储数据，persist方法没有sql语句，没有开启事务，save会回滚，persist不会回滚
+
+ 
+
+15．Session与SessionFactory的多线程问题
+
+Session内部封装了一个connection对象，尽量迟的创建连接，尽量早的释放连接
+
+ 
+
+16．本地sql查询与命名查询
+
+(1).使用Query接口
+
+static list sql(){
+
+Session s=HibernateUtil.getSession();
+
+Query q = s.createSQLQuery(“select * fromuser”).addEntity(User.class);//查询的结果是User对象
+
+List rs=q.list();
+
+for(User r:rs){
+
+System.out.println(r.getName());
+
+}
+
+}
+
+ 
+
+(2).不同的数据库，本地的查询语句是不同的，所以这种本地的查询语句最好不要使用，兼容性和移植性不好.
+
+ 
+
+(3).命名查询：将查询语句放在配置文件中，以后修改查询语句只修改配置文件中的查询语句就可以了.
+
+<queryname=”getUserByBirthday”>
+
+<![CDATA[from User wherebirthday=:birthday]]>
+
+</query>
+
+这个定义可以放到class标签内部，不需要使用全名，只需要getUserByBirthday即可，但是在这个范围内，不能出现重名,如果在外部，那就需要全名了，cn.itcast.hibernate.domain.User.getUserByBirthday
+
+在配置文件中
+
+static List namedQuery(){
+
+Session s=HibernateUtil.getSession();
+
+Queryq=s.getNamedQuery(“getUserByBirthday”);
+
+q.setDate(“birthday”,new Date());
+
+return q.list();
+
+}
+
+ 
+
+(4).hibernate可以做到用Map代替Domain对象，存入到数据库，但是这就符合ORM定义了，同时也可以将数据库中的内容转换XML
+
+ 
+
+17．多对多关联关系的查询
+
+使用表之间的关联join,效率低
+
+ 
+
+18．多对多关联关系的映射与原理分析
+
+(1).多对多(teacher-student):在操作和性能方面都不太理想，所以多对多的映射使用较少，实际使用中最好转换成一对多的对象模型；Hibernate会为我们创建中间关联表，转换成两个一对多.
+
+<set name=”teacher”table=”teacher_student”>
+
+<key column=”teacher_id”/>
+
+<many-to-many class=”Student” column=”student_id”/>
+
+</set>
+
+ER图：teacher：id(PK);student:id(PK);teacher_student:teacher_id(PK,FK1),student_id(PK,FK2)
+
+ 
+
+(2).
+
+public class Teacher{
+
+private int id;
+
+private String name;
+
+private Set<Student> students;
+
+//省略get/set方法
+
+}
+
+public class Student{
+
+private int id;
+
+private String name;
+
+private Set<Teacher> teachers;
+
+//省略get/set方法
+
+}
+
+teacher的映射文件：
+
+<class name=”Teacher”>
+
+<id name=”id”>
+
+<generator class=”native”/>
+
+</id>
+
+<property name=”name”/>
+
+<set name=”students” table=”teacher_student”>
+
+<key cloumn=”teacher_id”/>
+
+<many-to-many class=”Student”column=”student_id”>根据student_id去查询学生的相关信息
+
+</set>
+
+</class>
+
+同理student的映射文件相似.
+
+ 
+
+(3).测试类：
+
+Set<Teacher> ts=newHashSet<Teacher>();
+
+Teacher t1=new Teacher();
+
+t1.setName(“t1 name”);
+
+Teacher t2=new Teacher();
+
+t2.setName(“t2 name”);
+
+ts.add(t1);
+
+ts.add(t2);
+
+Set<Student> ss=newHashSet<Student>();
+
+Student s1=new Student();
+
+s1.setName(“s1”);
+
+Student s2=new Student();
+
+s2.setName(“s2”);
+
+t1.setStudents(ss);//建立关联关系
+
+t2.setStudents(ss);
+
+ss.add(s1);
+
+ss.add(s2);
+
+s.save(t1);
+
+s.save(t2);
+
+s.save(s1);
+
+s.save(s2);
+
+在中间表中插入数据
+
+ 
+
+19．多对一的懒加载分析
+
+(1).查询员工的信息时，是否需要部门的信息，默认的情况下是懒加载的方式，怎样判断是否进行了懒加载，可以通过打印出的sql语句中的查询语句即可
+
+ 
+
+(2).当IdCard中的id是主键也是外键，当id有值时，一定有一个person与之对应，所以可以使用懒加载，先生成一个代理对象，当需要person的信息时，才去查询，反过来，因为person中的id只是个主键，知道person的id，IdCard中不一定有一个值与之对应，所以不使用懒加载的方式，而是直接去查询数据库，这就是查询主表时不使用懒加载，查询从表时使用懒加载.
+
+ 
+
+(3).但是多对一的部门和员工，直接就是用了代理，depart.getEmps()获取员工时，Hibernate中的集合把集合空对象和空集合是相同的概念.
+
+ 
+
+20．多对一关联关系的检索与原理分析
+
+(1).查询操作(department表的查询和以前一样，只是employee表不一样)：
+
+static Employee query(int empid){
+
+Employee emp =(Employee)s.get(Employee.class,empid);
+
+System.out.println(“departname:”+emp.getDepart().getName());//得到department的名称.
+
+return emp;
+
+}
+
+进行两次查询，首先根据id查询employee表，得到depart_id,在根据depart_id查询department表.
+
+ 
+
+21．多对一关联关系的映射与原理分析
+
+(1).多对一：映射文件：<many-to-one name=”depart”column=”depart_id”/>
+
+ER图中定义Employee主键(PK):id和外键(FK):depart_id,Department的主键id;
+
+ 
+
+(2).建立Department类
+
+public class Department{
+
+private int id;
+
+private String name;
+
+//省略get/set方法
+
+}
+
+建立Employee类
+
+public class Employee{
+
+private int id;
+
+private String name;
+
+private Department depart;
+
+//省略get/set方法
+
+}
+
+ 
+
+(3).映射文件：
+
+<hibernate-mappingpackage=”cn.itcast.hibernate.domain”>
+
+<class name=”Emplyee”>
+
+<id name=”id”>
+
+<generator class=”native”/>
+
+</id>
+
+<property name=”name”/>
+
+<many-to-one name=”depart”colum=”depart_id”/>
+
+</class>
+
+</hibernate-mapping>
+
+不在使用标签property,是对象类型depart,使用标签<many-to-one>
+
+通过反射可以找到depart对应的映射文件，当depart_id与depart映射文件中的id相同时，就查找到了.也可以使用属性not-null=”true”，设置colum=”depart_id”这列不为空
+
+ 
+
+(4).column=”depart_id”不设置可以，默认就是column=”depart”
+
+ 
+
+(5).staticDepartemnt add(){
+
+//模板代码，省略
+
+Department depart = new Department();
+
+depart.setName(“depart name”);
+
+Employee emp = new Employee();
+
+emp.setDepart(depart);//直接赋值就可以了，只要在对象建立关系，数据库中的表就建立关系了.
+
+emp.setName(“emp name”);
+
+s.save(depart);
+
+s.save(emp);
+
+return depart;
+
+}
+
+ 
+
+(6).当s.save(depart);与s.save(emp)两条语句的顺序调换，会多出现一条更新语句，因为首先存储emp，当存储到depart时，因为employee中定义了department，所以hibernate检测到employee中的depart发生改变了，就进行了更新操作.此时是持久态
+
+ 
+
+22．           分布式缓存的分析
+
+大型网站有多个服务器，即就有多个cache，每个服务器对应一个cache，
+
+ 
+
+23．关联关系的级联操作
+
+(1).cascade和inverse:
+
+Casade用来说明当对主对象进行某种操作时是否对其关联的从对象也做类似的操作，常用的cascade：none,all,save-update,delete,lock,refresh,evict,replicate,persist,merge,delete-orphan(one-to-many),一般对many-to-one,many-to-many不设置级联，在one-to-one和one-to-many中设置级联
+
+Inverse表“是否放弃维护关联关系”(在Java里两个对象产生关联时，对数据库表的影响)，在one-to-many和many-to-many的集合定义中使用，inverse=”true”表示该对象不维护关联关系；该属性的值一般在使用有序集合时设置成false(注意hibernate的缺省值是false),one-to-many维护关联关系就是更新外键，many-to-many维护关联关系就是在中间表增减记录
+
+注：配置成one-to-one的对象不维护关联关系.
+
+ 
+
+24．缓存的原理与模拟分析
+
+(1).第一个人读的信息和后一个人读的信息可能相同，那第二个人读信息时能够加快速度了.
+
+ 
+
+(2).第二人读取信息时，就不是到数据库中读取了，可以到缓存中读取数据.
+
+ 
+
+(3).使用缓存cache存取数据.
+
+ 
+
+25．继承_鉴别器与内连接器相结合
+
+(1).子类的特有属性很多，就拿一张表进行对应，特有属性少的就和父类放在同一个表中，
+
+ 
+
+(2).employee:id(PK),name,depart_id,type,skill;sales:employee_id(PK,FK),sales;
+
+Skiller子类和Employee父类放在一起，Sale类自己对应一张表.
+
+ 
+
+(3).映射文件中只需按照前两中方式进行改变.
+
+ 
+
+26．继承_每个具体类映射一张独立表
+
+(1).没有公共的属性，所有的属性都是自己特有的，在插入时候不需要涉及到多个表的关联了，效率高.如果employee不是抽象的，会有employee表
+
+ 
+
+(2).employee:id(PK),name,depart_id;skiller:id(PK),name,skill,depart_id;sales:id(PK),name,sell,depart_id;
+
+ 
+
+(3).映射文件：
+
+<union-subclass name=”Skiller”table=”skiller”>
+
+<property name=”skill”/>
+
+</union-subclass>
+
+<union-subclass name=”Sales”table=”sales”>
+
+<property name=”sell”/>
+
+</union-subclass>
+
+ 
+
+(4).在查询的时候，多态查询时，还是要进行三种表的关联查询，但是插入只在一张表进行.
+
+ 
+
+27．继承关系_每个类映射到一张表
+
+(1).employee:id(PK),name,depart_id;sales:employee_id(PK,FK),sell;skiller:employee_id(PK,FK),skill;
+
+ 
+
+(2).此时不需要鉴别器了，每个子类对应一张表
+
+ 
+
+(3).映射文件：
+
+<joined-subclassname=”Skiller” table=”skiller”>
+
+<key column=”employee_id”/>
+
+<property name=”skill”/>
+
+</joined-subclass>
+
+<joined-subclass name=”Sales”table=”sales”>
+
+<key column=”employee_id”/>
+
+<property name=”sell”/>
+
+</joined-subclass>
+
+ 
+
+(4).插入子类时，相同的属性插入到employee表中，自己特有的属性插入到自己表中，如果插入一个技术员Skiller(name,skill)时skill插入skiller表中，name插入employee表中，这时就插入了两张表.
+
+ 
+
+(5).当查询自己特有的属性时,会关联两张表,当查找相同的属性时，会关联三张表.所以查询时效率低.不要进行多态查询，最好查询具体的子类:
+
+具体查询：Employee emp = (Employee)s.getId(Skiller.class,id);
+
+多态查询：Employee emp = (Employee)s.getId(Skiller.class,id);
+
+ 
+
+28．继承关系_整个继承树映射到一张表
+
+(1).public classSkiller extends Employee{
+
+private String skill;
+
+//省略get/set方法
+
+}
+
+public class Sales extends Employee{
+
+private int sell;
+
+//省略get/set方法
+
+}
+
+ 
+
+(2).employee表中的字段：id(PK),name,depart_id,type(区分不同类型的员工,又称鉴别器),skill,sell
+
+ 
+
+(3).这种方式当增加子类时，需要修改employee表结构.
+
+ 
+
+(4).映射文件：
+
+<class name=”Employee”discriminator-value=”0″>
+
+<id name=”id”>
+
+<generator class=”native”/>
+
+</id>
+
+<discriminator column=”type”type=”int”/>鉴别器，hibernate用来区分不同的子类.
+
+<subclass name=”Skiller”discriminator-value=”1″>
+
+<property name=”skill”/>
+
+</subclass>
+
+<subclass name=”Sales”discriminator-value=”2″>
+
+<property name=”sell”/>
+
+</subclass>
+
+</class>
+
+ 
+
+(5).将一棵继承树映射到一张表中，所以在查询时，只对一张表进行操作，效率高，但是不灵活，当增加子类时，需要更改表结构，同时每个字段不能设置成非空约束.
+
+ 
+
+29．实体对象的三种状态与saveOrUpdate方法
+
+(1).Session的几个主要方法：
+
+第一：save,persist保存数据，persist在事务外不会产生insert语句
+
+第二：delete：删除对象
+
+第三：update：更新对象，如果数据库中没有记录，会出现异常
+
+第四：get:根据ID查询数据，会立刻访问数据库
+
+第五：load:根据ID查询，(返回的是代理，不会立即访问数据库)
+
+第六：saveOrUpdate,merge(根据ID和version的值来确定是save或update),调用merge你的对象还是托管的
+
+第七：lock(把对象编程持久对象，但不会同步对象的状态)
+
+ 
+
+(2).瞬时(transient):数据库中没有数据与之对应，超过作用域会被JVM垃圾回收器回收，一般是new出来且与session没有关联的对象
+
+持久(persistent):数据库中有数据与之对应，当前与session有关联，并且相关联的session没有关闭，事务没有提交；持久对象状态发生改变，在事务提交时会影响到数据库(hibernate能检测到)
+
+脱管(detached):数据库中有数据与之对应，但当前没有session与之关联；托管对象状态发生改变，hibernate不能检测到.
+
+ 
+
+(3).当关闭session时，持久态就变成了脱管状态了，区分这三种状态的两个标准：是否与数据库中记录相对应，是否在session中.
+
+ 
+
+(4).当在脱管的状态时，更新的时候需要执行update的更新语句，因为不在session中.
+
+ 
+
+(5).对象new是瞬时的,get(),load(),find(),iterate()等是持久的，瞬时状态执行save(),saveOrUpdate()时变成持久的，当持久状态执行delete()时变成瞬时的,当脱管状态执行update(),saveOrUpdate(),lock()时变成持久状态，当持久状态执行evict(),close(),clear()时，持久状态变成脱管状态.
+
+ 
+
+(6).瞬时对象的id没有值，脱管对象的id是有值的.所以当没有值时执行save()方法，当有值时执行update()方法.
+
+ 
+
+30．实体类或属性名与数据库关键字冲突问题
+
+使用Oracle时，user是个关键字，可能出现问题，将表名添加反引号.
+
+ 
+
+31．使用Hibernate完成CRUD实验的步骤说明
+
+(1).实验步骤：
+
+第一步：设计domain对象User
+
+第二步：设计UserDao接口
+
+第三步：加入hibernate.jar和其依赖的包
+
+第四步：编写User.hbm.xml映射文件，可以基于hibernate/eg目录下的org/hibernate/auction/User.hbm.xml修改
+
+第五步：编写hibernate.cfg.xml配置文件，可以基于hibernate/etc/hibernate.cfg.xml修改；必须提供的几个参数：connection.driver_class、connection.url、connection.username、connection.password、dialect、hbm2ddl.auto
+
+第六步：编写HibernateUtils类，主要用来完成hibernate初始化和提供一个获得Session的方法
+
+第七步：实现UserDao接口
+
+ 
+
+32．事务的悲观锁和乐观锁
+
+(1).悲观锁和乐观锁
+
+悲观锁由数据库来实现；乐观锁hibernate用version和timestamp来实现，悲观锁就相当于写锁，当自己在操作时，别人不能进行任何操作,
+
+ 
+
+(2).可能多个人来读取同一个数据源，可能后一个人修改后的结果覆盖前一个人修改的结果，存在并发问题
+
+ 
+
+(3).悲观锁是不可取的，我们给每条记录添加一个版本号，当同时操作数据源时，判断版本号，如果版本号不符合，就不进行更新.假设刚开始版本号为0，同时来两个人进行操作，判断版本号是否为0，如果为0，就进行操作，操作完后版本号加一，那第二个人就发现版本号不等于0，就不会进行操作了，也不会覆盖前一个人进行的操作.
+
+ 
+
+(4).在映射文件中：
+
+<versionname=”ver”/>该标签必须在id标签的下面，即是id的子标签.
+
+ 
+
+(5).版本号的类型是整型的，也可以是日期型的
+
+ 
+
+(6).
+
+Session s1=HibernateUtil.getSession();
+
+Transactiontx1=s1.beginTransaction();//第一个线程操作事务
+
+User user1=(User)s1.get(User.class,id);
+
+Session s2 =HibernateUtil.getSession();
+
+Transactiontx2=s2.beginTransaction();//第二个线程操作事务
+
+User user2=(User)s2.get(User.class,id);
+
+user1.getName().setFirstName(“firstName1”);
+
+user2.getName().setFirstName(“firstName2”);
+
+tx2.commit();//线程二先提交，成功了
+
+tx1.commit();//线程一提交不成功.因为版本号不一样.
+
+ 
+
+33．事务与事务边界的相关知识
+
+(1).一个SessionFactory对应一个数据库，由JDBC实现
+
+ 
+
+(2).事务的控制应该在业务逻辑层实现.但是事务的对象是在DAO层，那么在业务逻辑层中调用事务的对象，就出现了耦合，所以要解决这个耦合，就需借助第三方架包了EJB,Spring
+
+ 
+
+34．完善HibernateUtil类及hql查询入门
+
+(1).HQL：面向对象的查询语言，与SQL不同，HQL中的对象名是区分大小写的(除了Java类和属性其他部分不区分大小写),HQL中查的是对象而不是和表，并且支持多态；HQL主要通过Query来操作，Query的创建方式：Query q=session.createQuery(hql);
+
+from Person
+
+from User as userwhere user.name=:name//其中User是类不是表名,user是别名
+
+form User as userwhere user.name=:name and user.birthday<:birthday
+
+ 
+
+(2).Criteria：是一种比HQL更面向对象的查询方式；Criteria的创建方式：Criteria crit=session.createCriteria(DomainClass.class);
+
+简单属性条件如：
+
+criteria.add(Restrictions.eq(propertyName,value)),criteria.add(Restrictions.eqProperty(propertyName,otherPropertyName))
+
+ 
+
+(3).public staticvoid add(Object entity){//能够保存所有对象
+
+Session s=null;
+
+Transactiontx=null;
+
+try{
+
+s=HibernateUtil.getSession();
+
+tx.s.beginTransaction();
+
+s.save(entity);
+
+tx.commit();
+
+}catch(HibernateExceptione){
+
+if(tx!=null)
+
+tx.rollback();//不仅要回滚，还有抛出异常
+
+throw e;
+
+}finally{
+
+if(s!=null)
+
+s.close();
+
+}
+
+}
+
+同理更新，删除同时同样的道理
+
+ 
+
+(4).执行HQL语句
+
+Session s=null;
+
+try{
+
+s=HibernateUtil.getSession();
+
+Stringhql=”from User as user where user.name=?”;
+
+Queryquery=s.createQuery(hql);
+
+query.setString(0,name);//替换占位符
+
+Listlist=query.list();//JDBC中的executQuery()类似
+
+for(Useruser:list{
+
+System.out.println(user.getName());
+
+}
+
+//Object obj=query.uniqueResult();当确定返回值只有一个的时候，使用这种方法.当查询有多个结果时，会出现异常
+
+}finally{
+
+if(s!=null)
+
+s.close();
+
+}
+
+支持多态，查询的话，子类对应数据库表也被查询，如果from Object的话，会把数据库中的表都查一遍，因为所有的类都是Object的子类.
+
+ 
+
+35．一对多关联关系的映射与原理分析
+
+(1).在Department的角度上是不是一对多了，在Department中定义：
+
+privateSet<Employee> emps;//一个department中有多个员工
+
+ 
+
+(2).映射文件：
+
+<classname=”Department”>
+
+<idname=”id”>
+
+<generatorclass=”native”/>
+
+</id>
+
+<propertyname=”name”/>
+
+<setname=”emps”>用set属性进行映射
+
+<keycoluem=”depart_id”/>设置外键
+
+<one-to-manyclass “Employee”/>
+
+</set>
+
+</class>
+
+ 
+
+(3).System.out.println(“empsize:”+depart.getEmps().size());
+
+打印出department中所有的employee人数.
+
+ 
+
+(4).首先添加employee,在添加到department,即告诉employee属于哪个department;多两条更新语句.
+
+Set<Employee>emps = new HashSet<Employee>();
+
+emps.add(emp1);
+
+emps.add(emp2);
+
+depart.setEmps(emps);
+
+告诉department有哪些employee
+
+emp1.setDepart(depart);
+
+emp2.setDepart(depart);
+
+ 
+
+(5)：ER图：Deparment:id(PK);Employee:id(PK),depart_id(FK1);
+
+ 
+
+36．一对多和多对多的懒加载分析
+
+(1).对于one-to-one懒加载方式体现出的效率不是很明显，查询身份证号时，把person的信息也查询出来，没有查询太多的信息，对效率的影响不是很大
+
+ 
+
+(2).对于one-to-many懒加载方式就体现的很明显的了，当我们查询部门的详细信息时，可能把该部门的所有员工都查询出来，因为一个部门可能有很多员工，所以这时效率就明显降低了.
+
+ 
+
+(3).缺省的是懒加载，当depart.getEmps()时，才会查询员工的信息,因为java中的set集合没有懒加载的功能,当我们的代码只是获取集合代理对象的引用，比没有调用该集合代理对象的方法，所以，hibernate在这里还用不着去查询数据库来填充集合代理，因此不会抛出”代理未初始化”的异常，如果将代码改为depart.getEmps().size()，就可以看到异常了.
+
+ 
+
+(4).对于many-to-many方式懒加载也很重要，因为涉及到三张表的查询.所以也需要懒加载的功能.
+
+ 
+
+37．一对一的懒加载分析
+
+(1).one-to-one在查询主对象的时候默认情况下不使用懒加载，使用一个关联查询.但是在查询从对象的时候使用了懒加载.
+
+ 
+
+(2).constrain=true是建立外键约束
+
+ 
+
+(3).lazy=”proxy”,使用懒加载，默认的值也是proxy,还有false,true的取值
+
+ 
+
+(4).fetch=”join”,使用什么方式去抓取,默认值为select,join是一次查询(表的连接)，select是两次查询.当lazy=”proxy”时，fetch=”join”是无效的，它们俩之间的设置是互斥的.
+
+ 
+
+38．一对一外键关联关系的映射与原理分析
+
+(1).一对一：基于外键的one-to-one,可以描述为多对一，加上unique=”true”约束<one-to-onename=”idCard” property-ref=”person”/><many-to-onename=”person” column=”person_id” unique=”true”not-null=”true”/>区别于多对一.只需将外键设置为唯一.
+
+ 
+
+(2).对于IdCard的映射文件，其的id不是外部生成的，而是自增长的.
+
+<generatorclass=”native”/>对于Person的映射文件：<one-to-one name=”idCard”property-ref=”person”/>
+
+ 
+
+39．一对一主键关联关系的检索
+
+(1).查询主对象：
+
+Personp=(Person)get(Person.class,id);
+
+System.out.println(p.getIdCard().getId());
+
+理论上是两次查询，但是实际只进行了一次查询，使用了表之间的关联join，效率上比两次查询高
+
+查询从对象：
+
+IdCardidCard=(IdCard)get(IdCard.class,id);
+
+System.out.println(idCard.getPerson().getId());
+
+理论上和实际上都进行了两次查询
+
+ 
+
+40．一对一主键关联关系的映射与原理分析
+
+(1).基于主键的one-to-one(person的映射文件)
+
+<id name=”id”>
+
+<generatorclass=”foregin”><paramname=”property”>idCard</param></generator>
+
+</id>
+
+<one-to-one name=”idCard”constrained=”true”/>
+
+ 
+
+(2).对象模型：
+
+public class　Person{
+
+private int id;
+
+private String name;
+
+private IdCard idCard;
+
+//省略get/set方法
+
+}
+
+public class IdCard{
+
+private int id;
+
+private String name;
+
+private Person person;
+
+//省略get/set方法
+
+}
+
+ 
+
+(3).Person的映射文件：
+
+<class name=”Person”>
+
+<id name=”id”>
+
+<generator class=”native”/>
+
+</id>
+
+<property name=”name”/>
+
+<one-to-one name=”idCard”/>
+
+</class>
+
+IdCard的映射文件：
+
+<class name=”IdCard”>
+
+<id name=”id”>
+
+<generator class=”foregin”>主键是由外部得到，不是自己得到的
+
+<paramname=”property”>person</param>IdCard的id是由person得到的
+
+</generator>
+
+</id>
+
+<property name=”name”/>
+
+<one-to-one name=”person” constrained=”true”/>添加约束，配置外键.
+
+</class>
+
+idcard中的主键是person中的外键
+
+ 
+
+(4).测试代码：
+
+IdCard idCard = new IdCard();
+
+Person p=new Person();
+
+p.setName(“p1”);
+
+p.setIdCard(idCard);
+
+idCard.setPerson(p);
+
+s.save(p);
+
+s.save(idCard);
+
+IdCard中的id是由Person得到的.只有主对象(person)存在，从对象(idcard)存在.
+
+ 
+
+(5).ER图：person:id(PK);IdCard:id(PK,FK)
+
+ 
+
+41．组件关联关系的映射与原理分析
+
+(1).组件映射(User-Name):关联的属性是个复杂类型的持久化类，但不是实体即：数据库中没有表与该属性对应，但该类的属性要之久保存的
+
+<component name=”name”class=”com.test.hibernate.domain.Name”>
+
+<property name=”initial”/>
+
+<property name=”first”/>
+
+<property name=”last”/>
+
+</component>
+
+当组件的属性不能和表中的字段简单对应的时候可以选择实现：
+
+org.hibernate.usertype.UserType或
+
+org.hibernate.usertype.CompositeUserType
+
+ 
+
+(2).用户名name是个对象类型
+
+public Class Name{
+
+private String firstName;
+
+private String lastName;
+
+//get/set方法省略
+
+}
+
+想过使用一对一.一对多，多对一都可以，一个人只能有一个名字，一个人可以有多个名字.这是数据库中肯定有两张表：User和Name，但是现在Name的内容很小，不想设计成一个实体，不想在数据库中对应一张表，因为它太小了，此时就是用组件相关联，将用户user和名字name设计到同一张表中
+
+ 
+
+ 
+
+六、       JDBC
+
+1．DAO设计思想与搭建骨架
+
+(1).建立Domain包，在包中建立一个实体对象(bean).
+
+public class User{
+
+private int id;
+
+private String name;
+
+private Date birthday;//java.util.Date
+
+private float money;
+
+//生成对应的get/set方法,省略
+
+}
+
+ 
+
+(2).定义Domain接口：
+
+public interface UserDao{
+
+public void addUser(User user);
+
+public User getUser(int userid);
+
+public void update(User user);
+
+public void delete(User user);
+
+public User findUser(StringloginName,String password);
+
+}
+
+这个接口是给service层使用的.
+
+ 
+
+(3).实现UserDao接口
+
+public class UserDaoImpl implements UserDao{
+
+public void addUser(User user){};
+
+public User getUser(int userid){};
+
+public void update(User user){};
+
+public void delete(User user){};
+
+public User findUser(StringloginName,String password){};
+
+ 
+
+}
+
+ 
+
+(4).在UserDaoImpl中抛出的异常进行包装，定义一个异常类
+
+ 
+
+(5).工厂模式:UserDao userDao = DaoFactory.getInstance().getUserDao();
+
+ 
+
+2．Java的动态代理及使用该技术完善连接代理
+
+(1).前面说到的静态代理模式，有点麻烦，因为需要实现接口Connection的所有方法.
+
+ 
+
+(2).public classMyConnectionHandler implements InvocationHandler{
+
+private Connection realConnection;
+
+MyConnectionHandler(){
+
+}
+
+Connectionbind(Connection realConn){//通过此方法将连接传进来
+
+ConnectionwarpedConnection = (Connection)Proxy.newProxyInstance(this.getClass().getClassLoader(),newClass[]{Connection.class},this);//动态的编写一个类，这个类实现Connection接口，最终会把Connection的所有方法都交给InvocationHandler处理器处理，在内存中直接产生一个字节码.
+
+returnwarpedConnection;
+
+}
+
+public Objectinvoke(Object proxy,Method method,Object[] args){
+
+if(“close”.equals(method.getName())){//是close方法
+
+this.dataSource.connectonsPool.addList(this.warpedConnection);
+
+}
+
+returnmethod.invoke(this.realConnection,args);
+
+}
+
+}
+
+这就是动态代理模式，不管是动态的，还是静态的，最终到底都是关心操作Connection的方法.
+
+ 
+
+3．JdbcTemplate类中的其他各个查询方法
+
+(1).Spring的JdbcTemplate
+
+第一：查询带有参数，和行映射方法：
+
+public ObjectqueryForObject(String sql,Object[]args,RowMapper rowMapper)，使用自定义的UserRowMapper完成映射
+
+一个RowMapper的常用实现BeanPropertyRowMapper,该实现可将结果集转换成一个Java Bean(字段名与Java Bean属性名不符合规范，可用别名处理)返回一条记录.
+
+第二：public List query(String sql,Object[]args,RowMapperrowMapper)返回多条记录
+
+第三：public int queryForInt(String sql)(如:selectcount(*) from user),其他结果比如String可用queryForObject方法向下转型
+
+public MapqueryForMap(String sql,Object[]args)返回不是对象类型的Map(key:字段名或别名，value:列值)；当查询的结果不是一个对象时，就是用一个Map进行存放结果.查询共多少条记录，最大值，最小值等信息时,当返回的是String类型时，就是用queryForObject(String sql);只是要对返回类型进行转换.
+
+第四：public List queryForList(String sql,Object[]args)返回多个Map
+
+ 
+
+4．JDBC的理论概述
+
+(1).JDBC(Java数据库连接)由一些借口和类构成的api,j2se的一部分，由java.sql，javax.sql包组成
+
+ 
+
+(2).应用程序、JDBC API、数据库驱动及数据库之间的关系：
+
+应用程序–>JDBC–>MySql Driver,Oracle Driver,DB2Driver—>MySql,ORacle,DB2
+
+ 
+
+5．jdbc中数据类型与日期问题
+
+(1).rs.getInt(“id”),getString(“name”),rs.getDate(“birthday”),rs.getFloat(“money”)),不同的类型的获取数据.
+
+ 
+
+(2).java.sql.Date是继承java.util.Date，java.util.Date是日期和时间的，而java.sql.Date只有日期，而没有时间.
+
+ 
+
+(3).不能将java.util.Date赋给java.sql.Date,所以:newjava.sql.Date(birthday.getTime()));这样就可以将java.util.Date转换成java.sql.Date,java.sql.Date直接赋给java.util.Date可以的.
+
+ 
+
+(6).st.executeUpdate(sql),带参数的方法是Statement的，不带参数的方法是PreperedStatement的
+
+ 
+
+6．JTA分布事务的简要介绍
+
+(1).跨多个数据源的事务，使用JTA容器实现事务，分成两个阶段提交
+
+javax.transaction.UserTransactiontx=(UserTransaction)ctx.lookup(“jndiName”);
+
+tx.begin();//connection1,connection2(可能来自不同的数据库)
+
+tx.commit()//tx.rollback();
+
+ 
+
+(2).tomcat不支持这种容器.weblogic可以支持.
+
+ 
+
+(3).第一阶段：向所有的数据库提交事务的请求，当有事务回滚的请求，所有的数据库都回滚，第二阶段：当没有回滚请求，就进行提交事务.
+
+ 
+
+(4).分布式事务处理.
+
+ 
+
+7．Statement的sql注入问题
+
+(1).SQL注入：PreparedStatement和Statement:
+
+在sql中包含特殊字符或SQL的关键字(如：’or 1 or’)时，Statement将出现不可预料的结果(出现异常或查询的结果不正确)，可用PreparedStatement来解决
+
+PreperedStatement(从Statement扩展而来)相对Statement的优点：
+
+第一：没有SQL注入的问题
+
+第二：Statement会使数据库频繁编译SQL，可能造成数据库缓冲区溢出
+
+第三：数据库和驱动可以对PreperedStatement进行优化(只有在相关联的数据库连接没有关闭的情况下有效)
+
+PreparedStatement是Statement的子接口.
+
+ 
+
+(2).
+
+PreparedStatementps=null;//预处理接口，需要进行预处理，所以在构造的时候就需要SQL语句了,ps=conn.prepareStatement(sql);而Statement是在查询的时候需要SQL语句.
+
+Stringsql=”select id,name from user where name=?”;?问号是占位符
+
+ps.setString(1,name);将传过来的name参数替换第一个占位符?,在此过程中，将name进行的处理，将特殊符号去除，当执行查询时，不需要SQL语句了，不然会报错，rs=ps.executeQuery();
+
+ 
+
+(3).建立连接最消耗时间的,当程序执行多次时，PreperedStatement比Statement除去建立连接的时间，前者效率高.
+
+ 
+
+8．编写一个基本的连接池来实现连接的重复使用
+
+(1).连接池经常使用到插入和删除，所以使用LinkedList，
+
+public class MyDataSource{
+
+private LinkedList<Connection>connectionsPool = new LinkedList<Connection>();
+
+public MyDataSource(){
+
+for(int i=0;i<10;i++){//开始时创建10个连接
+
+this.connectionsPool.addLast(this.createConnection());
+
+}
+
+}
+
+public Connection createConnection() {//创建连接
+
+returnDriverManager.getConnection(url,user,password);
+
+}
+
+public Connection getConnection(){//获取连接
+
+return this.connectionPool.removeFirst();
+
+}
+
+public void free(Connection conn){//释放连接
+
+this.connectionsPool.addList(conn);
+
+}
+
+}
+
+得到连接并不是重复的.想重复的拿取连接，创建的连接数n<用户取连接数m,即可.
+
+ 
+
+(2).
+
+private static int initCount=5;//定义初始化连接数
+
+private static int maxCount=10;//最大连接数
+
+private static int currentCount=0;//当前创建的连接数
+
+ 
+
+(3).为了保证并发操作，需要在获取连接中同步：
+
+synchronized(connectionsPool){
+
+if(this.connctionPool.size()>0)//连接池中还有连接
+
+return this.connectionsPool.removeFirst();
+
+if(this.currentCount<maxCount)//当前连接数没有超过最大连接数，可以接着创建连接，
+
+return this.createConnection();
+
+throw new SQLException(“已经没有连接了”);//超过了最大连接数，抛出异常.
+
+}
+
+ 
+
+9．编写一个简单的JDBC的例子
+
+(1).连接数据的步骤：
+
+第一步：注册驱动(只做一次)
+
+DriverManager.registerDriver(newcom.mysql.jdbc.Driver());
+
+第二步：建立连接(Connection)
+
+Connectionconn=DriverManager.getConnection(“jdbc:mysql://localhost:3305/jdbc”,”root”,””);没有密码
+
+第三步：创建执行SQL的语句(Statement)
+
+Statementst=conn.createStatement();
+
+第四步:执行语句
+
+ResultSet rs =st.executeQuery(“select * from user”);
+
+第六步：处理执行结果(ResultSet)
+
+while(rs.next()){//遍历行
+
+System.out.println(rs.getObject(1)+’\t’+rs.getObject(2));//第一列，第二列
+
+}
+
+第七步：释放资源
+
+rs.close();//关闭资源和打开资源的顺序是相反的
+
+st.close();
+
+conn.close();
+
+ 
+
+10．参数的元数据信息
+
+(1).
+
+Connection conn=JdbcUtils.getConnection();
+
+PreparedStatementps=null;
+
+ResultSet rs=null;
+
+ps.conn.prepareStatement(sql);//sql中可能含有参数(占位符),Object[]params存储参数，可以动态的查看sql中含有哪些参数.
+
+ParameterMetaDatapmd=ps.getParameterMetaData();
+
+intcount=pmd.getParameterCount();//得到参数的个数
+
+for(inti=1;i<count;i++){
+
+System.out.println(pmd.getParameterClassName(i));//得到参数的类名
+
+System.out.println(pmd.getParameterType(i));//得到参数的类型
+
+ps.setObject(i,parames[i-1]);//遍历替换参数
+
+}
+
+String sql =”select * from user where name=? and birthday<? and money>?”;
+
+直接返回的类型都是String,VARCHAR
+
+ 
+
+11．分析jdbc程序的编写步骤和原理
+
+(1).连接是通过底层的TCP/IP协议进行的
+
+ 
+
+(2).注册驱动：
+
+方式一：Class.forName(“com.mysql.jdbc.Driver”);
+
+推荐这种方式，不会对具体的驱动类产生依赖，类加载到内存中，会调用静态代码块:
+
+static{
+
+try{
+
+DriverManager.registerDriver(new Driver());
+
+}catch(SQLException e){
+
+throws RuntimeException();
+
+}
+
+}
+
+方式二：DriverManager.registerDriver(newcom.mysql.jdbc.Driver());
+
+会造成DriverManager中产生两个一样的驱动，并会对具体的驱动类产生依赖，其内部定义了一个Vector列表，将多个驱动存放到Vector中
+
+方式三：System.setProperty(“jdbc.drivers”,”driver1:driver2″);
+
+虽然不会对具体的驱动类产生依赖；但注册不太方便，所以很少使用，可以注册多个驱动
+
+ 
+
+(3).方式一接受的是一个字符串，方式二接受的是一个驱动类，所以具有依赖关系
+
+ 
+
+(4).创建连接：
+
+Stringurl=”jdbc:mysql://localhost:3394/jdbc”;
+
+格式：jdbc:子协议:子名称//主机名:端口/数据库名
+
+String user=”root”;
+
+String password=””;
+
+Connectionconn=DriverManager.getConnection(url,user,password”);
+
+ 
+
+(5).释放资源：数据库建立连接的个数也是有限制的，当数据库创建了多个连接，数据库可能运行的很慢，可能导致数据库崩溃，占用系统资源.
+
+ 
+
+12．分析在实际项目中该如何应用JDBC
+
+(1).三层架构：
+
+表示层：基于web的jsp、servlet、struts、webwork、spring web MVC等，基于客户端的swing,swt等
+
+业务逻辑层：Pojo(service,manager),Domain,session EJB、spring
+
+数据访问层:JDBC，IBatis，Hibernate，JDO，Entity Bean
+
+层与层之间用接口隔离
+
+ 
+
+13．规范和封装JDBC程序代码
+
+(1).规范的代码：
+
+Stringurl=”jdbc:mysql://localhost:2332/jdbc”;
+
+String user=”root”;
+
+String password=””;
+
+Statement st=null;
+
+ResultSet rs=null;
+
+Connecton conn=null;
+
+try{
+
+Class.forName(“com.mysql.jdbc.Driver”);
+
+conn=DriverManager.getConnection(url,user,password);
+
+st = conn.createStatement();
+
+rs=st.executeQuery(“select * fromuser”);
+
+}finally{
+
+try{
+
+if(rs!=null)
+
+rs.close();
+
+}finally{if(st!=null)
+
+try{
+
+st.close();
+
+}finally{
+
+if(conn!=null)
+
+conn.close();
+
+}
+
+}
+
+}
+
+}
+
+ 
+
+(2).设计一个工具类：
+
+public final class JdbcUtils{
+
+private static Stringurl=”jdbc:mysql://localhost:2332/jdbc”;
+
+private static String user=”root”;
+
+private static String password=””;
+
+private JdbcUtils(){//不允许实例化
+
+}
+
+static{//驱动只注册一次
+
+try{
+
+Class.forName(“com.mysql.jdbc.Driver”);
+
+}catch(ClassNotFoundException e){
+
+throw new ExceptionInitializerError(e);
+
+}
+
+}
+
+public static Connection getConnection(){//创建连接
+
+returnDriverManager.getConnection(url,user,password);
+
+}
+
+public static void free(ResultSetrs,Statement st,Connection conn){//释放资源
+
+try{
+
+if(rs!=null)
+
+rs.close();
+
+}catch(SQLException e){
+
+e.printStackTrace();
+
+}finally{if(st!=null)
+
+try{
+
+st.close();
+
+}catch(SQLException e){
+
+e.printStackTrace();
+
+}finally{
+
+if(conn!=null)
+
+conn.close();
+
+}
+
+}
+
+}
+
+}
+
+ 
+
+}
+
+ 
+
+14．将Dao中的修改方法提取到抽象父类中
+
+(1).对于代码的重构，焦点就是将代码变化的部分和不变的部分分离开来.一个是sql语句不同，参数不同，提取一个超类，相同的部分，放到超类中，不同的部分由子类实现.
+
+publci abstract class AbstractDao{
+
+public void update(String sql,Object[]args){
+
+Connection conn=null;
+
+PreparedStatement ps=null;
+
+ResultSet rs=null;
+
+conn=JdbcUtils.getConnection();
+
+ps=conn.prepareStatement(sql);
+
+for(int i=0;i<args.length;i++){//用args参数列表，更新数据
+
+ps.setObject(i+1,args[i]);
+
+}
+
+}
+
+//args就是参数列表，
+
+}
+
+ 
+
+public class UserDaoImpl extendsAbstractDao{
+
+public void update(User user){
+
+String sql=”update user setname=?,birthday=?,money=?,where id=?”;
+
+Object[] args=new Object[]{user.getName(),user.getBirthday(),user.getMoney(),user.getId()};
+
+super.update(sql,args);//调用父类的update方法.
+
+}
+
+}
+
+ 
+
+15．可更新和对更新敏感的结果集
+
+(1).
+
+st=conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,Result.CONUR_UPDATABLE);
+
+在读取数据时，可以更改数据,可更新结果集.
+
+ 
+
+(2)
+
+while(rs.next()){
+
+rs.getObject(“name”);
+
+rs.getObject(“money”);
+
+String name= rs.getString(“name”);
+
+if(“lisi”.equals(name)){
+
+rs.updateFloat(“money”,200f);
+
+rs.updateRow();//更新行
+
+}
+
+}
+
+(3).这种方式不常用，在查询时，把数据更改了，给人一种不明确感.
+
+在查询结果集时，更新数据时数据库能不能感知到数据更新了.数据库敏不敏感SENSITIVE
+
+ 
+
+16．利用结果集元素数据将查询结果封装为map
+
+(1).将查询结果放在map中
+
+key:列的名称
+
+value:列的值
+
+ 
+
+(2).
+
+Connection conn=JdbcUtils.getConnection();
+
+ps=conn.prepareStatement(sql);
+
+rs=ps.executeQuery();
+
+ResultSetMetaData rsmd =rs.getMetaData();//获取结果集的元数据
+
+int count= rsmd.getColumnCount();//结果有多少列
+
+for(int i=1;i<=count;i++){//循环遍历列
+
+System.out.println(rsmd.getColumnClassName(i));//每一列的类型名
+
+System.out.println(rsmd.getColumnName(i));//每一列的名称
+
+System.out.println(rsmd.getColumnLabel(i));//每一列的别名
+
+}
+
+这里就可以准确的得到每一列的类型，而不像前面的都是String类型.
+
+String[]colName=new String[count];//存放每一列的名称
+
+Map<String,Object> data=null;
+
+while(rs.next()){//按行循环
+
+data = new HashMap<String,Object>();
+
+for(int i=0;i<colNames.length;i++){//按列循环
+
+data.put(colNames[i],rs.getObject(colNames[i]));//根据类名得到列的值
+
+}
+
+}
+
+灵活性非常高.能够按照各种方式查询
+
+ 
+
+16．如何使用开源项目DBCP
+
+(1).dbcpconfig.properties数据源的配置文件：
+
+连接配置：
+
+driverClassName=com.mysql.jdbc.Driver
+
+url=jdbc:mysql://localhost:3306/test
+
+username=root
+
+password=root
+
+初始化连接：
+
+initialiSize=10
+
+最大连接数量：
+
+maxActive=50
+
+最大空闲连接：//不同的时间段创建的连接不同，可能出现空闲连接.
+
+maxIdle=20
+
+最小空闲连接：
+
+minIdle=5
+
+超过等待时间以毫秒为单位 6000毫秒/1000等于60秒
+
+maxWait=60000
+
+//当没有连接可取的时候，让当前线程等待一段时间，在去拿连接
+
+JDBC驱动建立连接时附带的连接属性，属性的格式必须为这样：[属性名=property;]，注意:”user” 与”password”两个属性会被明确地传递，因此这里不需要包含它们(url后面携带的值)
+
+connectionProperties=userUnicode=true;characterEncoding=gbk
+
+指定由连接池所创建的连接的自动提交状态
+
+defaultAutoCommit=true
+
+driver default指定由连接池所创建的连接的只读(read-only)状态，如果没有设置该值，则”setReadOnly”方法将不被调用，(某些驱动并不支持只读模式,如:Informix)
+
+defaultReadOnly=
+
+driver default指定 由连接池所创建的连接事务级别(TransactionIsoation),可用值为下列之一(详情可见javadoc)NONE，READ，UNCOMMITTED，READ_COMMITTE
+
+defaultTransactionIsolation=READ_UNCOMMITTED
+
+ 
+
+(2).DBCP是apache的开源项目.实现了DataSource接口.Data Base Connection Pool,修改代码需要从新编译，打包，修改配置文件只需要重启即可.
+
+ 
+
+(3).
+
+Properties prop = new Properties();
+
+InputStream is =JdbcUtils.class.getClassLoader().getResource.AsStream(“dbcp.property”);//读取property文件
+
+prop.load(is);
+
+private static DataSoruce myDataSource=null;
+
+myDataSource=BasicDataSourceFactory.createDataSource(prop);
+
+ 
+
+(4).DataSource用来取代DriverManager来获取Connection;通过DataSource获得Connection速度快;通过DataSource获得Connection都是已经被包裹过的(不是驱动原来的连接),它的close方法已经被修改了；一般DataSource内部会用一个连接池来缓存Connection，这样可以大幅度提高数据库的访问速度；连接池可以理解成一个能够存放Connection的Collection;我们的程序只和DataSource打交道，不会直接访问连接池.
+
+ 
+
+(5).使用dbcp需要的三个包:common-dbcp.jar,common-collections.jar,common-pool.jar
+
+ 
+
+17．使用JDBCTemplate工具类简化对象查询
+
+(1).Spring框架中提供了一个JdbcTemplate工具类，JdbcTemplate类对JDBC API进行了很好的封装，这个类就像我们自己对JDBC进行封装一样，只是代码更健壮和功能更强大而已，我们以后在实际项目中可以使用JdbcTemplate类来完全替换直接使用JDBC API，这与直接使用JDBC API没有太大的性能区别，使用JdbcTemplate类需要额外从spring开发包中导入spring.jar和commons-logging.jar包
+
+ 
+
+(2).JdbcTemplate的设计思想和前面的MyDaoTemplate类是相同的
+
+static User findUser(String name){
+
+JdbcTemplate jdbc = newJdbcTemplate(JdbcUtils.getDataSource());//参数是拿到一个数据源
+
+String sql = “select id,name from userwhere name=?”;
+
+Object[]args=new Object[]{name};
+
+jdbc.queryForObject(sql,args,newRowMapper(){//行映射器
+
+public Object mapRow(ResultSet rs,introwNum){
+
+User user = new User();
+
+user.setId(rs.getInt(“id”));
+
+return user;
+
+}
+
+});
+
+return null;
+
+}
+
+//这里可以不需要实现行映射器，可以用类代替：
+
+new BeanPropertyRowMapper(User.class);即可
+
+ 
+
+18．使用JdbcTemplate实现Dao和用工厂模式灵活切换实现
+
+(1).
+
+public class UserDaoSpringImpl implementsUserDao{
+
+private SimpleJdbcTemplatesimpleJdbcTemplate
+
+= new SimpleJdbcTemplate(JdbcUtils.getDataSource());
+
+//增加用户
+
+public void addUser(User user){
+
+String sql = “insert into user(name,money,birthday)values(:name,:money,:birthday);
+
+KeyHolder keyHolder = newGeneratedKeyHolder();
+
+SqlParameterSource param = new BeanPropertySqlParameterSource(user);
+
+this.simpleJdbcTemplate.getNamedParameterJdbcOperations().update(sql,param,keyHoler);
+
+ 
+
+user.setId(keyHolder.getKey().intValue());
+
+}
+
+}
+
+//增加user的代码减少了太多了.
+
+delete,update等方法都是大同小异
+
+//删除用户
+
+public void delete(User user){
+
+String sql = “delete from user whereid=?”;
+
+this.simpleJdbcTemplate.update(sql,user.getId());
+
+//使用了可变参数的特性,不需要复杂的Map存储参数
+
+}
+
+//查询用户
+
+public User findUser(StringloginName,String password){
+
+//如何简化返回查找集
+
+String sql = “selectid,name,money,birthday from user where name=?”;
+
+returnthis.simpleJdbcTemplate.queryForObject(sql,ParameterizedBeanProertyRowMapper.newInstance(User.class),userId);
+
+}
+
+//更新用户
+
+public void update(User user){//如何替换占位符?
+
+String sql =”update user setname=?,birthday=?,money=? where id=?”;
+
+this.simpleJdbcTemplate.update(sql,user.getName(),user.getBirthday(),user.getMoney(),user.getId());
+
+//这里也可以使用bean属性的参数源;
+
+}
+
+代码量大大减少了.
+
+ 
+
+19．使用JDBC的批处理功能
+
+(1).和数据库打交道的成本是很高的，当需要发送多条sql语句时，成本更高了，这时就需要使用批处理技术,将多条查询语句打成一个包.
+
+ 
+
+(2).
+
+for(int i=0;i<10000;i++){
+
+ps.setString();
+
+ps.setName();
+
+ps.addBatch();//把一条更新语句增加到包中
+
+}
+
+int[] a = ps.executeBatch();//执行批处理，不是ps.executeUpdate();
+
+ 
+
+(3).首先将语句打包时，并不是包越大越好，如果包过大的话，可能造成内存溢出，所以可能将一个打包在分成几个小包进行发送，不同的数据库，包的最适合大小是不同的.
+
+ 
+
+(4).并不是所有的批处理都能提高性能，这和不同的数据库以及数据库驱动决定的.
+
+ 
+
+(5).Hibernate就是用了批处理技术，但是它进行了一些优化技术.
+
+ 
+
+20．使用JDBC调用的存储过程
+
+(1).存储过程经常用在以前的两层结构中，现在的三层结构已经就用不到了
+
+ 
+
+(2).CallableStatement(从PreparedStatement继承来的)
+
+java代码：
+
+CallableStatement cs=null;
+
+String sql=”{calladdUser(?,?,?,?)}”;
+
+cs=conn.prepareCall(sql);
+
+//替换参数
+
+cs.registerOutParameter(4,Types.INTEGER);
+
+cs.setString(1,”ps name”);
+
+cs.setDate(2.new java.sql.Date(System.currentTimeMills()));
+
+cs.setFloat(3,100f);
+
+cs.executeUpdate();
+
+int id = cs.getInt(4);
+
+System.out.println(id);
+
+存储过程：
+
+create procedure ‘jdbc’.’addUser’ (in pnamevarchar(45),in birthday date,in money float,out pid int)
+
+//in:输入参数，out:输出参数
+
+begin
+
+insert intouser(name,birthday,money)values(pname,birthday,money);
+
+select last_insert_id() into pid;
+
+//last_insert_id()是一个函数，最后一次插入的id号
+
+end $$
+
+ 
+
+21．使用SimplejdbcTemplate和泛型技术简化代码
+
+(1).
+
+public class SimpleJdbcTemplateTest{
+
+static SimpleJdbcTemplate simple = newSimpleJdbcTemplate(JdbcUtils.getDataSource());
+
+static <T> T find(String nameClass<T> clazz){
+
+String sql = “selectid,name,money,birthday from user where name=? and money=?”;
+
+User user =
+
+simple.queryForObject(sql,ParameterizedBeanPropertyRowMapper.newInstance(User.class),name,100f);
+
+}//使用了可变参数功能，没有使用了参数数组，参数Map；使用泛型，将查询的类型也当做是参数传递过来.
+
+ 
+
+}
+
+ 
+
+(2).它的内部也是包装了NamedParameterJdbcOperations类，当将对象可变参数变成数组后，剩下的工作都交给NamedParameterJdbcOperations类做.
+
+simple.getNamedParameterJdbcOperations()获取NamedParameterJdbcOperations对象
+
+simple.getJdbcOperations()获取JdbcTemplate对象
+
+ 
+
+22．使用策略模式对模板方法设计模式进行改进
+
+(1).对于不同的查询语句，返回的结果集可能不同,只要一个name,但是把所有的信息都查询出来了，这就要求不同的映射结果.
+
+public StringfindUserName(int id){
+
+Stringsql=”select name from user where id=?”;
+
+Object[]args=newObject[]{id};
+
+}
+
+protected ObjectrowMapper(ResultSet rs){//从新覆盖rowMapper方法
+
+returnrs.getString(“name”);
+
+}
+
+这种方式可能导致有多少条不同的查询语句，就需要覆盖多少次rowMapper方法.
+
+ 
+
+(2).java中是不允许传递方法的，但是可以传递一个类，接口
+
+根据不同的sql中的内容，查询的列不同，如：
+
+select name fromuser:可以得到name一列
+
+select id,namefrom user:可以得到id,name这两列
+
+selectid,name,money from user:可以得到id,name,money这三列.
+
+ 
+
+public classMyDaoTemplate{
+
+public Objectfind(String sql,Object[]args,RowMapper rowMapper){
+
+obj =rowMapper.mapRow(rs);//映射的过程由一个接口去做
+
+}
+
+}
+
+ 
+
+public interfaceRowMapper{//定义一个行映射器接口
+
+public ObjectmapRow(ResultSet rs);
+
+}
+
+ 
+
+public classUserDaoImpl2{
+
+MyDaoTemplate template= new MyDaoTemplate();
+
+public UserfindUser(String loginName,String password){
+
+Stringsql=”select id,name,money,birthday from user where name=?”;
+
+Object[] args =new Object[]{loginName};
+
+Object user =this.template.find(sql,args,new UserRowMapper());
+
+retrun (User)user;
+
+}
+
+}
+
+classUserRowMapper implements RowMapper{
+
+public ObjectmapRow(ResultSet rs){//行映射器
+
+User user = newUser();
+
+user.setId(rs.getInt(“id”));
+
+user.setName(rs.getString(“name”));
+
+user.setMoney(rs.getFloat(“money”));
+
+return user;
+
+}
+
+}
+
+//当需要不同的查询结果集，只需实现RowMapper接口就行了(可以使用匿名内部方式实现)
+
+ 
+
+(3).这是一种策略模式，根据不同的功能，调用不同的方法(策略),实现类组合的方式(在UserDaoImpl2类中定义一个MyDaoTemplate类)实现的，模板模式是根据继承的方式实现的.
+
+ 
+
+23．使用模板方法设计模式处理DAO中的查询方法
+
+publc abstractclass AbstractDao{
+
+public Object find(String sql,Object[]args){//相同的部分在父类中实现
+
+Connectionconn=null;
+
+PreparedStatementps=null;
+
+ResultSet rs=null;
+
+conn=JdbcUtils.getConnection();
+
+ps=conn.prepareStatement(sql);
+
+for(inti=0;i<args.length;i++){
+
+ps.setObject(i+1,args[i]);
+
+}
+
+rs=ps.executQuery();
+
+Object obj-null;
+
+while(rs.next()){
+
+obj=rowMapper(rs);
+
+}
+
+return obj;
+
+}
+
+abstract protectedObject rowMapper(ResultSet rs);//父类中不知道具体的查询结果集.放到子类实现该方法.
+
+}
+
+ 
+
+public classUserDaoImpl extends AbstractDao{
+
+public UserfindUser(String loginName,String password){//不变的部分放到子类实现.
+
+Stringsql=”select id,name,money,birthday from user where name=?”;
+
+Object[] args =new Object[]{loginName};
+
+Object user = super.find(sql,args);
+
+return (User)user;
+
+}
+
+@Override
+
+protected ObjectrowMapper(ResultSet rs){//在子类中知道查询结果有几列
+
+User user=newUser();
+
+user.setId(rs.getInt(“id”));
+
+user.setName(rs.getString(“name”));
+
+user.setMoney(rs.getFloat(“money”));
+
+user.setBirthday(rs.getDate(“birthday”));
+
+return user;
+
+}
+
+ 
+
+}
+
+ 
+
+假设现在有一个账户AccountDao
+
+public classAccountDaoImpl extends AbstractDao{
+
+public UserfindAccount(int id){//不变的部分放到子类实现.
+
+Stringsql=”select id,name,money from account where id=?”;
+
+Object[] args =new Object[]{id};
+
+Object user =super.find(sql,args);
+
+return(Account)account;
+
+}
+
+ 
+
+@Override
+
+protected ObjectrowMapper(ResultSet rs){//在子类中知道查询结果有几列
+
+Accountaccount=new Account();
+
+account.setId(rs.getInt(“id”));
+
+account.setName(rs.getString(“name”));
+
+account.setMoney(rs.getFloat(“money”));
+
+return account;
+
+}
+
+ 
+
+}
+
+ 
+
+public classAccount{
+
+private int id;
+
+private Stringname;
+
+private floatmoney;
+
+//get/set方法省略
+
+}
+
+ 
+
+模板模式，相同的步骤放到父类中，不同的步骤放到子类中设计，service方法，doGet(),doPost()方法，首先调用service方法.service会根据method参数的值来调用doGet(),doPost()方法.
+
+ 
+
+24．使用支持命名参数的JdbcTemplate
+
+(1).Spring的NamedParameterJdbcTemplate
+
+第一：NamedParameterJdbcTemplate内部包含了一个JdbcTemplate,所以JdbcTemplate能做的事情NamedParameterJdbcTemplate都能干，NamedParameterJdbcTemplate相对于JdbcTemplate主要增加了参数可以命名的功能
+
+第二：public Object queryForObject(String sql,MapparamMap,RowMapper rowMapper)
+
+第三：public Object queryForObject(Stringsql,SqlParameterSoruce paramSource,RowMapper rowMapper)
+
+SqlParameterSource的两个主要实现MapSqlParameterSource和BeanPropertySqlParameterSource
+
+第四：public int update(String sql,SqlParameterSourceparamSource,KeyHolder generatedKeyHolder)保存数据获得主键
+
+ 
+
+(2).在传递参数时，需要将参数Object[]args与?占位符的位置对应好，如果对应错了，就会出现问题，这时，我们就可以给占位符起个别名
+
+staticNamedParameterJdbcTemplate named = new NamedParameterJdbcTemplate();
+
+Stringsql=”select id from user where name=:n and money>:m andid<:id”;
+
+Map params=newHashMap();//使用Map存放参数，而不是数组了
+
+params.put(“n”,user.getName());
+
+params.put(“m”,user.getMoney());
+
+params.put(“id”,user.getId());
+
+/*Object[]args=new Object[]{user.getName(),user.getMoney(),user.getId()};*/
+
+Object u =named.queryForObject(sql,params,new BeanPropertyRowMapper(),User.class));
+
+//注意sql的书写，将占位符?替换了，注意替换的规则.NamedParameterJdbcTemplate只干了一件事，就是将占位符?替换成变量名，将参数命名话后，之后的操作都会交给JdbcTemplate处理.
+
+ 
+
+(3).为什么要使用命名参数:
+
+SqlParameterSourceps = new BeanPropertySqlParameterSource(user);//关于user的bean参数源
+
+Stringsql=”select id from user where name=:name and money>:money andid<:id”;
+
+Object u =named.queryForObject(sql,ps,new BeanPropertyRowMapper(),User.class));
+
+这时参数就存放在user参数源中，参数名必须和user的属性名一样,将参数封装成一个类(参数源),符合面向对象设计思想
+
+ 
+
+(4).保存数据，拿到记录的主键.当主键是符合类型(就是多列组成)，也可能是String类型的.
+
+static voidaddUser(User user){
+
+String sql =”insert into user(name,birthday,money) value(:name,:birthday,:money);
+
+SqlParameterSourceps = new BeanPropertySqlParameterSource(user);//关于user的bean参数源
+
+KeyHolderkeyHolder = new GeneratedKeyHolder();
+
+named.update(sql,ps,keyHolder);
+
+//插入的记录的主键放到keyHoler中
+
+int id =keyHolder.getKey().inValue();
+
+user.setId(id);
+
+Map map =keyHolder.getKeys();//主键由多列组成的时候
+
+}//重点
+
+ 
+
+ 
+
+25．事务的保存点处理
+
+(1).当事务进行回滚时，不是全部进行回滚，有时只想回滚一部分的操作，
+
+ 
+
+(2).Savepoint sp=null;
+
+sp=conn.setSavepoint();//设置保存点
+
+if(conn!=null&&sp!=null){
+
+conn.rollback(sp);//将保存点当做参数，只回滚到保存点
+
+}
+
+26．事务的概念与JDBC事务处理
+
+(1).事务的特性：(ACID)
+
+原子性(atomicity):组成事务处理的语句形成了一个逻辑单元，不能只执行其中的一部分
+
+一致性(consistency):在事务处理执行前后，数据库是一致的(数据库数据完整性约束)
+
+隔离性(isolcation):一个事务处理对另一个事务处理的影响持久性(durability):事务处理的效果能够被永久保存下来
+
+ 
+
+(2).connection.setAutoCommit(false)//打开事务
+
+connection.commit();//提交事务
+
+connection.rollback();//回滚事务
+
+ 
+
+(3).查看数据库表的引擎是否支持事务的操作
+
+ 
+
+27．事务的隔离级别
+
+(1).当两个事务同时去操作同一个数据源，这就是隔离性
+
+ 
+
+(2).设置隔离级别：connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+
+隔离级别：
+
+读未提交:可能出现脏读，不可重复度，幻度
+
+读已提交:不可能脏读，可能出现不可重复读，幻读
+
+可重复读:不可能脏读，不可重复读，可能出现幻读
+
+可串行化:不可能脏读，不可重复读，幻读
+
+ 
+
+级别逐渐提高.当级别越高的时候，需要的资源越多，对并发的操作有影响.
+
+脏读:别人的数据没有提交，我就读到了.
+
+不可重复读:第一次读和第二次读的结果不同
+
+幻读:当我们正在查询id>10的记录，这时有另外一个事务增加一条正好id>10的记录.
+
+ 
+
+(3).隔离级别的缺省值和数据库相关.不同数据库拥有的隔离级别的个数也是不同的.
+
+ 
+
+28．数据库的元数据信息
+
+(1).可以得到数据库的相关信息，是否支持事务，数据库的名称，版本号，隔离级别等信息.
+
+Connectionconn=JdbcUtils.getConnection();
+
+DatabaseMetaDatadbmd =conn.getMetaData()//返回数据的元信息
+
+dbmd.getDatabaseProductName();//得到数据库的名称
+
+ 
+
+(2).hibernate支持各种数据库，所以它肯定需要知道所有数据库的相关信息.
+
+ 
+
+29．通过代理模式来保持用户关闭连接的习惯
+
+(1).用户可能不使用JdbcUtils.free()方法释放连接，而是按照conn.close()方法释放连接，这时我们创建的连接池就没有用了，连接数也就减少了,所以我们希望用户始终使用我们自己编写的方法进行释放连接
+
+ 
+
+(2).通过close()方法，还是能够将连接方法连接池中，所以我们要拦截close()方法，组合优先继承
+
+ 
+
+(3).public classMyConnection implements Connection{
+
+private ConnectionrealConnection;//使用组合方式
+
+privateMyDataSource dataSource;
+
+MyConnection(ConnectionrealConnection,MyDataSource dataSource){
+
+this.realConnection=connection;
+
+this.dataSource=dataSource;
+
+}
+
+//实现Connection的所有方法
+
+public voidclose(){//这里就可以实现Connection的close()方法了
+
+this.dataSource.connectionPool.addLast(this);//把自己重新放到池中.
+
+}
+
+ 
+
+(4).此时代码中的Connection处都使用MyConnection,这就是面向接口编程的好处.同时类MyConnection的访问权限是包访问权限，不准用户访问的，但是允许在dataSource中访问.
+
+ 
+
+(5).DataSource类和MyConnection类之间相互调用.
+
+ 
+
+(6).MyConnection是个代理，是Connection的代理模式，实现Connection的close()方法.这就是静态代理设计模式,在MyConnection类中定义一个Connection，这是组合方式，也可以使用集成方式实现代理.
+
+ 
+
+30．完成数据库的CRUD操作
+
+(1).书写SQL语句时应该注意的问题：select * from user，就是不应该写星号,最好书写列名，得到数据，可以根据列的索引号，也可以根据列名，建议使用根据列名取数据.
+
+ 
+
+31．用jdbc访问大段文本数据
+
+(1).数据库中的varchar最大是255个字节，所以就需要使用大文本类型TEXT.只有纯文本格式才能放进去.
+
+ 
+
+(2).
+
+Stringsql=”insert into clob_test(big_text) value(?)”;
+
+ps=conn.prepareState(sql);
+
+File file=newFile(“src/cn/itcast/jdbc/JdbcUtils.java”);
+
+Reader reader =new BufferedReader(new FileReader(file));//可能含有IO的异常
+
+ps.setAsciiStream(1,reader,(int)file.length());//需要一个Reader,字符流的长度Length，这个方法只能用于文本只含有Ascii码的
+
+inti=ps.executeUpdate(sql);
+
+reader.close();
+
+ 
+
+rs=st.executeQuery(“selectbig_text from clob_test”);//读取文本类型数据
+
+while(rs.net()){
+
+Clob clob =rs.getClob(1);
+
+Reader reader =clob.getCharacterStream();
+
+File file=newFile(“JdbUtils_bak.java”);
+
+Writer writer=newBufferedWriter(new FileWriter(file));
+
+char[]buff=newchar[1024];
+
+for(inti=0;(i=reader.read(buff))>0;){
+
+writer.write(buff,0,i);
+
+}
+
+}
+
+writer.close();
+
+reader.close();
+
+ 
+
+七、       iBaits
+
+优点：
+
+1. ibatis把sql语句从Java源程序中独立出来，放在单独的XML文件中编写，给程序的维护带来了很大便利。
+
+2. ibatis封装了底层JDBC API的调用细节，并能自动将结果集转换成Java Bean对象，大大简化了Java数据库编程的重复工作。
+
+3. 简单易于学习，易于使用，非常实用。
+
+4. 因为Ibatis需要程序员自己去编写sql语句，程序员可以结合数据库自身的特点灵活控制sql语句，因此能够实现比hibernate等全自动orm框架更高的查询效率，能够完成复杂查询。
+
+5. 阿里巴巴、慧点科技等多家知名软件公司都使用Ibatis。
+
+ 
+
+缺点：
+
+1.CRUD的操作只能带一个参数
+
+2.和Hibernate相比，需要编写Sql语句，但是Hibernate不需要编写Sql语句
